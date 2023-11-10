@@ -18,6 +18,7 @@ class _NavBarState extends State<NavBar> {
   Widget _currentPage = HomePage();
 
   void _onItemTapped(int index) {
+    if(index == _selectedIndex) return;
     switch(index) {
       case 0: _currentPage = HomePage();
       case 1: _currentPage = WorkoutPage();
@@ -36,6 +37,12 @@ class _NavBarState extends State<NavBar> {
       body: _currentPage,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey.shade400,
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -54,9 +61,6 @@ class _NavBarState extends State<NavBar> {
             label: 'Settings',
           ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
-        onTap: _onItemTapped,
       ),
     );
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:life_balance_plus/views/home_page.dart';
 
 
 class SettingsPage extends StatefulWidget {
