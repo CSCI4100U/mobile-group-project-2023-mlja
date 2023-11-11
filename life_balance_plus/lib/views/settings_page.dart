@@ -44,14 +44,40 @@ class _SettingsPageState extends State<SettingsPage> {
                       builder: (context) => NotificationsSettingsPage()));
             },
           ),
-          // Add more settings options here...
+          ListTile(
+            title: Text('Goal Settings'),
+            onTap: () {
+              // Navigate to goal settings
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => GoalSettingsPage()));
+            },
+          ),
+          ListTile(
+            title: Text('Connectivity'),
+            onTap: () {
+              // Navigate to connectivity settings
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ConnectivitySettingsPage()));
+            },
+          ),
+          ListTile(
+            title: Text('Data Management'),
+            onTap: () {
+              // Navigate to data management settings
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DataManagementSettingsPage()));
+            },
+          ),
         ],
       ),
     );
   }
 }
 
-// You can create separate pages for different settings categories.
 class ProfileSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -94,4 +120,44 @@ class NotificationsSettingsPage extends StatelessWidget {
   }
 }
 
-// Add more settings pages for other categories as needed.
+class GoalSettingsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Goal Settings'),
+      ),
+      body: Center(
+        child: Text('Goal settings go here'),
+      ),
+    );
+  }
+}
+
+class ConnectivitySettingsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Connectivity Settings'),
+      ),
+      body: Center(
+        child: Text('Connectivity settings go here'),
+      ),
+    );
+  }
+}
+
+class DataManagementSettingsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Data Management Settings'),
+      ),
+      body: Center(
+        child: Text('Data management settings go here'),
+      ),
+    );
+  }
+}
