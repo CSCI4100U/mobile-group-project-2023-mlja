@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../model/user.dart';
 
 
 class DietPage extends StatefulWidget {
@@ -7,6 +8,7 @@ class DietPage extends StatefulWidget {
 }
 
 class _DietPageState extends State<DietPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

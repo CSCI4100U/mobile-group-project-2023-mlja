@@ -3,18 +3,18 @@ import 'package:path/path.dart' as path;
 
 
 class DatabaseDriver {
-  String dbURI;
-  late Future<Database> database;
-
-  DatabaseDriver({required this.dbURI}) { initDatabase(); }
-
-  void initDatabase() async {
-    this.database = openDatabase(
-      path.join(await getDatabasesPath(), dbURI),
-      onCreate: (db, version) {
-        // create table
+  static Future init() async {
+    var database = openDatabase(
+      path.join(await getDatabasesPath(), 'database_manager.db'),
+      onCreate: (db, version) async {
+        await db.execute(
+          'CREATE TABLE exercises(id INTEGER PRIMARY KEY, name TEXT, sets INTEGER)'
+        );
       },
-      version: 1,
+      version: 1
     );
+
+    print("Created DB $database");
+    return database;
   }
 }
