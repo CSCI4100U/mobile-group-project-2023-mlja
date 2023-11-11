@@ -5,6 +5,9 @@ import 'package:life_balance_plus/views/diet_page.dart';
 import 'package:life_balance_plus/views/settings_page.dart';
 
 
+/// Base widget for the UI set as the home widget of the `App` instance.
+/// Provides a global `Scaffold` with a `BottomNavigationBar` for navigating
+/// between the main pages.
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
 
@@ -13,36 +16,48 @@ class NavBar extends StatefulWidget {
 }
 
 
+/// State of a NavBar.
 class _NavBarState extends State<NavBar> {
   int _selectedIndex = 0;
   Widget _currentPage = HomePage();
 
+  /// Navigates to the selected page.
   void _onItemTapped(int index) {
     if(index == _selectedIndex) return;
-    switch(index) {
-      case 0: _currentPage = HomePage();
-      case 1: _currentPage = WorkoutPage();
-      case 2: _currentPage = DietPage();
-      case 3: _currentPage = SettingsPage();
-    }
-    setState(() => _selectedIndex = index);
+
+    setState(() {
+      switch(index) {
+        case 0: _currentPage = HomePage();
+        case 1: _currentPage = WorkoutPage();
+        case 2: _currentPage = DietPage();
+        case 3: _currentPage = SettingsPage();
+      }
+      _selectedIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Life Balance Plus'),
+        title: const Text('Life Balance Plus'),
       ),
       body: _currentPage,
+
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey.shade400,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+
+        // Hide labels for navbar items
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+
+        // Icon colours
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey.shade400,
+
+        // Items
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

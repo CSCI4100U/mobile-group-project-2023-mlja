@@ -3,6 +3,7 @@ import 'dart:async';
 import '../data/database_provider.dart';
 import '../model/exercise.dart';
 
+
 class ExerciseControl {
 
   Future addDummyData() async {

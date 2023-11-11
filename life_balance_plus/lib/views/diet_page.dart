@@ -27,6 +27,7 @@ class _DietPageState extends State<DietPage> {
     // MealControl().addDummyData();
     _loadMeals();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
