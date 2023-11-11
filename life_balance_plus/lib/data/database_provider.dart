@@ -8,7 +8,19 @@ class DatabaseDriver {
       path.join(await getDatabasesPath(), 'database_manager.db'),
       onCreate: (db, version) async {
         await db.execute(
-          'CREATE TABLE exercises(id INTEGER PRIMARY KEY, name TEXT, sets INTEGER)'
+          'CREATE TABLE IF NOT EXISTS exercises(id INTEGER PRIMARY KEY, name TEXT, sets INTEGER)'
+        );
+        await db.execute(
+          '''
+          CREATE TABLE IF NOT EXISTS meals(
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            mealType TEXT,
+            fats REAL,
+            proteins REAL,
+            carbs REAL
+          )
+          '''
         );
       },
       version: 1
