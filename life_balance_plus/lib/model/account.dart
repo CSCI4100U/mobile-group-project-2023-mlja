@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 
 class Account {
+  int? id;
   String email;
   String firstName;
   String lastName;
@@ -10,6 +11,7 @@ class Account {
   DateTime dateOfBirth;
 
   Account({
+    this.id,
     required this.email,
     required this.firstName,
     required this.lastName,
@@ -20,6 +22,7 @@ class Account {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'email': email,
       'firstName': firstName,
       'lastName': lastName,
@@ -31,6 +34,7 @@ class Account {
 
   factory Account.fromMap(Map<String, dynamic> map) {
     return Account(
+      id: map['id'],
       email: map['email'],
       firstName: map['firstName'],
       lastName: map['lastName'],
