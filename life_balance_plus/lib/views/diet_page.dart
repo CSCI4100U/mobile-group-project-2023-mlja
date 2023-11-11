@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../model/meal.dart';
 import '../control/meals_control.dart';
+import 'meals_data_table.dart';
 
 
 class DietPage extends StatefulWidget {
@@ -30,18 +31,7 @@ class _DietPageState extends State<DietPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ListView.builder(
-          itemCount: meals.length,
-          itemBuilder: (context, index) {
-            final meal = meals[index];
-            return ListTile(
-              title: Text('${meal.name} - Type: ${meal.mealType}'),
-              subtitle: Text(
-                  'Macros - Fats: ${meal.fats}, Proteins: ${meal.proteins}, Carbs: ${meal.carbs}'
-              )
-            );
-          },
-        )
+        child: MealsDataTable(meals: meals),
       ),
     );
   }
