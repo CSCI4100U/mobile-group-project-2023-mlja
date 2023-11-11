@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/exercise.dart';
+import '../model/workout_plan.dart';
 import '../control/exercises_control.dart';
 
 
@@ -10,7 +10,7 @@ class WorkoutPage extends StatefulWidget {
 
 class _WorkoutPageState extends State<WorkoutPage> {
 
-  List<Exercise> exs = [];
+  List<ExercisePlan> exs = [];
 
   Future<void> _loadExercises() async {
     final exs_ = await ExerciseControl().getAllExercises();
