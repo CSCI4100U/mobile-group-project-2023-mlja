@@ -29,33 +29,33 @@ class MealControl {
     return result;
   }
 
-  Future<int> addMeal(Meal ex) async {
+  Future<int> addMeal(Meal meal) async {
     final db = await DatabaseDriver.init();
     return db.insert(
         'meals',
-        ex.toMap(),
+        meal.toMap(),
         conflicAlgorithm: ConflictAlgorithm.replace
     );
   }
 
-  Future addMealsMult(List<Meal> exs) async {
+  Future addMealsMult(List<Meal> meals) async {
     final db = await DatabaseDriver.init();
-    exs.forEach((ex) {
+    meals.forEach((meal) {
       db.insert(
           'meals',
-          ex.toMap(),
+          meal.toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace
       );
     });
   }
 
-  Future updateMeal(Meal ex) async {
+  Future updateMeal(Meal meal) async {
     final db = await DatabaseDriver.init();
     return db.update(
         'meals',
-        ex.toMap(),
+        meal.toMap(),
         where: 'id = ?',
-        whereArgs: [ex.id]
+        whereArgs: [meal.id]
     );
   }
 

@@ -22,6 +22,30 @@ class DatabaseDriver {
           )
           '''
         );
+
+        await db.execute(
+          '''
+          CREATE TABLE IF NOT EXISTS diets(
+            id INTEGER PRIMARY KEY,
+            dailyCals INTEGER,
+            startDate DATE,
+            endDate DATE,
+            status TEXT,
+          )
+          '''
+        );
+
+        await db.execute(
+          '''
+           CREATE TABLE IF NOT EXISTS diets_meals(
+             diet_id INTEGER NOT NULL,
+             meal_id INTEGER NOT NULL,
+             meal_date DATE,
+             FOREIGN KEY (diet_id) REFERENCES diets (id),
+             FOREIGN KEY (meal_id) REFERENCES meals (id),
+           )
+          '''
+        );
       },
       version: 1
     );
