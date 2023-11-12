@@ -194,9 +194,11 @@ class UnitsAndPreferencesSettingsPage extends StatefulWidget {
       _UnitsAndPreferencesSettingsPageState();
 }
 
+enum UnitsSystem { Metric, Imperial }
+
 class _UnitsAndPreferencesSettingsPageState
     extends State<UnitsAndPreferencesSettingsPage> {
-  bool useMetricSystem = true;
+  UnitsSystem unitsSystem = UnitsSystem.Metric;
   int dailyGoal = 2000;
 
   @override
@@ -211,18 +213,29 @@ class _UnitsAndPreferencesSettingsPageState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Units System'),
-            Row(
-              children: [
-                Text('Use Metric System'),
-                Switch(
-                  value: useMetricSystem,
-                  onChanged: (value) {
-                    setState(() {
-                      useMetricSystem = value;
-                    });
-                  },
-                ),
-              ],
+            ListTile(
+              title: Text('Metric System'),
+              leading: Radio(
+                value: UnitsSystem.Metric,
+                groupValue: unitsSystem,
+                onChanged: (UnitsSystem? value) {
+                  setState(() {
+                    unitsSystem = value!;
+                  });
+                },
+              ),
+            ),
+            ListTile(
+              title: Text('Imperial System'),
+              leading: Radio(
+                value: UnitsSystem.Imperial,
+                groupValue: unitsSystem,
+                onChanged: (UnitsSystem? value) {
+                  setState(() {
+                    unitsSystem = value!;
+                  });
+                },
+              ),
             ),
             Divider(),
             Text('Daily Goal'),
