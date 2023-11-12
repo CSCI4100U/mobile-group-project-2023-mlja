@@ -78,15 +78,111 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 }
 
-class ProfileSettingsPage extends StatelessWidget {
+class ProfileSettingsPage extends StatefulWidget {
+  @override
+  _ProfileSettingsPageState createState() => _ProfileSettingsPageState();
+}
+
+class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
+  // Define variables to store user profile information.
+  String? username = 'John Doe';
+  int? age = 30;
+  String? gender;
+  double? weight = 70.0;
+  double? height = 175.0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile Settings'),
       ),
-      body: Center(
-        child: Text('Profile settings go here'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Username'),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Enter your username',
+              ),
+              controller: TextEditingController(text: username),
+              onChanged: (value) {
+                setState(() {
+                  username = value;
+                });
+              },
+            ),
+            SizedBox(height: 20.0),
+            Text('Age'),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Enter your age',
+              ),
+              keyboardType: TextInputType.number,
+              controller: TextEditingController(text: age?.toString() ?? ''),
+              onChanged: (value) {
+                setState(() {
+                  age = int.tryParse(value);
+                });
+              },
+            ),
+            SizedBox(height: 20.0),
+            Text('Gender'),
+            DropdownButton<String>(
+              value: gender,
+              onChanged: (value) {
+                setState(() {
+                  gender = value;
+                });
+              },
+              items: <String?>['Male', 'Female', 'Other']
+                  .map((value) => DropdownMenuItem<String?>(
+                        value: value,
+                        child: Text(value ?? 'Select Gender'),
+                      ))
+                  .toList(),
+            ),
+            SizedBox(height: 20.0),
+            Text('Weight (kg)'),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Enter your weight',
+              ),
+              keyboardType: TextInputType.number,
+              controller:
+                  TextEditingController(text: weight?.toStringAsFixed(1) ?? ''),
+              onChanged: (value) {
+                setState(() {
+                  weight = double.tryParse(value);
+                });
+              },
+            ),
+            SizedBox(height: 20.0),
+            Text('Height (cm)'),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Enter your height',
+              ),
+              keyboardType: TextInputType.number,
+              controller:
+                  TextEditingController(text: height?.toStringAsFixed(1) ?? ''),
+              onChanged: (value) {
+                setState(() {
+                  height = double.tryParse(value);
+                });
+              },
+            ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                // Save the updated profile information to the server or storage here.
+              },
+              child: Text('Save'),
+            ),
+          ],
+        ),
       ),
     );
   }
