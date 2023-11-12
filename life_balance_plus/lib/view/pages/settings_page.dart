@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:life_balance_plus/authentication/authentication_gate.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -72,6 +74,19 @@ class _SettingsPageState extends State<SettingsPage> {
               );
             },
           ),
+          const SizedBox(height: 196),
+          Center(
+            child: TextButton(
+              // TODO: better implement sign-out functionality
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const AuthGate(),
+                ));
+              },
+              child: Text("sign out", style: TextStyle(fontSize: 16)),
+            )
+          )
         ],
       ),
     );
