@@ -238,7 +238,8 @@ class _UnitsAndPreferencesSettingsPageState
               divisions: 100,
               label: dailyGoal.toString(),
             ),
-            SizedBox(height: 20.0),
+            SizedBox(height: 10.0),
+            Text('Daily Goal Amount: $dailyGoal'),
             ElevatedButton(
               onPressed: () {
                 // Save the updated units and preferences to the server or storage here.
