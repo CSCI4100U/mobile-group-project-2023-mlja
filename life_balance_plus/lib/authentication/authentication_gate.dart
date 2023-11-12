@@ -1,11 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:life_balance_plus/view/appbase.dart';
+import 'package:life_balance_plus/view/pages/initial_form.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
+
+  Future<bool> _userExists() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final firestore = FirebaseFirestore.instance;
+    final userRef = firestore.collection('users').doc(userId);
+    final userSnapshot = await userRef.get();
+    return userSnapshot.exists;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +53,7 @@ class AuthGate extends StatelessWidget {
           );
         }
 
+        // return _userExists() ? AppBase() : UserProfileForm();
         return AppBase();
       }
     );
