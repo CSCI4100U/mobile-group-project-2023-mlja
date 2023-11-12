@@ -18,6 +18,11 @@ dependencies:
   cloud_firestore: ^4.13.0
   provider: ^6.1.1
   firebase_ui_auth: ^1.10.0
+  geolocator: ^10.1.0
+  flutter_map: ^6.0.1
+  flutter_map_geojson: ^1.0.6
+  latlong2: ^0.9.0
+  http: ^1.1.0
 
 dev_dependencies:
   flutter_test:

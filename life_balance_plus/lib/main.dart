@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:life_balance_plus/firebase_options.dart';
-// import 'package:life_balance_plus/view/appbase.dart';
 import 'package:life_balance_plus/authentication/authentication_gate.dart';
 import 'package:life_balance_plus/app_state.dart';
 

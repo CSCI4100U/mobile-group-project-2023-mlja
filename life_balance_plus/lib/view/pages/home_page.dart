@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:life_balance_plus/view/widgets/home_nutrition_card.dart';
 import 'package:life_balance_plus/view/widgets/home_summary_card.dart';
-import 'dart:math' as math;
-
 import 'package:life_balance_plus/view/widgets/home_workout_card.dart';
 
 class HomePage extends StatefulWidget {
