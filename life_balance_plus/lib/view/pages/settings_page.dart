@@ -266,15 +266,89 @@ class _UnitsAndPreferencesSettingsPageState
   }
 }
 
-class NotificationsSettingsPage extends StatelessWidget {
+class NotificationsSettingsPage extends StatefulWidget {
+  @override
+  _NotificationsSettingsPageState createState() =>
+      _NotificationsSettingsPageState();
+}
+
+class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
+  bool enableNotifications = true;
+  bool enableSound = true;
+  bool enableVibration = true;
+  TimeOfDay notificationTime = TimeOfDay(hour: 8, minute: 0);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Notifications Settings'),
       ),
-      body: Center(
-        child: Text('Notifications settings go here'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Enable Notifications'),
+            Row(
+              children: [
+                Text('Receive Daily Notifications'),
+                Switch(
+                  value: enableNotifications,
+                  onChanged: (value) {
+                    setState(() {
+                      enableNotifications = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            Divider(),
+            Text('Notification Time'),
+            ListTile(
+              title: Text(
+                  'Time: ${notificationTime.hour}:${notificationTime.minute.toString().padLeft(2, '0')}'),
+              onTap: () async {
+                final pickedTime = await showTimePicker(
+                  context: context,
+                  initialTime: notificationTime,
+                );
+                if (pickedTime != null && pickedTime != notificationTime) {
+                  setState(() {
+                    notificationTime = pickedTime;
+                  });
+                }
+              },
+            ),
+            Divider(),
+            Text('Notification Preferences'),
+            CheckboxListTile(
+              title: Text('Play Sound'),
+              value: enableSound,
+              onChanged: (value) {
+                setState(() {
+                  enableSound = value;
+                });
+              },
+            ),
+            CheckboxListTile(
+              title: Text('Vibrate'),
+              value: enableVibration,
+              onChanged: (value) {
+                setState(() {
+                  enableVibration = value;
+                });
+              },
+            ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                // Save the updated notification settings to the server or storage here.
+              },
+              child: Text('Save'),
+            ),
+          ],
+        ),
       ),
     );
   }
