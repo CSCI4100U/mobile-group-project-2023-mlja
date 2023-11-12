@@ -6,14 +6,12 @@ import 'dart:async';
 class AccountControl {
   Future<int> addAccount(Account account) async {
     final db = await DatabaseDriver.init();
-    return db.insert('account', account.toMap(),
-        conflicAlgorithm: ConflictAlgorithm.replace);
+    return db.insert('account', account.toMap(), conflicAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future updateAccountInfo(Account account) async {
     final db = await DatabaseDriver.init();
-    return db.update('account', account.toMap(),
-        where: 'id = ?', whereArgs: [account.id]);
+    return db.update('account', account.toMap(), where: 'id = ?', whereArgs: [account.id]);
   }
 
   Future deleteAccount(Account account) async {

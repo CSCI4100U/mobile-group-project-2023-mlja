@@ -6,7 +6,6 @@ class Meal {
   double? proteins;
   double? carbs;
 
-
   Meal({this.id,
     required this.name,
     required this.mealType,

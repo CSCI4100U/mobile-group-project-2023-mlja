@@ -31,9 +31,6 @@ class _WorkoutPageState extends State<WorkoutPage> {
       // initialIndex: 1,
       length: 3,
       child: Scaffold(
-        // body: Center(
-
-        // ),
         appBar: AppBar(
           backgroundColor: Colors.black,
           bottom: PreferredSize(

@@ -19,9 +19,11 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: () {
               // Navigate to profile settings
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ProfileSettingsPage()));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfileSettingsPage()
+                )
+              );
             },
           ),
           ListTile(
@@ -29,9 +31,11 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: () {
               // Navigate to units and preferences settings
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UnitsAndPreferencesSettingsPage()));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UnitsAndPreferencesSettingsPage()
+                )
+              );
             },
           ),
           ListTile(
@@ -39,17 +43,21 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: () {
               // Navigate to notifications settings
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NotificationsSettingsPage()));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NotificationsSettingsPage()
+                )
+              );
             },
           ),
           ListTile(
             title: Text('Goal Settings'),
             onTap: () {
               // Navigate to goal settings
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => GoalSettingsPage()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => GoalSettingsPage())
+              );
             },
           ),
           ListTile(
@@ -57,9 +65,11 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: () {
               // Navigate to connectivity settings
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ConnectivitySettingsPage()));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ConnectivitySettingsPage()
+                )
+              );
             },
           ),
         ],
@@ -128,11 +138,11 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                 });
               },
               items: <String?>['Male', 'Female', 'Other']
-                  .map((value) => DropdownMenuItem<String?>(
-                        value: value,
-                        child: Text(value ?? 'Select Gender'),
-                      ))
-                  .toList(),
+                .map((value) => DropdownMenuItem<String?>(
+                  value: value,
+                  child: Text(value ?? 'Select Gender'),
+                )
+              ).toList(),
             ),
             SizedBox(height: 20.0),
             Text('Weight (kg)'),
@@ -141,8 +151,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                 hintText: 'Enter your weight',
               ),
               keyboardType: TextInputType.number,
-              controller:
-                  TextEditingController(text: weight?.toStringAsFixed(1) ?? ''),
+              controller: TextEditingController(text: weight?.toStringAsFixed(1) ?? ''),
               onChanged: (value) {
                 setState(() {
                   weight = double.tryParse(value);
@@ -156,8 +165,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                 hintText: 'Enter your height',
               ),
               keyboardType: TextInputType.number,
-              controller:
-                  TextEditingController(text: height?.toStringAsFixed(1) ?? ''),
+              controller: TextEditingController(text: height?.toStringAsFixed(1) ?? ''),
               onChanged: (value) {
                 setState(() {
                   height = double.tryParse(value);
@@ -181,13 +189,12 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
 class UnitsAndPreferencesSettingsPage extends StatefulWidget {
   @override
   _UnitsAndPreferencesSettingsPageState createState() =>
-      _UnitsAndPreferencesSettingsPageState();
+    _UnitsAndPreferencesSettingsPageState();
 }
 
 enum UnitsSystem { Metric, Imperial }
 
-class _UnitsAndPreferencesSettingsPageState
-    extends State<UnitsAndPreferencesSettingsPage> {
+class _UnitsAndPreferencesSettingsPageState extends State<UnitsAndPreferencesSettingsPage> {
   UnitsSystem unitsSystem = UnitsSystem.Metric;
 
   @override
@@ -296,8 +303,7 @@ class _UnitsAndPreferencesSettingsPageState
 
 class NotificationsSettingsPage extends StatefulWidget {
   @override
-  _NotificationsSettingsPageState createState() =>
-      _NotificationsSettingsPageState();
+  _NotificationsSettingsPageState createState() => _NotificationsSettingsPageState();
 }
 
 class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
@@ -455,8 +461,7 @@ class _GoalSettingsPageState extends State<GoalSettingsPage> {
               label: dailyPhysicalActivityGoal.toString(),
             ),
             SizedBox(height: 10.0),
-            Text(
-                'Daily Physical Activity Goal: $dailyPhysicalActivityGoal minutes'),
+            Text('Daily Physical Activity Goal: $dailyPhysicalActivityGoal minutes'),
             Divider(),
             Text('Daily Water Intake Goal'),
             Slider(
@@ -489,8 +494,7 @@ class _GoalSettingsPageState extends State<GoalSettingsPage> {
 
 class ConnectivitySettingsPage extends StatefulWidget {
   @override
-  _ConnectivitySettingsPageState createState() =>
-      _ConnectivitySettingsPageState();
+  _ConnectivitySettingsPageState createState() => _ConnectivitySettingsPageState();
 }
 
 class _ConnectivitySettingsPageState extends State<ConnectivitySettingsPage> {

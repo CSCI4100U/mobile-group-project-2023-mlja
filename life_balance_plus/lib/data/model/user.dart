@@ -8,8 +8,9 @@ class User {
   List<WorkoutPlan> workoutPlans;
   FitnessLogs fitnessLogs;
 
-  User(
-      {required this.account,
-      required this.workoutPlans,
-      required this.fitnessLogs});
+  User({
+    required this.account,
+    required this.workoutPlans,
+    required this.fitnessLogs
+  });
 }
