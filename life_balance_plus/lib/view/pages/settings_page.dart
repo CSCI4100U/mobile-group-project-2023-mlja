@@ -331,15 +331,48 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
   }
 }
 
-class GoalSettingsPage extends StatelessWidget {
+class GoalSettingsPage extends StatefulWidget {
+  @override
+  _GoalSettingsPageState createState() => _GoalSettingsPageState();
+}
+
+class _GoalSettingsPageState extends State<GoalSettingsPage> {
+  int dailyGoal = 2000;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Goal Settings'),
       ),
-      body: Center(
-        child: Text('Goal settings go here'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Daily Goal'),
+            Slider(
+              value: dailyGoal.toDouble(),
+              onChanged: (value) {
+                setState(() {
+                  dailyGoal = value.round();
+                });
+              },
+              min: 0,
+              max: 5000,
+              divisions: 100,
+              label: dailyGoal.toString(),
+            ),
+            SizedBox(height: 10.0),
+            Text('Daily Goal Amount: $dailyGoal'),
+            ElevatedButton(
+              onPressed: () {
+                // Save the updated goal settings to the server or storage here.
+              },
+              child: Text('Save'),
+            ),
+          ],
+        ),
       ),
     );
   }
