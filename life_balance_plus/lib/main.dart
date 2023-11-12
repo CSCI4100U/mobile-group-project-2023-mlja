@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:life_balance_plus/navbar.dart';
-
+import 'package:life_balance_plus/view/appbase.dart';
 
 void main() {
   runApp(const App());
@@ -17,7 +16,7 @@ class App extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
         useMaterial3: true,
       ),
-      home: const NavBar(),
+      home: const AppBase(),
     );
   }
 }

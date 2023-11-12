@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "life_balance_plus",
+            "cwd": "life_balance_plus",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "life_balance_plus (profile mode)",
+            "cwd": "life_balance_plus",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "life_balance_plus (release mode)",
+            "cwd": "life_balance_plus",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
