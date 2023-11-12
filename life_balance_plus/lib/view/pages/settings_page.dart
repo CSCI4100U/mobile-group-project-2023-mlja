@@ -487,15 +487,93 @@ class _GoalSettingsPageState extends State<GoalSettingsPage> {
   }
 }
 
-class ConnectivitySettingsPage extends StatelessWidget {
+class ConnectivitySettingsPage extends StatefulWidget {
+  @override
+  _ConnectivitySettingsPageState createState() =>
+      _ConnectivitySettingsPageState();
+}
+
+class _ConnectivitySettingsPageState extends State<ConnectivitySettingsPage> {
+  bool? enableWifi = true;
+  bool? enableMobileData = false;
+  bool? enableBluetooth = true;
+  bool? enableNFC = false;
+  bool? enableLocationServices = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Connectivity Settings'),
       ),
-      body: Center(
-        child: Text('Connectivity settings go here'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Wi-Fi'),
+            CheckboxListTile(
+              title: Text('Enable Wi-Fi'),
+              value: enableWifi,
+              onChanged: (value) {
+                setState(() {
+                  enableWifi = value;
+                });
+              },
+            ),
+            Divider(),
+            Text('Mobile Data'),
+            CheckboxListTile(
+              title: Text('Enable Mobile Data'),
+              value: enableMobileData,
+              onChanged: (value) {
+                setState(() {
+                  enableMobileData = value;
+                });
+              },
+            ),
+            Divider(),
+            Text('Bluetooth'),
+            CheckboxListTile(
+              title: Text('Enable Bluetooth'),
+              value: enableBluetooth,
+              onChanged: (value) {
+                setState(() {
+                  enableBluetooth = value;
+                });
+              },
+            ),
+            Divider(),
+            Text('NFC (Near Field Communication)'),
+            CheckboxListTile(
+              title: Text('Enable NFC'),
+              value: enableNFC,
+              onChanged: (value) {
+                setState(() {
+                  enableNFC = value;
+                });
+              },
+            ),
+            Divider(),
+            Text('Location Services'),
+            CheckboxListTile(
+              title: Text('Enable Location Services'),
+              value: enableLocationServices,
+              onChanged: (value) {
+                setState(() {
+                  enableLocationServices = value;
+                });
+              },
+            ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                // Save the updated connectivity settings to the server or storage here.
+              },
+              child: Text('Save'),
+            ),
+          ],
+        ),
       ),
     );
   }
