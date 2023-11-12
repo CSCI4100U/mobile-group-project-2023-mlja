@@ -188,15 +188,65 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   }
 }
 
-class UnitsAndPreferencesSettingsPage extends StatelessWidget {
+class UnitsAndPreferencesSettingsPage extends StatefulWidget {
+  @override
+  _UnitsAndPreferencesSettingsPageState createState() =>
+      _UnitsAndPreferencesSettingsPageState();
+}
+
+class _UnitsAndPreferencesSettingsPageState
+    extends State<UnitsAndPreferencesSettingsPage> {
+  bool useMetricSystem = true;
+  int dailyGoal = 2000;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Units and Preferences'),
       ),
-      body: Center(
-        child: Text('Units and preferences settings go here'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Units System'),
+            Row(
+              children: [
+                Text('Use Metric System'),
+                Switch(
+                  value: useMetricSystem,
+                  onChanged: (value) {
+                    setState(() {
+                      useMetricSystem = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            Divider(),
+            Text('Daily Goal'),
+            Slider(
+              value: dailyGoal.toDouble(),
+              onChanged: (value) {
+                setState(() {
+                  dailyGoal = value.round();
+                });
+              },
+              min: 0,
+              max: 5000,
+              divisions: 100,
+              label: dailyGoal.toString(),
+            ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                // Save the updated units and preferences to the server or storage here.
+              },
+              child: Text('Save'),
+            ),
+          ],
+        ),
       ),
     );
   }
