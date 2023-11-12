@@ -4,6 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:life_balance_plus/view/pages/initial_form.dart';
 
+import '../appbase.dart';
+import 'initial_form.dart';
+
 class LoginForward extends StatefulWidget {
   const LoginForward({super.key});
 
@@ -13,18 +16,24 @@ class LoginForward extends StatefulWidget {
 
 class _LoginForwardState extends State<LoginForward> {
   String? userId;
-  Map? userInfo;
-
-  Future _loadUserInfo() async {
-    userId = FirebaseAuth.instance.currentUser?.uid;
-    final firestore = FirebaseFirestore.instance;
-    final userRef = firestore.collection('users').doc(userId);
-    final userSnapshot = await userRef.get();
-    userInfo = userSnapshot.data();
-  }
+  bool hasInfo = false;
+  Map<String, dynamic>? userInfo;
 
   Future<void> _loadUserId() async {
-    userId = FirebaseAuth.instance.currentUser!.uid;
+    userId = FirebaseAuth.instance.currentUser?.uid;
+  }
+
+  Future _loadUserInfo() async {
+    final firestore = FirebaseFirestore.instance;
+    final query = firestore.collection('users').where('userId', isEqualTo: userId);
+    final snapshot = await query.get();
+
+    if (snapshot.docs.isNotEmpty) {
+      setState(() {
+        hasInfo = true;
+        userInfo = snapshot.docs.first.data();
+      });
+    }
   }
 
   Future _sendToForm() async {
@@ -33,9 +42,31 @@ class _LoginForwardState extends State<LoginForward> {
     );
   }
 
+  @override
+  void initState() {
+    _loadUserId();
+    _loadUserInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    if (userId != null && userInfo != null) {
+      // Navigate to Page A
+      Future.delayed(Duration.zero, () {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => AppBase(userData: userInfo)),
+        );
+      });
+    } else {
+      // Navigate to Page B
+      Future.delayed(Duration.zero, () {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => UserProfileForm()),
+        );
+      });
+    }
+
+    // Return a placeholder widget (this will not be displayed)
+    return Container();
   }
 }

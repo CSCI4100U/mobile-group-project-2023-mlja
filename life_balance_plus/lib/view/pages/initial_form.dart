@@ -139,8 +139,8 @@ class _UserProfileFormState extends State<UserProfileForm> {
 
         // Navigator.pop(context, userData);
 
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => AppBase(userInfo: userData))
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => AppBase(userData: userData))
         );
 
       } catch (e) {

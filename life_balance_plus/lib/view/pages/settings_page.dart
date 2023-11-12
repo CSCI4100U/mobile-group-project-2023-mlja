@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:life_balance_plus/authentication/authentication_gate.dart';
 import 'package:life_balance_plus/data/model/session.dart';
 import 'package:life_balance_plus/data/model/account.dart';
+import 'package:life_balance_plus/view/pages/login_forward.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -67,6 +68,16 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           const SizedBox(height: 196),
+          Center(
+              child: TextButton(
+                onPressed: () async {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const LoginForward(),
+                  ));
+                },
+                child: Text("Test mid-router", style: TextStyle(fontSize: 35)),
+              ),
+          ),
           Center(
               child: TextButton(
                 // TODO: better implement sign-out functionality

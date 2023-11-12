@@ -10,9 +10,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Base widget for the UI. Provides a global `Scaffold` with a `NavigationBar`
 /// for navigating between the main pages.
 class AppBase extends StatefulWidget {
-  Map<String, dynamic>? userInfo;
+  Map<String, dynamic>? userData;
 
-  AppBase({super.key, this.userInfo});
+  AppBase({super.key, required this.userData});
 
   @override
   State<AppBase> createState() => _AppBaseState();

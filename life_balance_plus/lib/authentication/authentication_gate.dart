@@ -43,7 +43,7 @@ class AuthGate extends StatelessWidget {
             },
           );
         }
-        return AppBase();
+        return LoginForward();
       }
     );
   }
