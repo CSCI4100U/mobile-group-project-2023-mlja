@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:life_balance_plus/authentication/authentication_gate.dart';
+import 'package:life_balance_plus/data/model/session.dart';
+import 'package:life_balance_plus/data/model/account.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -100,14 +102,40 @@ class ProfileSettingsPage extends StatefulWidget {
 
 class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   // Define variables to store user profile information.
-  String? username = 'John Doe';
-  int? age = 30;
+  String username = 'John Doe';
+  DateTime dateOfBirth = DateTime.now();
   String? gender;
   double? weight = 70.0;
   double? height = 175.0;
 
+  /// Displays a date picker and updates date of birth.
+  Future<void> _chooseDateOfBirth(BuildContext context) async {
+    DateTime? date = await showDatePicker(
+      context: context,
+      initialDate: dateOfBirth,
+      firstDate: DateTime(1900, 1),
+      lastDate: DateTime.now(),
+    );
+
+    if(date != null && date != dateOfBirth) {
+      setState(() => dateOfBirth = date);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    // Get user data from account
+    Account? account = Session.instance.account;
+    if(account != null) {
+      username = '${account.firstName} ${account.lastName}';
+      dateOfBirth = account.dateOfBirth;
+      gender = account.gender.name;
+      gender = gender![0].toUpperCase() + gender!.substring(1);
+      weight = account.weight;
+      height = account.height;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile Settings'),
@@ -130,18 +158,10 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
               },
             ),
             SizedBox(height: 20.0),
-            Text('Age'),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter your age',
-              ),
-              keyboardType: TextInputType.number,
-              controller: TextEditingController(text: age?.toString() ?? ''),
-              onChanged: (value) {
-                setState(() {
-                  age = int.tryParse(value);
-                });
-              },
+            Text('Date of Birth'),
+            ElevatedButton(
+              onPressed: () => _chooseDateOfBirth(context),
+              child: Text('$dateOfBirth'.split(' ')[0]),
             ),
             SizedBox(height: 20.0),
             Text('Gender'),
@@ -190,7 +210,14 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                // Save the updated profile information to the server or storage here.
+                account?.updateAccountInfo(
+                  firstName: username.split(' ')[0],
+                  lastName: username.split(' ')[1],
+                  dateOfBirth: dateOfBirth,
+                  gender: gender,
+                  weight: weight,
+                  height: height,
+                );
               },
               child: Text('Save'),
             ),
@@ -207,13 +234,18 @@ class UnitsAndPreferencesSettingsPage extends StatefulWidget {
     _UnitsAndPreferencesSettingsPageState();
 }
 
-enum UnitsSystem { Metric, Imperial }
-
 class _UnitsAndPreferencesSettingsPageState extends State<UnitsAndPreferencesSettingsPage> {
   UnitsSystem unitsSystem = UnitsSystem.Metric;
 
   @override
   Widget build(BuildContext context) {
+
+    // Get user data from account
+    Account? account = Session.instance.account;
+    if(account != null) {
+      unitsSystem = account.unitsSystem;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Units and Preferences'),
@@ -232,6 +264,7 @@ class _UnitsAndPreferencesSettingsPageState extends State<UnitsAndPreferencesSet
                 onChanged: (UnitsSystem? value) {
                   setState(() {
                     unitsSystem = value!;
+                    account?.updateAccountInfo(unitsSystem: unitsSystem);
                   });
                 },
               ),
@@ -244,6 +277,7 @@ class _UnitsAndPreferencesSettingsPageState extends State<UnitsAndPreferencesSet
                 onChanged: (UnitsSystem? value) {
                   setState(() {
                     unitsSystem = value!;
+                    account?.updateAccountInfo(unitsSystem: unitsSystem);
                   });
                 },
               ),
@@ -330,6 +364,16 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    // Get user data from account
+    Account? account = Session.instance.account;
+    if(account != null) {
+      enableNotifications = account.useNotifications;
+      enableSound = account.notificationSound;
+      enableVibration = account.notificationVibration;
+      reminderFrequency = account.notificationFrequency;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Notifications Settings'),
@@ -414,7 +458,12 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                // Save the updated notification settings to the server or storage here.
+                account?.updateAccountInfo(
+                  useNotifications: enableNotifications,
+                  notificationSound: enableSound,
+                  notificationVibration: enableVibration,
+                  notificationFrequency: reminderFrequency,
+                );
               },
               child: Text('Save'),
             ),
@@ -437,6 +486,15 @@ class _GoalSettingsPageState extends State<GoalSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    // Get user data from account
+    Account? account = Session.instance.account;
+    if(account != null) {
+      dailyCaloricIntakeGoal = account.caloricIntakeGoal;
+      dailyPhysicalActivityGoal = account.dailyActivityGoal;
+      dailyWaterIntakeGoal = account.waterIntakeGoal;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Goal Settings'),
@@ -496,7 +554,11 @@ class _GoalSettingsPageState extends State<GoalSettingsPage> {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                // Save the updated goal settings to the server or storage here.
+                account?.updateAccountInfo(
+                  caloricIntakeGoal: dailyCaloricIntakeGoal,
+                  dailyActivityGoal: dailyPhysicalActivityGoal,
+                  waterIntakeGoal: dailyWaterIntakeGoal,
+                );
               },
               child: Text('Save'),
             ),
@@ -521,6 +583,16 @@ class _ConnectivitySettingsPageState extends State<ConnectivitySettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    // Get user data from account
+    Account? account = Session.instance.account;
+    if(account != null) {
+      enableWifi = account.useWifi;
+      enableMobileData = account.useMobileData;
+      enableNFC = account.useNFC;
+      enableLocationServices = account.useLocation;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Connectivity Settings'),
@@ -587,7 +659,13 @@ class _ConnectivitySettingsPageState extends State<ConnectivitySettingsPage> {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                // Save the updated connectivity settings to the server or storage here.
+                account?.updateAccountInfo(
+                  useWifi: enableWifi,
+                  useMobileData: enableMobileData,
+                  useBluetooth: enableBluetooth,
+                  useNFC: enableNFC,
+                  useLocation: enableLocationServices,
+                );
               },
               child: Text('Save'),
             ),
