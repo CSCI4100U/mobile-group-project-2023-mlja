@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:life_balance_plus/authentication/authentication_gate.dart';
-import 'package:life_balance_plus/view/pages/initial_form.dart';
+import 'package:life_balance_plus/data/model/session.dart';
+import 'package:life_balance_plus/data/model/account.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -22,11 +23,9 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: () {
               // Navigate to profile settings
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProfileSettingsPage()
-                )
-              );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProfileSettingsPage()));
             },
           ),
           ListTile(
@@ -34,11 +33,9 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: () {
               // Navigate to units and preferences settings
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => UnitsAndPreferencesSettingsPage()
-                )
-              );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UnitsAndPreferencesSettingsPage()));
             },
           ),
           ListTile(
@@ -46,21 +43,17 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: () {
               // Navigate to notifications settings
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NotificationsSettingsPage()
-                )
-              );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NotificationsSettingsPage()));
             },
           ),
           ListTile(
             title: Text('Goal Settings'),
             onTap: () {
               // Navigate to goal settings
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => GoalSettingsPage())
-              );
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => GoalSettingsPage()));
             },
           ),
           ListTile(
@@ -68,38 +61,23 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: () {
               // Navigate to connectivity settings
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ConnectivitySettingsPage()
-                )
-              );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ConnectivitySettingsPage()));
             },
           ),
           const SizedBox(height: 196),
-          ListTile(
-            title: Text('Test Form page'),
-            onTap: () {
-              // Navigate to connectivity settings
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UserProfileForm()
-                  )
-              );
-            },
-          ),
           Center(
-            child: TextButton(
-              // TODO: better implement sign-out functionality
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const AuthGate(),
-                ));
-              },
-              child: Text("sign out", style: TextStyle(fontSize: 16)),
-            )
-          )
+              child: TextButton(
+                // TODO: better implement sign-out functionality
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const AuthGate(),
+                  ));
+                },
+                child: Text("sign out", style: TextStyle(fontSize: 16)),
+              ))
         ],
       ),
     );
@@ -113,14 +91,39 @@ class ProfileSettingsPage extends StatefulWidget {
 
 class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   // Define variables to store user profile information.
-  String? username = 'John Doe';
-  int? age = 30;
+  String username = 'John Doe';
+  DateTime dateOfBirth = DateTime.now();
   String? gender;
   double? weight = 70.0;
   double? height = 175.0;
 
+  /// Displays a date picker and updates date of birth.
+  Future<void> _chooseDateOfBirth(BuildContext context) async {
+    DateTime? date = await showDatePicker(
+      context: context,
+      initialDate: dateOfBirth,
+      firstDate: DateTime(1900, 1),
+      lastDate: DateTime.now(),
+    );
+
+    if (date != null && date != dateOfBirth) {
+      setState(() => dateOfBirth = date);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Get user data from account
+    Account? account = Session.instance.account;
+    if (account != null) {
+      username = '${account.firstName} ${account.lastName}';
+      dateOfBirth = account.dateOfBirth;
+      gender = account.gender.name;
+      gender = gender![0].toUpperCase() + gender!.substring(1);
+      weight = account.weight;
+      height = account.height;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile Settings'),
@@ -143,18 +146,10 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
               },
             ),
             SizedBox(height: 20.0),
-            Text('Age'),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter your age',
-              ),
-              keyboardType: TextInputType.number,
-              controller: TextEditingController(text: age?.toString() ?? ''),
-              onChanged: (value) {
-                setState(() {
-                  age = int.tryParse(value);
-                });
-              },
+            Text('Date of Birth'),
+            ElevatedButton(
+              onPressed: () => _chooseDateOfBirth(context),
+              child: Text('$dateOfBirth'.split(' ')[0]),
             ),
             SizedBox(height: 20.0),
             Text('Gender'),
@@ -166,11 +161,11 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                 });
               },
               items: <String?>['Male', 'Female', 'Other']
-                .map((value) => DropdownMenuItem<String?>(
-                  value: value,
-                  child: Text(value ?? 'Select Gender'),
-                )
-              ).toList(),
+                  .map((value) => DropdownMenuItem<String?>(
+                value: value,
+                child: Text(value ?? 'Select Gender'),
+              ))
+                  .toList(),
             ),
             SizedBox(height: 20.0),
             Text('Weight (kg)'),
@@ -179,7 +174,8 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                 hintText: 'Enter your weight',
               ),
               keyboardType: TextInputType.number,
-              controller: TextEditingController(text: weight?.toStringAsFixed(1) ?? ''),
+              controller:
+              TextEditingController(text: weight?.toStringAsFixed(1) ?? ''),
               onChanged: (value) {
                 setState(() {
                   weight = double.tryParse(value);
@@ -193,7 +189,8 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                 hintText: 'Enter your height',
               ),
               keyboardType: TextInputType.number,
-              controller: TextEditingController(text: height?.toStringAsFixed(1) ?? ''),
+              controller:
+              TextEditingController(text: height?.toStringAsFixed(1) ?? ''),
               onChanged: (value) {
                 setState(() {
                   height = double.tryParse(value);
@@ -203,7 +200,14 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                // Save the updated profile information to the server or storage here.
+                account?.updateAccountInfo(
+                  firstName: username.split(' ')[0],
+                  lastName: username.split(' ')[1],
+                  dateOfBirth: dateOfBirth,
+                  gender: gender,
+                  weight: weight,
+                  height: height,
+                );
               },
               child: Text('Save'),
             ),
@@ -217,16 +221,21 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
 class UnitsAndPreferencesSettingsPage extends StatefulWidget {
   @override
   _UnitsAndPreferencesSettingsPageState createState() =>
-    _UnitsAndPreferencesSettingsPageState();
+      _UnitsAndPreferencesSettingsPageState();
 }
 
-enum UnitsSystem { Metric, Imperial }
-
-class _UnitsAndPreferencesSettingsPageState extends State<UnitsAndPreferencesSettingsPage> {
+class _UnitsAndPreferencesSettingsPageState
+    extends State<UnitsAndPreferencesSettingsPage> {
   UnitsSystem unitsSystem = UnitsSystem.Metric;
 
   @override
   Widget build(BuildContext context) {
+    // Get user data from account
+    Account? account = Session.instance.account;
+    if (account != null) {
+      unitsSystem = account.unitsSystem;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Units and Preferences'),
@@ -245,6 +254,7 @@ class _UnitsAndPreferencesSettingsPageState extends State<UnitsAndPreferencesSet
                 onChanged: (UnitsSystem? value) {
                   setState(() {
                     unitsSystem = value!;
+                    account?.updateAccountInfo(unitsSystem: unitsSystem);
                   });
                 },
               ),
@@ -257,6 +267,7 @@ class _UnitsAndPreferencesSettingsPageState extends State<UnitsAndPreferencesSet
                 onChanged: (UnitsSystem? value) {
                   setState(() {
                     unitsSystem = value!;
+                    account?.updateAccountInfo(unitsSystem: unitsSystem);
                   });
                 },
               ),
@@ -331,7 +342,8 @@ class _UnitsAndPreferencesSettingsPageState extends State<UnitsAndPreferencesSet
 
 class NotificationsSettingsPage extends StatefulWidget {
   @override
-  _NotificationsSettingsPageState createState() => _NotificationsSettingsPageState();
+  _NotificationsSettingsPageState createState() =>
+      _NotificationsSettingsPageState();
 }
 
 class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
@@ -343,6 +355,15 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Get user data from account
+    Account? account = Session.instance.account;
+    if (account != null) {
+      enableNotifications = account.useNotifications;
+      enableSound = account.notificationSound;
+      enableVibration = account.notificationVibration;
+      reminderFrequency = account.notificationFrequency;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Notifications Settings'),
@@ -427,7 +448,12 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                // Save the updated notification settings to the server or storage here.
+                account?.updateAccountInfo(
+                  useNotifications: enableNotifications,
+                  notificationSound: enableSound,
+                  notificationVibration: enableVibration,
+                  notificationFrequency: reminderFrequency,
+                );
               },
               child: Text('Save'),
             ),
@@ -450,6 +476,14 @@ class _GoalSettingsPageState extends State<GoalSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Get user data from account
+    Account? account = Session.instance.account;
+    if (account != null) {
+      dailyCaloricIntakeGoal = account.caloricIntakeGoal;
+      dailyPhysicalActivityGoal = account.dailyActivityGoal;
+      dailyWaterIntakeGoal = account.waterIntakeGoal;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Goal Settings'),
@@ -489,7 +523,8 @@ class _GoalSettingsPageState extends State<GoalSettingsPage> {
               label: dailyPhysicalActivityGoal.toString(),
             ),
             SizedBox(height: 10.0),
-            Text('Daily Physical Activity Goal: $dailyPhysicalActivityGoal minutes'),
+            Text(
+                'Daily Physical Activity Goal: $dailyPhysicalActivityGoal minutes'),
             Divider(),
             Text('Daily Water Intake Goal'),
             Slider(
@@ -509,7 +544,11 @@ class _GoalSettingsPageState extends State<GoalSettingsPage> {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                // Save the updated goal settings to the server or storage here.
+                account?.updateAccountInfo(
+                  caloricIntakeGoal: dailyCaloricIntakeGoal,
+                  dailyActivityGoal: dailyPhysicalActivityGoal,
+                  waterIntakeGoal: dailyWaterIntakeGoal,
+                );
               },
               child: Text('Save'),
             ),
@@ -522,18 +561,28 @@ class _GoalSettingsPageState extends State<GoalSettingsPage> {
 
 class ConnectivitySettingsPage extends StatefulWidget {
   @override
-  _ConnectivitySettingsPageState createState() => _ConnectivitySettingsPageState();
+  _ConnectivitySettingsPageState createState() =>
+      _ConnectivitySettingsPageState();
 }
 
 class _ConnectivitySettingsPageState extends State<ConnectivitySettingsPage> {
   bool? enableWifi = true;
-  bool? enableMobileData = false;
+  bool? enableMobileData = true;
   bool? enableBluetooth = true;
   bool? enableNFC = false;
   bool? enableLocationServices = true;
 
   @override
   Widget build(BuildContext context) {
+    // Get user data from account
+    Account? account = Session.instance.account;
+    if (account != null) {
+      enableWifi = account.useWifi;
+      enableMobileData = account.useMobileData;
+      enableNFC = account.useNFC;
+      enableLocationServices = account.useLocation;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Connectivity Settings'),
@@ -600,7 +649,13 @@ class _ConnectivitySettingsPageState extends State<ConnectivitySettingsPage> {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                // Save the updated connectivity settings to the server or storage here.
+                account?.updateAccountInfo(
+                  useWifi: enableWifi,
+                  useMobileData: enableMobileData,
+                  useBluetooth: enableBluetooth,
+                  useNFC: enableNFC,
+                  useLocation: enableLocationServices,
+                );
               },
               child: Text('Save'),
             ),

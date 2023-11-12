@@ -5,7 +5,7 @@ import 'dart:async';
 
 class AccountControl {
 
-  Future getAccounts() async {
+  static Future getAccounts() async {
     final db = await DatabaseDriver.init();
     final List maps = await db.query('account');
     List<Account> result = [];
@@ -15,17 +15,17 @@ class AccountControl {
     return result;
   }
 
-  Future<int> addAccount(Account account) async {
+  static Future<int> addAccount(Account account) async {
     final db = await DatabaseDriver.init();
-    return db.insert('account', account.toMap(), conflicAlgorithm: ConflictAlgorithm.replace);
+    return db.insert('account', account.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future updateAccountInfo(Account account) async {
+  static Future updateAccountInfo(Account account) async {
     final db = await DatabaseDriver.init();
     return db.update('account', account.toMap(), where: 'id = ?', whereArgs: [account.id]);
   }
 
-  Future deleteAccount(Account account) async {
+  static Future deleteAccount(Account account) async {
     final db = await DatabaseDriver.init();
     int id = account.id!;
     await db.delete('account', where: 'id = ?', whereArgs: [id]);
