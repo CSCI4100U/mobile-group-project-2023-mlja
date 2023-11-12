@@ -349,7 +349,9 @@ class GoalSettingsPage extends StatefulWidget {
 }
 
 class _GoalSettingsPageState extends State<GoalSettingsPage> {
-  int dailyGoal = 2000;
+  int dailyCaloricIntakeGoal = 2000;
+  int dailyPhysicalActivityGoal = 30; // in minutes
+  int dailyWaterIntakeGoal = 8; // in cups
 
   @override
   Widget build(BuildContext context) {
@@ -362,21 +364,55 @@ class _GoalSettingsPageState extends State<GoalSettingsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Daily Goal'),
+            Text('Daily Caloric Intake Goal'),
             Slider(
-              value: dailyGoal.toDouble(),
+              value: dailyCaloricIntakeGoal.toDouble(),
               onChanged: (value) {
                 setState(() {
-                  dailyGoal = value.round();
+                  dailyCaloricIntakeGoal = value.round();
                 });
               },
               min: 0,
               max: 5000,
               divisions: 100,
-              label: dailyGoal.toString(),
+              label: dailyCaloricIntakeGoal.toString(),
             ),
             SizedBox(height: 10.0),
-            Text('Daily Goal Amount: $dailyGoal'),
+            Text('Daily Caloric Intake Goal: $dailyCaloricIntakeGoal calories'),
+            Divider(),
+            Text('Daily Physical Activity Goal'),
+            Slider(
+              value: dailyPhysicalActivityGoal.toDouble(),
+              onChanged: (value) {
+                setState(() {
+                  dailyPhysicalActivityGoal = value.round();
+                });
+              },
+              min: 0,
+              max: 180, // Assuming a maximum of 3 hours of activity
+              divisions: 36, // 36 divisions for each 10 minutes
+              label: dailyPhysicalActivityGoal.toString(),
+            ),
+            SizedBox(height: 10.0),
+            Text(
+                'Daily Physical Activity Goal: $dailyPhysicalActivityGoal minutes'),
+            Divider(),
+            Text('Daily Water Intake Goal'),
+            Slider(
+              value: dailyWaterIntakeGoal.toDouble(),
+              onChanged: (value) {
+                setState(() {
+                  dailyWaterIntakeGoal = value.round();
+                });
+              },
+              min: 0,
+              max: 16, // Assuming a maximum of 16 cups
+              divisions: 16, // 16 divisions for each cup
+              label: dailyWaterIntakeGoal.toString(),
+            ),
+            SizedBox(height: 10.0),
+            Text('Daily Water Intake Goal: $dailyWaterIntakeGoal cups'),
+            SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
                 // Save the updated goal settings to the server or storage here.
