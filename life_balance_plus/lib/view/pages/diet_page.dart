@@ -22,7 +22,7 @@ class _DietPageState extends State<DietPage> {
   void initState() {
     super.initState();
     // Uncomment this the first time you run to add some meals to the local db
-    // MealControl().addDummyData();
+    MealControl().addDummyData();
     _loadMeals();
   }
 

@@ -23,9 +23,9 @@ class _AppBaseState extends State<AppBase> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Life Balance Plus'),
-        ),
+        // appBar: AppBar(
+        //   title: const Text('Life Balance Plus'),
+        // ),
         bottomNavigationBar: NavigationBar(
           labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           selectedIndex: currentIndex,
