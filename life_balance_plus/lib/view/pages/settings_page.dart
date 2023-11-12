@@ -62,16 +62,6 @@ class _SettingsPageState extends State<SettingsPage> {
                       builder: (context) => ConnectivitySettingsPage()));
             },
           ),
-          ListTile(
-            title: Text('Data Management'),
-            onTap: () {
-              // Navigate to data management settings
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DataManagementSettingsPage()));
-            },
-          ),
         ],
       ),
     );
@@ -409,20 +399,6 @@ class ConnectivitySettingsPage extends StatelessWidget {
       ),
       body: Center(
         child: Text('Connectivity settings go here'),
-      ),
-    );
-  }
-}
-
-class DataManagementSettingsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Data Management Settings'),
-      ),
-      body: Center(
-        child: Text('Data management settings go here'),
       ),
     );
   }
