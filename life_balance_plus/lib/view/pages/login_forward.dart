@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:life_balance_plus/view/pages/initial_form.dart';
-
-import '../appbase.dart';
-import 'initial_form.dart';
+import 'package:life_balance_plus/view/appbase.dart';
+import 'package:life_balance_plus/view/pages/initial_form.dart';
 
 class LoginForward extends StatefulWidget {
   const LoginForward({super.key});
@@ -25,7 +23,8 @@ class _LoginForwardState extends State<LoginForward> {
 
   Future _loadUserInfo() async {
     final firestore = FirebaseFirestore.instance;
-    final query = firestore.collection('users').where('userId', isEqualTo: userId);
+    final query =
+        firestore.collection('users').where('userId', isEqualTo: userId);
     final snapshot = await query.get();
 
     if (snapshot.docs.isNotEmpty) {
@@ -37,9 +36,8 @@ class _LoginForwardState extends State<LoginForward> {
   }
 
   Future _sendToForm() async {
-    await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => UserProfileForm())
-    );
+    await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => UserProfileForm()));
   }
 
   @override

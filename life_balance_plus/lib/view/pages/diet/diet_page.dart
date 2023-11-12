@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../data/model/meal.dart';
-import '../../control/meals_control.dart';
+import 'package:life_balance_plus/view/widgets/custom_tabbar.dart';
+import '../../../data/model/meal.dart';
+import '../../../control/meals_control.dart';
 import 'meals_data_table.dart';
 
 class DietPage extends StatefulWidget {
@@ -28,10 +29,13 @@ class _DietPageState extends State<DietPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: MealsDataTable(meals: meals),
-      ),
+    return CustomTabbar(
+      pages: [
+        Placeholder(),
+        Center(child: MealsDataTable(meals: meals)),
+        Placeholder(),
+      ],
+      tabNames: const ['Dashboard', 'Log', 'Create'],
     );
   }
 }
