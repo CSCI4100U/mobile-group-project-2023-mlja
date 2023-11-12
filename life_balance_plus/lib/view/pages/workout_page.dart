@@ -29,15 +29,17 @@ class _WorkoutPageState extends State<WorkoutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: ListView.builder(
-              itemCount: exs.length,
-              itemBuilder: (context, index) {
-                final ex = exs[index];
-                return ListTile(
-                  title: Text('${ex.name}'),
-                  subtitle: Text('Sets: ${ex.sets}'),
-                );
-              })),
+        child: ListView.builder(
+          itemCount: exs.length,
+          itemBuilder: (context, index) {
+            final ex = exs[index];
+            return ListTile(
+              title: Text('${ex.name}'),
+              subtitle: Text('Sets: ${ex.sets}'),
+            );
+          }
+        )
+      ),
     );
   }
 }

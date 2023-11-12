@@ -29,22 +29,19 @@ class ExerciseControl {
 
   Future<int> addExercise(ExercisePlan ex) async {
     final db = await DatabaseDriver.init();
-    return db.insert('exercises', ex.toMap(),
-        conflicAlgorithm: ConflictAlgorithm.replace);
+    return db.insert('exercises', ex.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future addExercisesMult(List<ExercisePlan> exs) async {
     final db = await DatabaseDriver.init();
     exs.forEach((ex) {
-      db.insert('exercises', ex.toMap(),
-          conflictAlgorithm: ConflictAlgorithm.replace);
+      db.insert('exercises', ex.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
     });
   }
 
   Future updateExercise(ExercisePlan ex) async {
     final db = await DatabaseDriver.init();
-    return db
-        .update('exercises', ex.toMap(), where: 'id = ?', whereArgs: [ex.id]);
+    return db.update('exercises', ex.toMap(), where: 'id = ?', whereArgs: [ex.id]);
   }
 
   Future deleteExercise(int id) async {
