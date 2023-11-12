@@ -226,6 +226,67 @@ class _UnitsAndPreferencesSettingsPageState
                 },
               ),
             ),
+            SizedBox(height: 20.0),
+            Text('Weight Unit'),
+            DropdownButton<String>(
+              value: unitsSystem == UnitsSystem.Metric ? 'kg' : 'lbs',
+              onChanged: (String? value) {
+                setState(() {
+                  if (value == 'kg') {
+                    unitsSystem = UnitsSystem.Metric;
+                  } else {
+                    unitsSystem = UnitsSystem.Imperial;
+                  }
+                });
+              },
+              items: [
+                'kg',
+                'lbs',
+              ].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            SizedBox(height: 20.0),
+            Text('Temperature Unit'),
+            DropdownButton<String>(
+              value: unitsSystem == UnitsSystem.Metric ? '°C' : '°F',
+              onChanged: (String? value) {
+                setState(() {
+                  // You can implement the logic to switch between Celsius and Fahrenheit here.
+                });
+              },
+              items: [
+                '°C',
+                '°F',
+              ].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            SizedBox(height: 20.0),
+            Text('Distance Unit'),
+            DropdownButton<String>(
+              value: unitsSystem == UnitsSystem.Metric ? 'km' : 'mi',
+              onChanged: (String? value) {
+                setState(() {
+                  // You can implement the logic to switch between kilometers and miles here.
+                });
+              },
+              items: [
+                'km',
+                'mi',
+              ].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
           ],
         ),
       ),
