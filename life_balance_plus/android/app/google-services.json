@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "685887050340",
+    "project_id": "lifebalanceplus",
+    "storage_bucket": "lifebalanceplus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685887050340:android:f6449a44cfb83d1047c571",
+        "android_client_info": {
+          "package_name": "com.example.life_balance_plus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARnK2HqvzFNByO-pMJU79vn5LKNC_A7fU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
