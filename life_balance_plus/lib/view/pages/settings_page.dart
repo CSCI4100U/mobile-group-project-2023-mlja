@@ -130,7 +130,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
             ),
             SizedBox(height: 20.0),
             Text('Gender'),
-            DropdownButton<String>(
+            DropdownButton<String?>(
               value: gender,
               onChanged: (value) {
                 setState(() {
