@@ -199,7 +199,6 @@ enum UnitsSystem { Metric, Imperial }
 class _UnitsAndPreferencesSettingsPageState
     extends State<UnitsAndPreferencesSettingsPage> {
   UnitsSystem unitsSystem = UnitsSystem.Metric;
-  int dailyGoal = 2000;
 
   @override
   Widget build(BuildContext context) {
@@ -236,28 +235,6 @@ class _UnitsAndPreferencesSettingsPageState
                   });
                 },
               ),
-            ),
-            Divider(),
-            Text('Daily Goal'),
-            Slider(
-              value: dailyGoal.toDouble(),
-              onChanged: (value) {
-                setState(() {
-                  dailyGoal = value.round();
-                });
-              },
-              min: 0,
-              max: 5000,
-              divisions: 100,
-              label: dailyGoal.toString(),
-            ),
-            SizedBox(height: 10.0),
-            Text('Daily Goal Amount: $dailyGoal'),
-            ElevatedButton(
-              onPressed: () {
-                // Save the updated units and preferences to the server or storage here.
-              },
-              child: Text('Save'),
             ),
           ],
         ),
