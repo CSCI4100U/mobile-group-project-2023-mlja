@@ -4,6 +4,17 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 
 class AccountControl {
+
+  Future getAccounts() async {
+    final db = await DatabaseDriver.init();
+    final List maps = await db.query('account');
+    List<Account> result = [];
+    for (int i = 0; i < maps.length; i++) {
+      result.add(Account.fromMap(maps[i]));
+    }
+    return result;
+  }
+
   Future<int> addAccount(Account account) async {
     final db = await DatabaseDriver.init();
     return db.insert('account', account.toMap(), conflicAlgorithm: ConflictAlgorithm.replace);
