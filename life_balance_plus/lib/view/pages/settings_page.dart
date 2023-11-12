@@ -274,8 +274,8 @@ class NotificationsSettingsPage extends StatefulWidget {
 
 class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
   bool enableNotifications = true;
-  bool enableSound = true;
-  bool enableVibration = true;
+  bool? enableSound = true;
+  bool? enableVibration = true;
   TimeOfDay notificationTime = TimeOfDay(hour: 8, minute: 0);
 
   @override
