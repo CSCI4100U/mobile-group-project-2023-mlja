@@ -250,10 +250,11 @@ class NotificationsSettingsPage extends StatefulWidget {
 }
 
 class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
-  bool enableNotifications = true;
+  bool? enableNotifications = true;
   bool? enableSound = true;
   bool? enableVibration = true;
   TimeOfDay notificationTime = TimeOfDay(hour: 8, minute: 0);
+  int reminderFrequency = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -267,40 +268,19 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Enable Notifications'),
-            Row(
-              children: [
-                Text('Receive Daily Notifications'),
-                Switch(
-                  value: enableNotifications,
-                  onChanged: (value) {
-                    setState(() {
-                      enableNotifications = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            Divider(),
-            Text('Notification Time'),
-            ListTile(
-              title: Text(
-                  'Time: ${notificationTime.hour}:${notificationTime.minute.toString().padLeft(2, '0')}'),
-              onTap: () async {
-                final pickedTime = await showTimePicker(
-                  context: context,
-                  initialTime: notificationTime,
-                );
-                if (pickedTime != null && pickedTime != notificationTime) {
-                  setState(() {
-                    notificationTime = pickedTime;
-                  });
-                }
+            CheckboxListTile(
+              title: Text('Enable notifications'),
+              value: enableNotifications,
+              onChanged: (value) {
+                setState(() {
+                  enableNotifications = value;
+                });
               },
             ),
             Divider(),
             Text('Notification Preferences'),
             CheckboxListTile(
-              title: Text('Play Sound'),
+              title: Text('Enable Sound'),
               value: enableSound,
               onChanged: (value) {
                 setState(() {
@@ -309,12 +289,54 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
               },
             ),
             CheckboxListTile(
-              title: Text('Vibrate'),
+              title: Text('Enable Vibration'),
               value: enableVibration,
               onChanged: (value) {
                 setState(() {
                   enableVibration = value;
                 });
+              },
+            ),
+            Divider(),
+            Text('Reminder Frequency'),
+            ListTile(
+              title: Text('$reminderFrequency times a day'),
+              onTap: () async {
+                final newFrequency = await showDialog<int>(
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: Text('Select Reminder Frequency'),
+                      children: [
+                        SimpleDialogOption(
+                          onPressed: () {
+                            Navigator.pop(context, 1);
+                          },
+                          child: Text('1 time a day'),
+                        ),
+                        SimpleDialogOption(
+                          onPressed: () {
+                            Navigator.pop(context, 2);
+                          },
+                          child: Text('2 times a day'),
+                        ),
+                        SimpleDialogOption(
+                          onPressed: () {
+                            Navigator.pop(context, 3);
+                          },
+                          child: Text('3 times a day'),
+                        ),
+                        // Add more options as needed.
+                      ],
+                    );
+                  },
+                );
+
+                if (newFrequency != null) {
+                  setState(() {
+                    reminderFrequency = newFrequency;
+                  });
+                }
               },
             ),
             SizedBox(height: 20.0),
