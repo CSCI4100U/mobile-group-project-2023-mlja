@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:life_balance_plus/authentication/authentication_gate.dart';
+import 'package:life_balance_plus/view/pages/initial_form.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -75,6 +76,18 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           const SizedBox(height: 196),
+          ListTile(
+            title: Text('Test Form page'),
+            onTap: () {
+              // Navigate to connectivity settings
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UserProfileForm()
+                  )
+              );
+            },
+          ),
           Center(
             child: TextButton(
               // TODO: better implement sign-out functionality

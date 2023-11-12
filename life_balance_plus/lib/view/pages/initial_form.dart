@@ -18,86 +18,96 @@ class _UserProfileFormState extends State<UserProfileForm> {
   double? _weight;
   double? _height;
 
-  List<String> _genders = ['Male', 'Female', 'Other'];
+  final List<String> _genders = ['Male', 'Female', 'Other'];
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextFormField(
-            decoration: InputDecoration(labelText: 'First Name'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your first name';
-              }
-              return null;
-            },
-            onSaved: (value) {
-              _firstName = value;
-            },
+    return Material(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('User Information'),
           ),
-          TextFormField(
-            decoration: InputDecoration(labelText: 'Last Name'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your last name';
-              }
-              return null;
-            },
-            onSaved: (value) {
-              _lastName = value;
-            },
+          body: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'First Name'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your first name';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _firstName = value;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Last Name'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your last name';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _lastName = value;
+                  },
+                ),
+                DropdownButtonFormField(
+                  items: _genders.map((gender) {
+                    return DropdownMenuItem(
+                      value: gender,
+                      child: Text(gender),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _gender = value as String;
+                    });
+                  },
+                  value: _gender,
+                  decoration: InputDecoration(labelText: 'Gender'),
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'Weight (kg)'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your weight';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _weight = double.tryParse(value!);
+                  },
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'Height (cm)'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your height';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _height = double.tryParse(value!);
+                  },
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _submitForm,
+                  child: Text('Submit'),
+                ),
+              ],
+            ),
           ),
-          DropdownButtonFormField(
-            items: _genders.map((gender) {
-              return DropdownMenuItem(
-                value: gender,
-                child: Text(gender),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() {
-                _gender = value as String;
-              });
-            },
-            value: _gender,
-            decoration: InputDecoration(labelText: 'Gender'),
-          ),
-          TextFormField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: 'Weight (kg)'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your weight';
-              }
-              return null;
-            },
-            onSaved: (value) {
-              _weight = double.tryParse(value!);
-            },
-          ),
-          TextFormField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: 'Height (cm)'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your height';
-              }
-              return null;
-            },
-            onSaved: (value) {
-              _height = double.tryParse(value!);
-            },
-          ),
-          SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: _submitForm,
-            child: Text('Submit'),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -122,19 +132,23 @@ class _UserProfileFormState extends State<UserProfileForm> {
         await userRef.set(userData);
 
         _formKey.currentState!.reset();
-        setState(() {
-          _gender = null;
-        });
+
+      setState(() {
+        _gender = null;
+      });
+
+        // Navigator.pop(context, userData);
 
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const AppBase())
+            MaterialPageRoute(builder: (context) => AppBase(userInfo: userData))
         );
+
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Couldn't add info! Maybe no internet connection? :("),
-            duration: Duration(seconds: 6),
-          )
+            SnackBar(
+              content: Text("Couldn't add info! Maybe no internet connection? :("),
+              duration: Duration(seconds: 6),
+            )
         );
       }
       // Clear the form

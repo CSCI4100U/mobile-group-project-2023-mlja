@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+
 import 'package:life_balance_plus/view/pages/diet_page.dart';
 import 'package:life_balance_plus/view/pages/home_page.dart';
+import 'package:life_balance_plus/view/pages/initial_form.dart';
 import 'package:life_balance_plus/view/pages/settings_page.dart';
 import 'package:life_balance_plus/view/pages/workout_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Base widget for the UI. Provides a global `Scaffold` with a `NavigationBar`
 /// for navigating between the main pages.
 class AppBase extends StatefulWidget {
-  const AppBase({super.key});
+  Map<String, dynamic>? userInfo;
+
+  AppBase({super.key, this.userInfo});
 
   @override
   State<AppBase> createState() => _AppBaseState();

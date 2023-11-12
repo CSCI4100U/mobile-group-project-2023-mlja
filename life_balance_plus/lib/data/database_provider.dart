@@ -51,13 +51,13 @@ class DatabaseDriver {
              meal_id INTEGER NOT NULL,
              meal_date DATE,
              FOREIGN KEY (diet_id) REFERENCES diets (id),
-             FOREIGN KEY (meal_id) REFERENCES meals (id),
+             FOREIGN KEY (meal_id) REFERENCES meals (id)
            )'''
         );
 
         await db.execute('''
           CREATE TABLE IF NOT EXISTS workout_plans(
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY
           )'''
         );
 
@@ -86,10 +86,10 @@ class DatabaseDriver {
         );
 
         await db.execute('''
-          CRATE TABLE IF NOT EXISTS workout_sessions(
+          CREATE TABLE IF NOT EXISTS workout_sessions(
             workout_plan_id INTEGER NOT NULL,
             session_id INTEGER NOT NULL,
-            FOREIGN KEY (workout_plan_id) REFERENCES workout_plans (id)
+            FOREIGN KEY (workout_plan_id) REFERENCES workout_plans (id),
             FOREIGN KEY (session_id) REFERENCES sessions (id)
           )'''
         );
