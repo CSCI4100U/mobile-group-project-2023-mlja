@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:life_balance_plus/control/exercises_control.dart';
+import 'package:life_balance_plus/data/model/workout_plan.dart';
 import 'package:life_balance_plus/view/pages/workout/dashboard_gym.dart';
+import 'package:life_balance_plus/view/pages/workout/dashboard_history.dart';
+import 'package:life_balance_plus/view/pages/workout/exercise_tab_page.dart';
 import 'package:life_balance_plus/view/widgets/custom_tabbar.dart';
-import '../../../data/model/workout_plan.dart';
-import '../../../control/exercises_control.dart';
 
 class WorkoutPage extends StatefulWidget {
   @override
@@ -29,27 +31,16 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
         Expanded(
           child: CustomTabbar(
             pages: [
               NestedTabBar(),
-              Center(
-                child: ListView.builder(
-                  itemCount: exs.length,
-                  itemBuilder: (context, index) {
-                    final ex = exs[index];
-                    return ListTile(
-                      title: Text(ex.name),
-                      subtitle: Text('Sets: ${ex.sets}'),
-                    );
-                  },
-                ),
-              ),
-              const Center(child: Text('Programs')),
+              ExerciseTabPage(),
+              Center(child: Text('Programs')),
             ],
-            tabNames: const ['Dashboard', 'Exercises', 'Programs'],
+            tabNames: ['Dashboard', 'Exercises', 'Programs'],
           ),
         ),
       ],
@@ -105,7 +96,7 @@ class _NestedTabBarState extends State<NestedTabBar> {
               children: [
                 DashboardGym(),
                 Center(child: Text('Run')),
-                Center(child: Text('History')),
+                DashboardHistory(),
               ],
             ),
           ),
