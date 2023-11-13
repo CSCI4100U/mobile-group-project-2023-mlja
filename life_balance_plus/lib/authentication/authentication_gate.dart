@@ -11,40 +11,37 @@ class AuthGate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return SignInScreen(
-            providers: [
-              EmailAuthProvider(),
-            ],
-            headerBuilder: (context, constraints, shrinkOffset) {
-              return Padding(
-                padding: const EdgeInsets.all(20),
-                child: const SizedBox(height: 5),
-              );
-            },
-            subtitleBuilder: (context, action) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: action == AuthAction.signIn
-                  ? const Text("Sing in")
-                  : const Text('Sign up'),
-              );
-            },
-            footerBuilder: (context, action) {
-              return const Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Text(
-                  'By signing in, you agree to our terms and conditions',
-                  style: TextStyle(color: Colors.grey),
-                )
-              );
-            },
-          );
-        }
-        return LoginForward();
-      }
-    );
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return SignInScreen(
+              providers: [EmailAuthProvider()],
+              headerBuilder: (context, constraints, shrinkOffset) {
+                return const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: SizedBox(height: 5),
+                );
+              },
+              subtitleBuilder: (context, action) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: action == AuthAction.signIn
+                      ? const Text("Sign in")
+                      : const Text('Sign up'),
+                );
+              },
+              footerBuilder: (context, action) {
+                return const Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Text(
+                    'By signing in, you agree to our terms and conditions',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                );
+              },
+            );
+          }
+          return LoginForward();
+        });
   }
 }

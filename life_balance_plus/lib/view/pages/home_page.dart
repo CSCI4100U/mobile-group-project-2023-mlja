@@ -26,34 +26,46 @@ class _HomePageState extends State<HomePage> {
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView(
+              child: SingleChildScrollView(
                 padding: const EdgeInsets.only(
                   top: 90,
                 ),
-                children: [
-                  HomeSummaryCard(
-                    name: 'John Doe',
-                    date: DateTime.now(),
-                    caloriesEaten: 2000,
-                    caloriesBurned: 500,
-                    milesRan: 2.5,
-                    litersDrank: 1.5,
-                  ),
-                  const SizedBox(height: 16),
-                  const HomeNutritionCard(),
-                  const SizedBox(height: 16),
-                  const HomeWorkoutCard(workoutName: 'Upper Split'),
-                  const SizedBox(height: 16),
-                  const Card(
-                    elevation: 4,
-                    child: Padding(padding: EdgeInsets.all(80)),
-                  ),
-                  const SizedBox(height: 16),
-                  const Card(
-                    elevation: 4,
-                    child: Padding(padding: EdgeInsets.all(80)),
-                  ),
-                ],
+                child: Column(
+                  children: [
+                    HomeSummaryCard(
+                      name: 'John Doe',
+                      date: DateTime.now(),
+                      caloriesEaten: 2000,
+                      caloriesBurned: 500,
+                      milesRan: 2.5,
+                      litersDrank: 1.5,
+                    ),
+                    const SizedBox(height: 16),
+                    const HomeNutritionCard(),
+                    const SizedBox(height: 16),
+                    const HomeWorkoutCard(workoutName: 'Upper Split'),
+                    const SizedBox(height: 16),
+                    const Card(
+                      elevation: 4,
+                      child: Padding(
+                        padding: EdgeInsets.all(100),
+                        child: Center(
+                          child: Text('Run Bar Chart'),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Card(
+                      elevation: 4,
+                      child: Padding(
+                        padding: EdgeInsets.all(100),
+                        child: Center(
+                          child: Text('Calories Line Graph'),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -82,6 +94,6 @@ class CurvePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
+    return false;
   }
 }

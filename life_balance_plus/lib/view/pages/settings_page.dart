@@ -227,7 +227,7 @@ class UnitsAndPreferencesSettingsPage extends StatefulWidget {
 
 class _UnitsAndPreferencesSettingsPageState
     extends State<UnitsAndPreferencesSettingsPage> {
-  UnitsSystem unitsSystem = UnitsSystem.Metric;
+  UnitsSystem unitsSystem = UnitsSystem.metric;
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +250,7 @@ class _UnitsAndPreferencesSettingsPageState
             ListTile(
               title: Text('Metric System'),
               leading: Radio(
-                value: UnitsSystem.Metric,
+                value: UnitsSystem.metric,
                 groupValue: unitsSystem,
                 onChanged: (UnitsSystem? value) {
                   setState(() {
@@ -263,7 +263,7 @@ class _UnitsAndPreferencesSettingsPageState
             ListTile(
               title: Text('Imperial System'),
               leading: Radio(
-                value: UnitsSystem.Imperial,
+                value: UnitsSystem.imperial,
                 groupValue: unitsSystem,
                 onChanged: (UnitsSystem? value) {
                   setState(() {
@@ -276,13 +276,13 @@ class _UnitsAndPreferencesSettingsPageState
             SizedBox(height: 20.0),
             Text('Weight Unit'),
             DropdownButton<String>(
-              value: unitsSystem == UnitsSystem.Metric ? 'kg' : 'lbs',
+              value: unitsSystem == UnitsSystem.metric ? 'kg' : 'lbs',
               onChanged: (String? value) {
                 setState(() {
                   if (value == 'kg') {
-                    unitsSystem = UnitsSystem.Metric;
+                    unitsSystem = UnitsSystem.metric;
                   } else {
-                    unitsSystem = UnitsSystem.Imperial;
+                    unitsSystem = UnitsSystem.imperial;
                   }
                 });
               },
@@ -299,7 +299,7 @@ class _UnitsAndPreferencesSettingsPageState
             SizedBox(height: 20.0),
             Text('Temperature Unit'),
             DropdownButton<String>(
-              value: unitsSystem == UnitsSystem.Metric ? '°C' : '°F',
+              value: unitsSystem == UnitsSystem.metric ? '°C' : '°F',
               onChanged: (String? value) {
                 setState(() {
                   // You can implement the logic to switch between Celsius and Fahrenheit here.
@@ -318,7 +318,7 @@ class _UnitsAndPreferencesSettingsPageState
             SizedBox(height: 20.0),
             Text('Distance Unit'),
             DropdownButton<String>(
-              value: unitsSystem == UnitsSystem.Metric ? 'km' : 'mi',
+              value: unitsSystem == UnitsSystem.metric ? 'km' : 'mi',
               onChanged: (String? value) {
                 setState(() {
                   // You can implement the logic to switch between kilometers and miles here.

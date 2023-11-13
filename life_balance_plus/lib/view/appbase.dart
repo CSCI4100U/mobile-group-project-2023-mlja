@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:life_balance_plus/view/pages/diet_page.dart';
+import 'package:life_balance_plus/view/pages/diet/diet_page.dart';
 import 'package:life_balance_plus/view/pages/home_page.dart';
-import 'package:life_balance_plus/view/pages/initial_form.dart';
-import 'package:life_balance_plus/view/pages/settings_page.dart';
-import 'package:life_balance_plus/view/pages/workout_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:life_balance_plus/view/pages/settings/settings_page.dart';
+import 'package:life_balance_plus/view/pages/workout/workout_page.dart';
 
 /// Base widget for the UI. Provides a global `Scaffold` with a `NavigationBar`
 /// for navigating between the main pages.
@@ -29,9 +27,9 @@ class _AppBaseState extends State<AppBase> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Life Balance Plus'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Life Balance Plus'),
+      // ),
       body: IndexedStack(
         index: currentIndex,
         children: pages,

@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:life_balance_plus/control/account_control.dart';
 
-enum Gender {
-  male,
-  female,
-  other
-}
+enum Gender { male, female, other }
 
-enum UnitsSystem {
-  Metric,
-  Imperial
-}
+enum UnitsSystem { metric, imperial }
 
 class Account {
   int? id;
   String email;
   String firstName;
   String lastName;
-  double height;         // Height in cm
-  double weight;         // Weight in kg
+  double height; // Height in cm
+  double weight; // Weight in kg
   Gender gender;
   DateTime dateOfBirth;
   int caloricIntakeGoal;
@@ -47,7 +40,7 @@ class Account {
     this.caloricIntakeGoal = 2000,
     this.dailyActivityGoal = 30,
     this.waterIntakeGoal = 8,
-    this.unitsSystem = UnitsSystem.Metric,
+    this.unitsSystem = UnitsSystem.metric,
     this.useNotifications = true,
     this.notificationSound = true,
     this.notificationVibration = true,
@@ -113,10 +106,9 @@ class Account {
 
   @override
   String toString() {
-    return
-      "User(email: $email, firstName: $firstName, lastName: $lastName, "
-      " height: $height, weight: $weight, gender: ${gender.name},  "
-      "dateOfBirth: ${DateUtils.dateOnly(dateOfBirth).toString()})";
+    return "User(email: $email, firstName: $firstName, lastName: $lastName, "
+        " height: $height, weight: $weight, gender: ${gender.name},  "
+        "dateOfBirth: ${DateUtils.dateOnly(dateOfBirth).toString()})";
   }
 
   /// Calculates the user's age in years from their date of birth.
@@ -124,7 +116,7 @@ class Account {
     DateTime present = DateTime.now();
     int age = present.year - dateOfBirth.year;
     int month = present.month - dateOfBirth.month;
-    if(month < 0 || (month == 0 && present.day < dateOfBirth.day)) {
+    if (month < 0 || (month == 0 && present.day < dateOfBirth.day)) {
       return age - 1;
     } else {
       return age;
@@ -151,27 +143,29 @@ class Account {
     bool? useBluetooth,
     bool? useNFC,
     bool? useLocation,
-
   }) {
-    if(firstName != null) this.firstName = firstName;
-    if(lastName != null) this.lastName = lastName;
-    if(height != null) this.height = height;
-    if(weight != null) this.weight = weight;
-    if(gender != null) this.gender = Gender.values.byName(gender.toLowerCase());
-    if(dateOfBirth != null) this.dateOfBirth = dateOfBirth;
-    if(caloricIntakeGoal != null) this.caloricIntakeGoal = caloricIntakeGoal;
-    if(dailyActivityGoal != null) this.dailyActivityGoal = dailyActivityGoal;
-    if(waterIntakeGoal != null) this.waterIntakeGoal = waterIntakeGoal;
-    if(unitsSystem != null) this.unitsSystem = unitsSystem;
-    if(useNotifications != null) this.useNotifications = useNotifications;
-    if(notificationSound != null) this.notificationSound = notificationSound;
-    if(notificationVibration != null) this.notificationVibration = notificationVibration;
-    if(notificationFrequency != null) this.notificationFrequency = notificationFrequency;
-    if(useWifi != null) this.useWifi = useWifi;
-    if(useMobileData != null) this.useMobileData = useMobileData;
-    if(useBluetooth != null) this.useBluetooth = useBluetooth;
-    if(useNFC != null) this.useNFC = useNFC;
-    if(useLocation != null) this.useLocation = useLocation;
+    if (firstName != null) this.firstName = firstName;
+    if (lastName != null) this.lastName = lastName;
+    if (height != null) this.height = height;
+    if (weight != null) this.weight = weight;
+    if (gender != null)
+      this.gender = Gender.values.byName(gender.toLowerCase());
+    if (dateOfBirth != null) this.dateOfBirth = dateOfBirth;
+    if (caloricIntakeGoal != null) this.caloricIntakeGoal = caloricIntakeGoal;
+    if (dailyActivityGoal != null) this.dailyActivityGoal = dailyActivityGoal;
+    if (waterIntakeGoal != null) this.waterIntakeGoal = waterIntakeGoal;
+    if (unitsSystem != null) this.unitsSystem = unitsSystem;
+    if (useNotifications != null) this.useNotifications = useNotifications;
+    if (notificationSound != null) this.notificationSound = notificationSound;
+    if (notificationVibration != null)
+      this.notificationVibration = notificationVibration;
+    if (notificationFrequency != null)
+      this.notificationFrequency = notificationFrequency;
+    if (useWifi != null) this.useWifi = useWifi;
+    if (useMobileData != null) this.useMobileData = useMobileData;
+    if (useBluetooth != null) this.useBluetooth = useBluetooth;
+    if (useNFC != null) this.useNFC = useNFC;
+    if (useLocation != null) this.useLocation = useLocation;
 
     AccountControl.updateAccountInfo(this);
   }
