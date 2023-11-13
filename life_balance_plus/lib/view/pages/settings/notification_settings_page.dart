@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:life_balance_plus/data/model/account.dart';
 import 'package:life_balance_plus/data/model/session.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class NotificationsSettingsPage extends StatefulWidget {
   const NotificationsSettingsPage({super.key});
@@ -16,6 +19,54 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
   bool? enableVibration = true;
   TimeOfDay notificationTime = const TimeOfDay(hour: 8, minute: 0);
   int reminderFrequency = 3;
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  List<PendingNotificationRequest> _queuedNotifications = [];
+
+  int _id = 0;
+  @override
+  void initState() {
+    super.initState();
+    tz.initializeTimeZones();
+    var initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
+    var initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    _refreshQueuedNotifications();
+  }
+
+  Future<void> _refreshQueuedNotifications() async {
+    final List<PendingNotificationRequest> pendingNotifications =
+    await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+
+    setState(() {
+      _queuedNotifications = pendingNotifications;
+    });
+  }
+  Future<void> _scheduleNotification(DateTime scheduledDate) async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'channel_id',
+      'channel_name',
+      channelDescription: 'channel_description',
+      icon: 'app_icon',
+    );
+    var platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      _id++,
+      'Scheduled Notification',
+      'This is coming at ${scheduledDate.hour}:${scheduledDate.minute}:${scheduledDate.second}',
+      tz.TZDateTime.from(scheduledDate, tz.local),
+      platformChannelSpecifics,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,  // Allow the notification to be shown even when the device is in low-power idle modes.
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime, // Interpret the scheduled date and time as an absolute timestamp
+    );
+  }
+
+  Future<void> _deleteNotification(int id) async {
+    await flutterLocalNotificationsPlugin.cancel(id);
+    _refreshQueuedNotifications();
+  }
+
 
   @override
   Widget build(BuildContext context) {
