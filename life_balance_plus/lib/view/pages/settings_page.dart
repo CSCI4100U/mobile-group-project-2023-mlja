@@ -70,16 +70,6 @@ class _SettingsPageState extends State<SettingsPage> {
           const SizedBox(height: 196),
           Center(
               child: TextButton(
-                onPressed: () async {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const LoginForward(),
-                  ));
-                },
-                child: Text("Test mid-router", style: TextStyle(fontSize: 35)),
-              ),
-          ),
-          Center(
-              child: TextButton(
                 // TODO: better implement sign-out functionality
                 onPressed: () async {
                   await FirebaseAuth.instance.signOut();

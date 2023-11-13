@@ -15,6 +15,16 @@ class AccountControl {
     return result;
   }
 
+  static Future<Account?> loadAccount(String email) async {
+    final db = await DatabaseDriver.init();
+    final List accountMap = await db.query(
+      'account',
+      where: 'email = ?',
+      whereArgs: [email]
+    );
+    if(!accountMap.isEmpty) return Account.fromMap(accountMap[0]);
+  }
+
   static Future<int> addAccount(Account account) async {
     final db = await DatabaseDriver.init();
     return db.insert('account', account.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);

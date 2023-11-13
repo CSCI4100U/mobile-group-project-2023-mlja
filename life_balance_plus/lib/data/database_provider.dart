@@ -14,7 +14,21 @@ class DatabaseDriver {
             lastName TEXT,
             height REAL,
             weight REAL,
-            dateOfBirth TEXT
+            gender TEXT,
+            dateOfBirth TEXT,
+            caloricIntakeGoal INTEGER,
+            dailyActivityGoal INTEGER,
+            waterIntakeGoal INTEGER,
+            unitsSystem TEXT,
+            useNotifications INTEGER,
+            notificationSound INTEGER,
+            notificationVibration INTEGER,
+            notificationFrequency INTEGER,
+            useWifi INTEGER,
+            useMobileData INTEGER,
+            useBluetooth INTEGER,
+            useNFC INTEGER,
+            useLocation INTEGER
           )'''
         );
 
@@ -55,19 +69,18 @@ class DatabaseDriver {
            )'''
         );
 
+        // Workout plan tables
         await db.execute('''
           CREATE TABLE IF NOT EXISTS workout_plans(
             id INTEGER PRIMARY KEY
           )'''
         );
-
         await db.execute('''
           CREATE TABLE IF NOT EXISTS sessions(
             id INTEGER PRIMARY KEY,
             date DATE
           )'''
         );
-
         await db.execute('''
           CREATE TABLE IF NOT EXISTS exercise_plans(
             id INTEGER PRIMARY KEY,
@@ -75,7 +88,6 @@ class DatabaseDriver {
             sets INTEGER
           )'''
         );
-
         await db.execute('''
           CREATE TABLE IF NOT EXISTS session_exercises(
             exercise_id INTEGER NOT NULL,
@@ -84,13 +96,35 @@ class DatabaseDriver {
             FOREIGN KEY (session_id) REFERENCES sessions (id)
           )'''
         );
-
         await db.execute('''
           CREATE TABLE IF NOT EXISTS workout_sessions(
             workout_plan_id INTEGER NOT NULL,
             session_id INTEGER NOT NULL,
             FOREIGN KEY (workout_plan_id) REFERENCES workout_plans (id),
             FOREIGN KEY (session_id) REFERENCES sessions (id)
+          )'''
+        );
+
+        // Fitness log tables
+        await db.execute('CREATE TABLE IF NOT EXISTS fitness_logs(id INTEGER PRIMARY KEY)');
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS session_logs(
+            id INTEGER PRIMARY KEY,
+            date DATE,
+            fitness_log_id INTEGER,
+            FOREIGN KEY (fitness_log_id) REFERENCES fitness_logs (id)
+          )'''
+        );
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS set_logs(
+            id INTEGER PRIMARY KEY,
+            exercise_name TEXT,
+            reps INTEGER,
+            weight REAL,
+            duration REAL,
+            avgSpeed REAL,
+            session_log_id INTEGER,
+            FOREIGN KEY (session_log_id) REFERENCES session_logs (id)
           )'''
         );
       },
