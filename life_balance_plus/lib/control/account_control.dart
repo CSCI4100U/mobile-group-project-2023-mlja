@@ -4,9 +4,8 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 
 class AccountControl {
-
   static Future getAccounts() async {
-    final db = await DatabaseDriver.init();
+    final Database db = await DatabaseProvider.instance.database;
     final List maps = await db.query('account');
     List<Account> result = [];
     for (int i = 0; i < maps.length; i++) {
@@ -16,27 +15,28 @@ class AccountControl {
   }
 
   static Future<Account?> loadAccount(String email) async {
-    final db = await DatabaseDriver.init();
-    final List accountMap = await db.query(
-      'account',
-      where: 'email = ?',
-      whereArgs: [email]
-    );
-    if(!accountMap.isEmpty) return Account.fromMap(accountMap[0]);
+    final Database db = await DatabaseProvider.instance.database;
+    final List accountMap =
+        await db.query('account', where: 'email = ?', whereArgs: [email]);
+    if (accountMap.isNotEmpty) {
+      return Account.fromMap(accountMap[0]);
+    }
   }
 
   static Future<int> addAccount(Account account) async {
-    final db = await DatabaseDriver.init();
-    return db.insert('account', account.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    final Database db = await DatabaseProvider.instance.database;
+    return db.insert('account', account.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   static Future updateAccountInfo(Account account) async {
-    final db = await DatabaseDriver.init();
-    return db.update('account', account.toMap(), where: 'id = ?', whereArgs: [account.id]);
+    final Database db = await DatabaseProvider.instance.database;
+    return db.update('account', account.toMap(),
+        where: 'id = ?', whereArgs: [account.id]);
   }
 
   static Future deleteAccount(Account account) async {
-    final db = await DatabaseDriver.init();
+    final Database db = await DatabaseProvider.instance.database;
     int id = account.id!;
     await db.delete('account', where: 'id = ?', whereArgs: [id]);
   }

@@ -5,7 +5,7 @@ import '../data/model/diet.dart';
 
 class DietControl {
   Future<List<Diet>> getAllDiets() async {
-    final db = await DatabaseDriver.init();
+    final Database db = await DatabaseProvider.instance.database;
     final List maps = await db.query('diets');
     List<Diet> result = [];
     for (int i = 0; i < maps.length; i++) {
@@ -15,24 +15,27 @@ class DietControl {
   }
 
   Future<int> addDiet(Diet diet) async {
-    final db = await DatabaseDriver.init();
-    return db.insert('diets', diet.toMap(), conflicAlgorithm: ConflictAlgorithm.replace);
+    final Database db = await DatabaseProvider.instance.database;
+    return db.insert('diets', diet.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future addDietsMult(List<Diet> diets) async {
-    final db = await DatabaseDriver.init();
+    final Database db = await DatabaseProvider.instance.database;
     diets.forEach((ex) {
-      db.insert('diets', ex.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+      db.insert('diets', ex.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace);
     });
   }
 
   Future updateDiet(Diet diet) async {
-    final db = await DatabaseDriver.init();
-    return db.update('diets', diet.toMap(), where: 'id = ?', whereArgs: [diet.id]);
+    final Database db = await DatabaseProvider.instance.database;
+    return db
+        .update('diets', diet.toMap(), where: 'id = ?', whereArgs: [diet.id]);
   }
 
   Future deleteDiet(int id) async {
-    final db = await DatabaseDriver.init();
+    final Database db = await DatabaseProvider.instance.database;
     await db.delete('diets', where: 'id = ?', whereArgs: [id]);
   }
 }

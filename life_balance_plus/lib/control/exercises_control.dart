@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
-import '../data/database_provider.dart';
-import '../data/model/workout_plan.dart';
+import 'package:life_balance_plus/data/database_provider.dart';
+import 'package:life_balance_plus/data/model/workout_plan.dart';
 
 class ExerciseControl {
   Future addDummyData() async {
@@ -18,7 +18,7 @@ class ExerciseControl {
   }
 
   Future<List<ExercisePlan>> getAllExercises() async {
-    final db = await DatabaseDriver.init();
+    final Database db = await DatabaseProvider.instance.database;
     final List maps = await db.query('exercises');
     List<ExercisePlan> result = [];
     for (int i = 0; i < maps.length; i++) {
@@ -28,24 +28,27 @@ class ExerciseControl {
   }
 
   Future<int> addExercise(ExercisePlan ex) async {
-    final db = await DatabaseDriver.init();
-    return db.insert('exercises', ex.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    final Database db = await DatabaseProvider.instance.database;
+    return db.insert('exercises', ex.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future addExercisesMult(List<ExercisePlan> exs) async {
-    final db = await DatabaseDriver.init();
+    final Database db = await DatabaseProvider.instance.database;
     exs.forEach((ex) {
-      db.insert('exercises', ex.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+      db.insert('exercises', ex.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace);
     });
   }
 
   Future updateExercise(ExercisePlan ex) async {
-    final db = await DatabaseDriver.init();
-    return db.update('exercises', ex.toMap(), where: 'id = ?', whereArgs: [ex.id]);
+    final Database db = await DatabaseProvider.instance.database;
+    return db
+        .update('exercises', ex.toMap(), where: 'id = ?', whereArgs: [ex.id]);
   }
 
   Future deleteExercise(int id) async {
-    final db = await DatabaseDriver.init();
+    final Database db = await DatabaseProvider.instance.database;
     await db.delete('exercises', where: 'id = ?', whereArgs: [id]);
   }
 }
