@@ -78,8 +78,8 @@ class DatabaseProvider {
           CREATE TABLE IF NOT EXISTS diets(
             id INTEGER PRIMARY KEY,
             dailyCals INTEGER,
-            startDate DATE,
-            endDate DATE,
+            startDate TEXT,
+            endDate TEXT,
             status TEXT
           )''');
 
@@ -87,7 +87,7 @@ class DatabaseProvider {
            CREATE TABLE IF NOT EXISTS diets_meals(
              diet_id INTEGER NOT NULL,
              meal_id INTEGER NOT NULL,
-             meal_date DATE,
+             meal_date TEXT,
              FOREIGN KEY (diet_id) REFERENCES diets (id),
              FOREIGN KEY (meal_id) REFERENCES meals (id)
            )''');
@@ -101,7 +101,7 @@ class DatabaseProvider {
     await db.execute('''
           CREATE TABLE IF NOT EXISTS sessions(
             id INTEGER PRIMARY KEY,
-            date DATE
+            date TEXT
           )''');
 
     await db.execute('''
@@ -134,7 +134,7 @@ class DatabaseProvider {
     await db.execute('''
           CREATE TABLE IF NOT EXISTS session_logs(
             id INTEGER PRIMARY KEY,
-            date DATE,
+            date TEXT,
             fitness_log_id INTEGER,
             FOREIGN KEY (fitness_log_id) REFERENCES fitness_logs (id)
           )''');
