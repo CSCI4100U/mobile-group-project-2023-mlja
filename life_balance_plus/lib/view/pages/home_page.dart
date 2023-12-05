@@ -4,6 +4,7 @@ import 'package:life_balance_plus/view/widgets/home_summary_card.dart';
 import 'package:life_balance_plus/view/widgets/home_workout_card.dart';
 import 'package:life_balance_plus/data/model/account.dart';
 import 'package:life_balance_plus/data/model/session.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,7 +18,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     print('building home page');
     Account? account = Session.instance.account;
-    String name = (account != null)? '${account.firstName} ${account.lastName}' : 'John Doe';
+    String name = (account != null)
+        ? '${account.firstName} ${account.lastName}'
+        : 'John Doe';
 
     return Scaffold(
       body: Stack(
