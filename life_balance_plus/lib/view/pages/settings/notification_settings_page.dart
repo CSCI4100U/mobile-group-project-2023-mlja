@@ -32,6 +32,15 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
     var initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
     _refreshQueuedNotifications();
+
+    // Get user data from account
+    Account? account = Session.instance.account;
+    if (account != null) {
+      enableNotifications = account.useNotifications;
+      enableSound = account.notificationSound;
+      enableVibration = account.notificationVibration;
+      reminderFrequency = account.notificationFrequency;
+    }
   }
 
   Future<void> _refreshQueuedNotifications() async {
@@ -70,14 +79,6 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Get user data from account
-    Account? account = Session.instance.account;
-    if (account != null) {
-      enableNotifications = account.useNotifications;
-      enableSound = account.notificationSound;
-      enableVibration = account.notificationVibration;
-      reminderFrequency = account.notificationFrequency;
-    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notifications Settings'),
@@ -162,7 +163,7 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                account?.updateAccountInfo(
+                Session.instance.account?.updateAccountInfo(
                   useNotifications: enableNotifications,
                   notificationSound: enableSound,
                   notificationVibration: enableVibration,

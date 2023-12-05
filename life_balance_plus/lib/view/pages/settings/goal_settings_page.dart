@@ -15,7 +15,9 @@ class _GoalSettingsPageState extends State<GoalSettingsPage> {
   int dailyWaterIntakeGoal = 8; // in cups
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+
     // Get user data from account
     Account? account = Session.instance.account;
     if (account != null) {
@@ -23,7 +25,10 @@ class _GoalSettingsPageState extends State<GoalSettingsPage> {
       dailyPhysicalActivityGoal = account.dailyActivityGoal;
       dailyWaterIntakeGoal = account.waterIntakeGoal;
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Goal Settings'),
@@ -84,7 +89,7 @@ class _GoalSettingsPageState extends State<GoalSettingsPage> {
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                account?.updateAccountInfo(
+                Session.instance.account?.updateAccountInfo(
                   caloricIntakeGoal: dailyCaloricIntakeGoal,
                   dailyActivityGoal: dailyPhysicalActivityGoal,
                   waterIntakeGoal: dailyWaterIntakeGoal,

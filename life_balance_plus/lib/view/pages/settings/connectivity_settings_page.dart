@@ -18,15 +18,22 @@ class _ConnectivitySettingsPageState extends State<ConnectivitySettingsPage> {
   bool? enableLocationServices = true;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+
     // Get user data from account
     Account? account = Session.instance.account;
     if (account != null) {
       enableWifi = account.useWifi;
       enableMobileData = account.useMobileData;
+      enableBluetooth = account.useBluetooth;
       enableNFC = account.useNFC;
       enableLocationServices = account.useLocation;
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Connectivity Settings'),
@@ -93,7 +100,7 @@ class _ConnectivitySettingsPageState extends State<ConnectivitySettingsPage> {
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                account?.updateAccountInfo(
+                Session.instance.account?.updateAccountInfo(
                   useWifi: enableWifi,
                   useMobileData: enableMobileData,
                   useBluetooth: enableBluetooth,
