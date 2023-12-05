@@ -1,10 +1,13 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:life_balance_plus/firebase_options.dart';
 import 'package:life_balance_plus/authentication/authentication_gate.dart';
 import 'package:life_balance_plus/app_state.dart';
+import 'package:life_balance_plus/data/notifications.dart';
 
 void main() async {
   // Initialize app and Firebase
@@ -12,6 +15,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Handle background messages
+  FirebaseMessaging.onBackgroundMessage(NotificationManager.fcmBackgroundHandler);
 
   runApp(ChangeNotifierProvider(
     create: (context) => ApplicationState(),
