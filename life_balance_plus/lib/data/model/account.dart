@@ -194,7 +194,7 @@ class Account {
     // Update local and cloud databases
     AccountControl.updateAccountInfo(this);
     if(firestoreUpdate.isNotEmpty) {
-      FirebaseFirestore.instance.collection('users').doc(firestoreId).update(firestoreUpdate);
+      FirebaseFirestore.instance.collection('users').doc(this.firestoreId).update(firestoreUpdate);
     }
   }
 }

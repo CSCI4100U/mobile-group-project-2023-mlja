@@ -16,12 +16,14 @@ class AppBase extends StatefulWidget {
 
 /// State of an `AppBase`.
 class _AppBaseState extends State<AppBase> {
-  int currentIndex = 0;
-  final List<Widget> pages = <Widget>[
-    HomePage(),
-    WorkoutPage(),
-    DietPage(),
-    SettingsPage(),
+  int _currentIndex = 0;
+  Widget _currentPage = HomePage();
+
+  late List<Function> _pages = [
+    () => _currentPage = HomePage(),
+    () => _currentPage = WorkoutPage(),
+    () => _currentPage = DietPage(),
+    () => _currentPage = SettingsPage(),
   ];
 
   @override
@@ -30,15 +32,14 @@ class _AppBaseState extends State<AppBase> {
       // appBar: AppBar(
       //   title: const Text('Life Balance Plus'),
       // ),
-      body: IndexedStack(
-        index: currentIndex,
-        children: pages,
-      ),
+      body: _currentPage,
       bottomNavigationBar: NavigationBar(
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        selectedIndex: currentIndex,
-        onDestinationSelected: (int value) =>
-            setState(() => currentIndex = value),
+        selectedIndex: _currentIndex,
+        onDestinationSelected: (index) => setState(() {
+          _currentIndex = index;
+          _pages[index]();
+        }),
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
           NavigationDestination(

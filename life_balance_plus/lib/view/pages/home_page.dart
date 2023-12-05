@@ -13,10 +13,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Account account = Session.instance.account!;
-
   @override
   Widget build(BuildContext context) {
+    Account? account = Session.instance.account;
+    String name = (account != null)? '${account.firstName} ${account.lastName}' : 'John Doe';
+
     return Scaffold(
       body: Stack(
         children: [
@@ -37,8 +38,7 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     HomeSummaryCard(
-                      name: '${account.firstName} ${account.lastName}',
-                      // name: 'John Doe',
+                      name: name,
                       date: DateTime.now(),
                       caloriesEaten: 2000,
                       caloriesBurned: 500,
