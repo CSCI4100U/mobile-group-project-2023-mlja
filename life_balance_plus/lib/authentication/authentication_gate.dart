@@ -39,7 +39,9 @@ class AuthGate extends StatelessWidget {
               },
             );
           }
-          return LoginForward();
+
+          LoginForward(context);
+          return Container();   // Placeholder widget
         });
   }
 }

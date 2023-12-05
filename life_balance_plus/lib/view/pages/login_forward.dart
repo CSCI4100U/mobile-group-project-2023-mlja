@@ -7,18 +7,35 @@ import 'package:life_balance_plus/control/account_control.dart';
 import 'package:life_balance_plus/data/model/account.dart';
 import 'package:life_balance_plus/data/model/session.dart';
 
-class LoginForward extends StatefulWidget {
-  const LoginForward({super.key});
-
-  @override
-  State<LoginForward> createState() => _LoginForwardState();
-}
-
-class _LoginForwardState extends State<LoginForward> {
+class LoginForward {
   String? userId;
   String? userEmail;
-  bool hasInfo = false;
   Map<String, dynamic>? userInfo;
+
+  LoginForward(BuildContext context) {
+    _loadUserId();
+    _loadUserEmail();
+    _loadUserInfo().whenComplete(() {
+      if (userId != null && userInfo != null) {
+        _loadLocalAccount().whenComplete(() {
+
+          // Navigate to Page A
+          Future.delayed(Duration.zero, () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => AppBase()),
+            );
+          });
+        });
+      } else {
+        // Navigate to Page B
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => UserProfileForm()),
+          );
+        });
+      }
+    });
+  }
 
   void _loadUserId() {
     userId = FirebaseAuth.instance.currentUser?.uid;
@@ -35,11 +52,8 @@ class _LoginForwardState extends State<LoginForward> {
     final snapshot = await query.get();
 
     if (snapshot.docs.isNotEmpty) {
-      setState(() {
-        hasInfo = true;
-        userInfo = snapshot.docs.first.data();
-        userInfo!['userInfoId'] = snapshot.docs.first.id;
-      });
+      userInfo = snapshot.docs.first.data();
+      userInfo!['userInfoId'] = snapshot.docs.first.id;
     }
   }
 
@@ -71,35 +85,5 @@ class _LoginForwardState extends State<LoginForward> {
     }
 
     Session.instance.account = account;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _loadUserId();
-    _loadUserEmail();
-    _loadUserInfo().whenComplete(() {
-
-      if (userId != null && hasInfo) {
-        _loadLocalAccount().whenComplete(() {
-
-          // Navigate to Page A
-          Future.delayed(Duration.zero, () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => AppBase()),
-            );
-          });
-        });
-      } else {
-        // Navigate to Page B
-        Future.delayed(Duration.zero, () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => UserProfileForm()),
-          );
-        });
-      }
-    });
-
-    // Return a placeholder widget (this will not be displayed)
-    return Container();
   }
 }

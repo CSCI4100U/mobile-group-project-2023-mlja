@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    print('building home page');
     Account? account = Session.instance.account;
     String name = (account != null)? '${account.firstName} ${account.lastName}' : 'John Doe';
 
