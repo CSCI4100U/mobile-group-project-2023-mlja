@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:life_balance_plus/control/account_control.dart';
 
@@ -6,12 +7,12 @@ enum Gender { male, female, other }
 enum UnitsSystem { metric, imperial }
 
 class Account {
-  int? id;
+  String firestoreId;   // Id of account document in users collection
   String email;
   String firstName;
   String lastName;
-  double height; // Height in cm
-  double weight; // Weight in kg
+  double height;        // Height in cm
+  double weight;        // Weight in kg
   Gender gender;
   DateTime dateOfBirth;
   int caloricIntakeGoal;
@@ -29,7 +30,7 @@ class Account {
   bool useLocation;
 
   Account({
-    this.id,
+    required this.firestoreId,
     required this.email,
     required this.firstName,
     required this.lastName,
@@ -54,7 +55,7 @@ class Account {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'firestoreId': firestoreId,
       'email': email,
       'firstName': firstName,
       'lastName': lastName,
@@ -80,7 +81,7 @@ class Account {
 
   factory Account.fromMap(Map<String, dynamic> map) {
     return Account(
-      id: map['id'],
+      firestoreId: map['firestoreId'],
       email: map['email'],
       firstName: map['firstName'],
       lastName: map['lastName'],
@@ -124,6 +125,7 @@ class Account {
   }
 
   void updateAccountInfo({
+    String? firestoreId,
     String? firstName,
     String? lastName,
     double? height,
@@ -144,13 +146,35 @@ class Account {
     bool? useNFC,
     bool? useLocation,
   }) {
-    if (firstName != null) this.firstName = firstName;
-    if (lastName != null) this.lastName = lastName;
-    if (height != null) this.height = height;
-    if (weight != null) this.weight = weight;
-    if (gender != null)
+    Map<String, dynamic> firestoreUpdate = {};
+
+    if (firstName != null) {
+      this.firstName = firstName;
+      firestoreUpdate['firstName'] = firstName;
+    }
+    if (lastName != null) {
+      this.lastName = lastName;
+      firestoreUpdate['lastName'] = lastName;
+    }
+    if (height != null) {
+      this.height = height;
+      firestoreUpdate['height'] = height;
+    }
+    if (weight != null) {
+      this.weight = weight;
+      firestoreUpdate['weight'] = weight;
+    }
+    if (gender != null) {
       this.gender = Gender.values.byName(gender.toLowerCase());
-    if (dateOfBirth != null) this.dateOfBirth = dateOfBirth;
+      firestoreUpdate['gender'] = '${gender[0].toUpperCase()}'
+                                  '${gender.substring(1).toLowerCase()}';
+    }
+    if (dateOfBirth != null) {
+      this.dateOfBirth = dateOfBirth;
+      firestoreUpdate['dateOfBirth'] = '$dateOfBirth'.split(' ')[0];
+    }
+
+    if (firestoreId != null) this.firestoreId = firestoreId;
     if (caloricIntakeGoal != null) this.caloricIntakeGoal = caloricIntakeGoal;
     if (dailyActivityGoal != null) this.dailyActivityGoal = dailyActivityGoal;
     if (waterIntakeGoal != null) this.waterIntakeGoal = waterIntakeGoal;
@@ -167,6 +191,10 @@ class Account {
     if (useNFC != null) this.useNFC = useNFC;
     if (useLocation != null) this.useLocation = useLocation;
 
+    // Update local and cloud databases
     AccountControl.updateAccountInfo(this);
+    if(firestoreUpdate.isNotEmpty) {
+      FirebaseFirestore.instance.collection('users').doc(firestoreId).update(firestoreUpdate);
+    }
   }
 }

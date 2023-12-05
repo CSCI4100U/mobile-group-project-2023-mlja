@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:life_balance_plus/authentication/authentication_gate.dart';
 import 'package:life_balance_plus/data/model/session.dart';
 import 'package:life_balance_plus/data/model/account.dart';
-import 'package:life_balance_plus/view/pages/login_forward.dart';
 
 class SettingsPage extends StatefulWidget {
   @override

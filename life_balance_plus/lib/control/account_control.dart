@@ -32,12 +32,11 @@ class AccountControl {
   static Future updateAccountInfo(Account account) async {
     final Database db = await DatabaseProvider.instance.database;
     return db.update('account', account.toMap(),
-        where: 'id = ?', whereArgs: [account.id]);
+        where: 'email = ?', whereArgs: [account.email]);
   }
 
   static Future deleteAccount(Account account) async {
     final Database db = await DatabaseProvider.instance.database;
-    int id = account.id!;
-    await db.delete('account', where: 'id = ?', whereArgs: [id]);
+    await db.delete('account', where: 'email = ?', whereArgs: [account.email]);
   }
 }

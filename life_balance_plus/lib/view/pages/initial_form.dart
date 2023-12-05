@@ -157,22 +157,15 @@ class _UserProfileFormState extends State<UserProfileForm> {
 
       try {
         await userRef.set(userData);
-
         _formKey.currentState!.reset();
-
-        setState(() {
-          _gender = null;
-        });
-
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => AppBase())
-        );
+        setState(() => _gender = null);
 
         // Load account and update user data
         String? userEmail = FirebaseAuth.instance.currentUser?.email;
         Account? account = await AccountControl.loadAccount(userEmail!);
         if(account == null) {
           account = Account(
+            firestoreId: userRef.id,
             email: userEmail,
             firstName: userData['firstName'],
             lastName: userData['lastName'],
@@ -184,6 +177,7 @@ class _UserProfileFormState extends State<UserProfileForm> {
         }
         else {
           account.updateAccountInfo(
+            firestoreId: userRef.id,
             firstName: userData['firstName'],
             lastName: userData['lastName'],
             gender: userData['gender'],
@@ -194,6 +188,10 @@ class _UserProfileFormState extends State<UserProfileForm> {
         }
         Session.instance.account = account;
 
+        // Load main app contents
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => AppBase())
+        );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

@@ -35,6 +35,7 @@ class DatabaseProvider {
     await db.execute('''
           CREATE TABLE IF NOT EXISTS account(
             email TEXT PRIMARY KEY,
+            firestoreId TEXT,
             firstName TEXT,
             lastName TEXT,
             height REAL,

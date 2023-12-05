@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-
 import 'package:life_balance_plus/view/pages/login_forward.dart';
-import 'package:life_balance_plus/view/appbase.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
