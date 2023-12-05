@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:life_balance_plus/view/widgets/home_nutrition_card.dart';
 import 'package:life_balance_plus/view/widgets/home_summary_card.dart';
 import 'package:life_balance_plus/view/widgets/home_workout_card.dart';
+import 'package:life_balance_plus/data/model/account.dart';
+import 'package:life_balance_plus/data/model/session.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,6 +15,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    Account? account = Session.instance.account;
+    String name = (account != null)? '${account.firstName} ${account.lastName}' : 'John Doe';
+
     return Scaffold(
       body: Stack(
         children: [
@@ -33,7 +38,7 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     HomeSummaryCard(
-                      name: 'John Doe',
+                      name: name,
                       date: DateTime.now(),
                       caloriesEaten: 2000,
                       caloriesBurned: 500,

@@ -20,11 +20,11 @@ class _LoginForwardState extends State<LoginForward> {
   bool hasInfo = false;
   Map<String, dynamic>? userInfo;
 
-  Future<void> _loadUserId() async {
+  void _loadUserId() {
     userId = FirebaseAuth.instance.currentUser?.uid;
   }
 
-  Future<void> _loadUserEmail() async {
+  void _loadUserEmail() {
     userEmail = FirebaseAuth.instance.currentUser?.email;
   }
 
@@ -38,15 +38,17 @@ class _LoginForwardState extends State<LoginForward> {
       setState(() {
         hasInfo = true;
         userInfo = snapshot.docs.first.data();
+        userInfo!['userInfoId'] = snapshot.docs.first.id;
       });
     }
   }
 
   /// Loads account and updates user data.
-  void _loadLocalAccount() async {
+  Future<void> _loadLocalAccount() async {
     Account? account = await AccountControl.loadAccount(userEmail!);
     if(account == null) {
       account = Account(
+        firestoreId: userInfo!['userInfoId'],
         email: userEmail!,
         firstName: userInfo!['firstName'],
         lastName: userInfo!['lastName'],
@@ -58,6 +60,7 @@ class _LoginForwardState extends State<LoginForward> {
     }
     else {
       account.updateAccountInfo(
+        firestoreId: userInfo!['userInfoId'],
         firstName: userInfo!['firstName'],
         lastName: userInfo!['lastName'],
         gender: userInfo!['gender'],
@@ -70,38 +73,31 @@ class _LoginForwardState extends State<LoginForward> {
     Session.instance.account = account;
   }
 
-  Future _sendToForm() async {
-    await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => UserProfileForm())
-    );
-  }
-
-  @override
-  void initState() {
-    _loadUserId();
-    _loadUserInfo();
-    _loadUserEmail();
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (userId != null && userInfo != null) {
-      _loadLocalAccount();
+    _loadUserId();
+    _loadUserEmail();
+    _loadUserInfo().whenComplete(() {
 
-      // Navigate to Page A
-      Future.delayed(Duration.zero, () {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => AppBase()),
-        );
-      });
-    } else {
-      // Navigate to Page B
-      Future.delayed(Duration.zero, () {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => UserProfileForm()),
-        );
-      });
-    }
+      if (userId != null && hasInfo) {
+        _loadLocalAccount().whenComplete(() {
+
+          // Navigate to Page A
+          Future.delayed(Duration.zero, () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => AppBase()),
+            );
+          });
+        });
+      } else {
+        // Navigate to Page B
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => UserProfileForm()),
+          );
+        });
+      }
+    });
 
     // Return a placeholder widget (this will not be displayed)
     return Container();
