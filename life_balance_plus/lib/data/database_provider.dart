@@ -58,11 +58,42 @@ class DatabaseProvider {
           )''');
 
     // Exercise table
-    await db.execute('''CREATE TABLE IF NOT EXISTS exercises (
-          id INTEGER PRIMARY KEY,
-          name TEXT,
-          sets INTEGER
+    await db.execute('''
+        CREATE TABLE IF NOT EXISTS workout_plans (
+          planId INTEGER PRIMARY KEY AUTOINCREMENT,
+          firestoreId TEXT,
+          title TEXT,
+          startDate TEXT,
+          endDate TEXT,
+          type TEXT,
+          sessions TEXT
           )''');
+
+    await db.execute('''
+        CREATE TABLE IF NOT EXISTS workout_sessions (
+          sessionId INTEGER PRIMARY KEY AUTOINCREMENT,
+          firestoreId TEXT,
+          planId INTEGER,
+          date TEXT,
+          exercises TEXT,
+          FOREIGN KEY (planId) REFERENCES workout_plans (planId)
+        )
+          ''');
+
+    await db.execute('''
+        CREATE TABLE IF NOT EXISTS exercise_sets (
+          id INTEGER PRIMARY KEY AUTOINCREMENT ,
+          firestoreId TEXT,
+          name TEXT,
+          description TEXT,
+          sets INTEGER,
+          repetitionsPerSet INTEGER,
+          sessionId INTEGER,
+          muscleGroups TEXT,
+          requiredEquipment TEXT,
+          FOREIGN KEY (sessionId) REFERENCES workout_sessions (sessionId)
+          )''');
+
 
     // Meal table
     await db.execute('''
@@ -94,40 +125,6 @@ class DatabaseProvider {
              FOREIGN KEY (meal_id) REFERENCES meals (id)
            )''');
 
-    // Workout plan tables
-    await db.execute('''
-          CREATE TABLE IF NOT EXISTS workout_plans(
-            id INTEGER PRIMARY KEY
-          )''');
-
-    await db.execute('''
-          CREATE TABLE IF NOT EXISTS sessions(
-            id INTEGER PRIMARY KEY,
-            date TEXT
-          )''');
-
-    await db.execute('''
-          CREATE TABLE IF NOT EXISTS exercise_plans(
-            id INTEGER PRIMARY KEY,
-            name TEXT,
-            sets INTEGER
-          )''');
-
-    await db.execute('''
-          CREATE TABLE IF NOT EXISTS session_exercises(
-            exercise_id INTEGER NOT NULL,
-            session_id INTEGER NOT NULL,
-            FOREIGN KEY (exercise_id) REFERENCES exercise_plans (id),
-            FOREIGN KEY (session_id) REFERENCES sessions (id)
-          )''');
-
-    await db.execute('''
-          CREATE TABLE IF NOT EXISTS workout_sessions(
-            workout_plan_id INTEGER NOT NULL,
-            session_id INTEGER NOT NULL,
-            FOREIGN KEY (workout_plan_id) REFERENCES workout_plans (id),
-            FOREIGN KEY (session_id) REFERENCES sessions (id)
-          )''');
 
     // Fitness log tables
     await db.execute(

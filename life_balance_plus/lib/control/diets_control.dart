@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import '../data/database_provider.dart';
 import '../data/model/diet.dart';
+import '../data/model/account.dart';
 
 class DietControl {
   Future<List<Diet>> getAllDiets() async {
@@ -14,6 +15,14 @@ class DietControl {
     }
     return result;
   }
+
+  // TODO: find way to get account.firestoreId. Probably convert Account to singleton
+  // Future getCloudDiets() async {
+  //   return await FirebaseFirestore
+  //       .instance
+  //       .collection('diets')
+  //       .where('userId', isEqualTo: Account.firestoreId)
+  // }
 
   Future<int> addDiet(Diet diet) async {
     addCloudDiet(diet);
