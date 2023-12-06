@@ -78,6 +78,7 @@ class DatabaseProvider {
     await db.execute('''
           CREATE TABLE IF NOT EXISTS diets(
             id INTEGER PRIMARY KEY,
+            firestoreId TEXT
             dailyCals INTEGER,
             startDate TEXT,
             endDate TEXT,

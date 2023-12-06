@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'meal.dart';
 
 enum DietType {
@@ -17,6 +18,7 @@ enum DietStatus {
 }
 
 class Diet {
+  String? firestoreId;
   int? id;
   int dailyCals;
   DietType dietType;
@@ -27,6 +29,7 @@ class Diet {
   DietStatus? status;
 
   Diet({
+    this.firestoreId,
     this.id,
     required this.dailyCals,
     required this.dietType,
@@ -75,9 +78,10 @@ class Diet {
 
   factory Diet.fromMap(Map<String, dynamic> map) {
     return Diet(
+      firestoreId: map['firestoreId'],
       id: map['id'],
       dailyCals: map['dailyCals'],
-      dietType: map['dietType'],
+      dietType: DietType.values[map['dietType']],
       startDate: DateTime.tryParse(map['startDate']),
       endDate: DateTime.tryParse(map['endDate']),
       mealsHistory: map['mealsHistory'],
@@ -88,9 +92,10 @@ class Diet {
 
   Map<String, dynamic> toMap() {
     return {
+      'firestoreId': firestoreId,
       'id': id,
       'dailyCals': dailyCals,
-      'dietType': dietType,
+      'dietType': dietType.index,
       'startDate': startDate?.toIso8601String(),
       'endDate': endDate?.toIso8601String(),
       'mealsHistory': mealsHistory,
