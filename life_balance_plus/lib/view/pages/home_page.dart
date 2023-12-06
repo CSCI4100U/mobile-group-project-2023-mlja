@@ -5,6 +5,8 @@ import 'package:life_balance_plus/view/widgets/home_workout_card.dart';
 import 'package:life_balance_plus/data/model/account.dart';
 import 'package:life_balance_plus/data/model/session.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:life_balance_plus/view/widgets/home_run_card.dart';
+import 'package:life_balance_plus/view/widgets/home_calories_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -53,25 +55,9 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 16),
                     const HomeWorkoutCard(workoutName: 'Upper Split'),
                     const SizedBox(height: 16),
-                    const Card(
-                      elevation: 4,
-                      child: Padding(
-                        padding: EdgeInsets.all(100),
-                        child: Center(
-                          child: Text('Run Bar Chart'),
-                        ),
-                      ),
-                    ),
+                    const HomeRunCard(), // Add the HomeRunCard
                     const SizedBox(height: 16),
-                    const Card(
-                      elevation: 4,
-                      child: Padding(
-                        padding: EdgeInsets.all(100),
-                        child: Center(
-                          child: Text('Calories Line Graph'),
-                        ),
-                      ),
-                    ),
+                    const HomeCaloriesCard(), // Add the HomeCaloriesCard
                   ],
                 ),
               ),
