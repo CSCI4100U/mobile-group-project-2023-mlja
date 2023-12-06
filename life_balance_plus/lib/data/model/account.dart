@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:life_balance_plus/control/account_control.dart';
 
@@ -53,6 +52,32 @@ class Account {
     this.useLocation = true,
   });
 
+  factory Account.fromMap(Map<String, dynamic> map) {
+    return Account(
+      firestoreId: map['firestoreId'],
+      email: map['email'],
+      firstName: map['firstName'],
+      lastName: map['lastName'],
+      height: map['height'],
+      weight: map['weight'],
+      gender: Gender.values.byName(map['gender']),
+      dateOfBirth: DateTime.parse(map['dateOfBirth']),
+      caloricIntakeGoal: map['caloricIntakeGoal'] ?? 2000,
+      dailyActivityGoal: map['dailyActivityGoal'] ?? 30,
+      waterIntakeGoal: map['waterIntakeGoal'] ?? 8,
+      unitsSystem: UnitsSystem.values.byName(map['unitsSystem'] ?? 'Metric'),
+      useNotifications: (map['useNotifications'] ?? 1) == 1,
+      notificationSound: (map['notificationSound'] ?? 1) == 1,
+      notificationVibration: (map['notificationVibration'] ?? 1) == 1,
+      notificationFrequency: map['notificationFrequency'],
+      useWifi: (map['useWifi'] ?? 1) == 1,
+      useMobileData: (map['useMobileData'] ?? 0) == 1,
+      useBluetooth: (map['useBluetooth'] ?? 1) == 1,
+      useNFC: (map['useNFC'] ?? 0) == 1,
+      useLocation: (map['useLocation'] ?? 1) == 1,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'firestoreId': firestoreId,
@@ -79,30 +104,16 @@ class Account {
     };
   }
 
-  factory Account.fromMap(Map<String, dynamic> map) {
-    return Account(
-      firestoreId: map['firestoreId'],
-      email: map['email'],
-      firstName: map['firstName'],
-      lastName: map['lastName'],
-      height: map['height'],
-      weight: map['weight'],
-      gender: Gender.values.byName(map['gender']),
-      dateOfBirth: DateTime.parse(map['dateOfBirth']),
-      caloricIntakeGoal: map['caloricIntakeGoal'] ?? 2000,
-      dailyActivityGoal: map['dailyActivityGoal'] ?? 30,
-      waterIntakeGoal: map['waterIntakeGoal'] ?? 8,
-      unitsSystem: UnitsSystem.values.byName(map['unitsSystem'] ?? 'Metric'),
-      useNotifications: (map['useNotifications'] ?? 1) == 1,
-      notificationSound: (map['notificationSound'] ?? 1) == 1,
-      notificationVibration: (map['notificationVibration'] ?? 1) == 1,
-      notificationFrequency: map['notificationFrequency'],
-      useWifi: (map['useWifi'] ?? 1) == 1,
-      useMobileData: (map['useMobileData'] ?? 0) == 1,
-      useBluetooth: (map['useBluetooth'] ?? 1) == 1,
-      useNFC: (map['useNFC'] ?? 0) == 1,
-      useLocation: (map['useLocation'] ?? 1) == 1,
-    );
+  /// Creates a map containing only the information stored in the cloud database.
+  Map<String, dynamic> toFirestoreMap() {
+    return {
+      'firstName': firstName,
+      'lastName': lastName,
+      'height': height,
+      'weight': weight,
+      'gender': gender.name,
+      'dateOfBirth': dateOfBirth.toString(),
+    };
   }
 
   @override
@@ -146,32 +157,31 @@ class Account {
     bool? useNFC,
     bool? useLocation,
   }) {
-    Map<String, dynamic> firestoreUpdate = {};
+    bool updateCloud = false;
 
     if (firstName != null) {
       this.firstName = firstName;
-      firestoreUpdate['firstName'] = firstName;
+      updateCloud = true;
     }
     if (lastName != null) {
       this.lastName = lastName;
-      firestoreUpdate['lastName'] = lastName;
+      updateCloud = true;
     }
     if (height != null) {
       this.height = height;
-      firestoreUpdate['height'] = height;
+      updateCloud = true;
     }
     if (weight != null) {
       this.weight = weight;
-      firestoreUpdate['weight'] = weight;
+      updateCloud = true;
     }
     if (gender != null) {
       this.gender = Gender.values.byName(gender.toLowerCase());
-      firestoreUpdate['gender'] = '${gender[0].toUpperCase()}'
-                                  '${gender.substring(1).toLowerCase()}';
+      updateCloud = true;
     }
     if (dateOfBirth != null) {
       this.dateOfBirth = dateOfBirth;
-      firestoreUpdate['dateOfBirth'] = '$dateOfBirth'.split(' ')[0];
+      updateCloud = true;
     }
 
     if (firestoreId != null) this.firestoreId = firestoreId;
@@ -191,10 +201,6 @@ class Account {
     if (useNFC != null) this.useNFC = useNFC;
     if (useLocation != null) this.useLocation = useLocation;
 
-    // Update local and cloud databases
-    AccountControl.updateAccountInfo(this);
-    if(firestoreUpdate.isNotEmpty) {
-      FirebaseFirestore.instance.collection('users').doc(this.firestoreId).update(firestoreUpdate);
-    }
+    AccountControl.updateAccount(this, updateCloud);
   }
 }

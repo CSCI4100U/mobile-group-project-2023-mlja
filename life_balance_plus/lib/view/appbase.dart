@@ -28,6 +28,8 @@ class _AppBaseState extends State<AppBase> {
 
   @override
   void initState() {
+    super.initState();
+
     // initializes notifications singleton
     NotificationManager();
   }

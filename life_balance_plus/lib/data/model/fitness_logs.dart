@@ -1,5 +1,3 @@
-import 'package:life_balance_plus/data/model/session.dart';
-
 class FitnessLogs {
   List<SessionLog> entries;
 
