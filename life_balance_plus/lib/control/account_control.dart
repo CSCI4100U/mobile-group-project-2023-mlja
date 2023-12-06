@@ -1,6 +1,7 @@
 import 'package:life_balance_plus/data/database_provider.dart';
 import 'package:life_balance_plus/data/model/account.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
 class AccountControl {
@@ -20,6 +21,8 @@ class AccountControl {
         await db.query('account', where: 'email = ?', whereArgs: [email]);
     if (accountMap.isNotEmpty) {
       return Account.fromMap(accountMap[0]);
+    } else {
+      return null;
     }
   }
 
@@ -29,14 +32,25 @@ class AccountControl {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  static Future updateAccountInfo(Account account) async {
-    final Database db = await DatabaseProvider.instance.database;
-    return db.update('account', account.toMap(),
-        where: 'email = ?', whereArgs: [account.email]);
+  static Future updateAccount(Account account, [bool updateCloud=true]) async {
+    if(updateCloud) _updateAccountCloud(account);
+    return _updateAccountLocal(account);
   }
 
   static Future deleteAccount(Account account) async {
     final Database db = await DatabaseProvider.instance.database;
     await db.delete('account', where: 'email = ?', whereArgs: [account.email]);
+  }
+
+  static Future _updateAccountLocal(Account account) async {
+    final Database db = await DatabaseProvider.instance.database;
+    return db.update('account', account.toMap(),
+        where: 'email = ?', whereArgs: [account.email]);
+  }
+
+  static void _updateAccountCloud(Account account) {
+    FirebaseFirestore.instance.collection('users')
+                              .doc(account.firestoreId)
+                              .update(account.toFirestoreMap());
   }
 }

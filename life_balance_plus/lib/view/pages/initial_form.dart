@@ -174,6 +174,7 @@ class _UserProfileFormState extends State<UserProfileForm> {
             height: userData['height'],
             dateOfBirth: DateTime.parse(userData['dateOfBirth'])
           );
+          AccountControl.addAccount(account);
         }
         else {
           account.updateAccountInfo(

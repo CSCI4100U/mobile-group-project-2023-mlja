@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:life_balance_plus/authentication/authentication_gate.dart';
-import 'package:life_balance_plus/view/pages/login_forward.dart';
 import 'package:life_balance_plus/view/pages/settings/export_settings.dart';
 
 class SettingsPage extends StatefulWidget {

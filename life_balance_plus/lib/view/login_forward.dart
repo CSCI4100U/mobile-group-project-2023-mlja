@@ -71,6 +71,7 @@ class LoginForward {
         height: userInfo!['height'],
         dateOfBirth: DateTime.parse(userInfo!['dateOfBirth'])
       );
+      AccountControl.addAccount(account);
     }
     else {
       account.updateAccountInfo(
