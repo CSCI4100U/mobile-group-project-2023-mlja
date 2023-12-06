@@ -5,6 +5,8 @@ import '../../../data/model/diet.dart';
 import '../../../control/meals_control.dart';
 import '../../../control/diets_control.dart';
 import 'meals_data_table.dart';
+import 'create_diet_form.dart';
+import 'diet_dashboard.dart'; // Import your diet_dashboard.dart file
 
 class DietPage extends StatefulWidget {
   @override
@@ -29,8 +31,8 @@ class _DietPageState extends State<DietPage> {
     MealControl().addDummyData();
     _loadMeals();
     sampleDiet = Diet(
-        dailyCals: 10,
-        dietType: DietType.other,
+      dailyCals: 10,
+      dietType: DietType.other,
     );
   }
 
@@ -38,16 +40,9 @@ class _DietPageState extends State<DietPage> {
   Widget build(BuildContext context) {
     return CustomTabbar(
       pages: [
-        Center(
-          child: ElevatedButton(
-            child: Text("Test add diet"),
-            onPressed: () {
-              DietControl().addCloudDiet(sampleDiet);
-            }
-          )
-        ),
+        Center(child: DietDashboard()), // Add the DietDashboard page
         Center(child: MealsDataTable(meals: meals)),
-        Placeholder(),
+        Center(child: CreateDietForm()), // Instantiate your create diet form
       ],
       tabNames: const ['Dashboard', 'Log', 'Create'],
     );
