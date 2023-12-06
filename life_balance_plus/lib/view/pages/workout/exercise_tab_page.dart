@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:life_balance_plus/data/model/workout_plan.dart';
 import 'package:life_balance_plus/data/model/exercise.dart';
 import 'package:life_balance_plus/control/workouts_control.dart';
+import 'package:life_balance_plus/view/pages/add_exercise_page.dart';
 
 class ExerciseTabPage extends StatefulWidget {
   const ExerciseTabPage({super.key});
@@ -34,7 +35,14 @@ class _ExerciseTabPageState extends State<ExerciseTabPage> {
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add),
         label: const Text('Add Exercise'),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const AddExercisePage(),
+              fullscreenDialog: true,
+            ),
+          );
+        },
       ),
       body: Center(
         child: ListView.builder(

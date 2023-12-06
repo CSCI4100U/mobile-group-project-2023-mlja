@@ -7,6 +7,8 @@ import 'package:life_balance_plus/control/workouts_control.dart';
 import 'package:life_balance_plus/view/widgets/custom_tabbar.dart';
 
 class WorkoutPage extends StatefulWidget {
+  const WorkoutPage({super.key});
+
   @override
   State<WorkoutPage> createState() => _WorkoutPageState();
 }
