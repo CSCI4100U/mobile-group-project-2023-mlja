@@ -1,12 +1,17 @@
 class Meal {
   int? id;
+  int? dietId;
+  String? firestoreId;
   String name;
   String mealType;
   double? fats;
   double? proteins;
   double? carbs;
 
-  Meal({this.id,
+  Meal({
+    this.id,
+    this.dietId,
+    this.firestoreId,
     required this.name,
     required this.mealType,
     this.fats,
@@ -17,19 +22,24 @@ class Meal {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'dietId': dietId,
+      'firestoreId': firestoreId,
       'name': name,
       'mealType': mealType,
       'fats': fats,
       'proteins': proteins,
       'carbs': carbs,
-    };
+    }..removeWhere(
+          (dynamic key, dynamic value) => value == null);
   }
 
   factory Meal.fromMap(Map<String, dynamic> map) {
     return Meal(
       id: map['id'],
-      name: map['name'],
-      mealType: map['mealType'],
+      dietId: map['dietId'],
+      firestoreId: map['firestoreId'],
+      name: map['name'] as String,
+      mealType: map['mealType'] as String,
       fats: map['fats'],
       proteins: map['proteins'],
       carbs: map['carbs'],
