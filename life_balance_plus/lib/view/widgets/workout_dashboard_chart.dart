@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
+/// A widget that represents a pie chart showing workout distribution.
 class WorkoutDashboardChart extends StatelessWidget {
   const WorkoutDashboardChart({Key? key}) : super(key: key);
 
@@ -13,6 +14,7 @@ class WorkoutDashboardChart extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Title of the chart
             Text(
               "Workout Distribution",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -20,6 +22,8 @@ class WorkoutDashboardChart extends StatelessWidget {
                   ),
             ),
             const SizedBox(height: 16),
+
+            // Legend items for different workout types
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -29,6 +33,8 @@ class WorkoutDashboardChart extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
+
+            // Pie chart displaying workout distribution
             Container(
               height: 200,
               child: PieChart(
@@ -46,6 +52,7 @@ class WorkoutDashboardChart extends StatelessWidget {
     );
   }
 
+  /// Generates a list of pie chart sections with color and distribution values.
   List<PieChartSectionData> _generateSections() {
     return [
       PieChartSectionData(
@@ -81,6 +88,7 @@ class WorkoutDashboardChart extends StatelessWidget {
     ];
   }
 
+  /// Builds a legend item with a colored circle and label.
   Widget _buildLegendItem(BuildContext context, Color color, String label) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
