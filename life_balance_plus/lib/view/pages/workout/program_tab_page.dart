@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:collection/collection.dart';
 import 'package:life_balance_plus/data/model/workout_plan.dart';
 import 'package:life_balance_plus/data/model/session.dart';
@@ -17,7 +16,6 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
   @override
   void initState() {
     super.initState();
-
     programs = Session.instance.workoutPlans!;
   }
 
@@ -31,14 +29,7 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add),
         label: const Text('Add Program'),
-        onPressed: () {
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) => const AddExercisePage(),
-          //     fullscreenDialog: true,
-          //   ),
-          // );
-        },
+        onPressed: () {},
       ),
     );
   }

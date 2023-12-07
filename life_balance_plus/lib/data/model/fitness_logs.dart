@@ -7,7 +7,9 @@ import 'package:life_balance_plus/data/enums/muscle_group.dart';
 class FitnessLogs {
   List<SessionLog> entries;
 
-  FitnessLogs({required this.entries});
+  FitnessLogs({required this.entries}) {
+    entries.sort((a, b) => a.date.compareTo(b.date)); // Sort entries by date
+  }
 
   void addSessionEntry(SessionLog session) {
     entries.add(session);
@@ -77,13 +79,14 @@ abstract class SetLog {
 
   SetLog({this.id, this.firestoreId, required this.exercise});
 
-  
   Map<String, dynamic> toMap();
   Map<String, dynamic> toFirestoreMap();
+  double get repsOrDuration;
+  double? get weightOrAvgSpeed;
 }
 
 class CardioSetLog extends SetLog {
-  double duration;
+  double duration;  // In minutes
   double avgSpeed;
 
   CardioSetLog({
@@ -145,6 +148,12 @@ class CardioSetLog extends SetLog {
       'weight': null,
     };
   }
+
+  @override
+  double get repsOrDuration => duration;
+
+  @override
+  double? get weightOrAvgSpeed => avgSpeed;
 }
 
 class ResistanceSetLog extends SetLog {
@@ -210,4 +219,10 @@ class ResistanceSetLog extends SetLog {
       'avgSpeed': null
     };
   }
+
+  @override
+  double get repsOrDuration => reps.toDouble();
+
+  @override
+  double? get weightOrAvgSpeed => weight;
 }

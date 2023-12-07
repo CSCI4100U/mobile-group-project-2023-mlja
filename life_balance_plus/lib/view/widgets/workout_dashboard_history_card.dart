@@ -1,23 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:life_balance_plus/data/model/exercise.dart';
+import 'package:life_balance_plus/data/model/session.dart';
+import 'package:life_balance_plus/data/model/account.dart';
+import 'package:life_balance_plus/data/model/fitness_logs.dart';
 
 class WorkoutDashboardHistoryCard extends StatelessWidget {
-  final String title;
-  final DateTime date;
+  final SessionLog log;
+
   const WorkoutDashboardHistoryCard({
     super.key,
-    required this.title,
-    required this.date,
+    required this.log,
   });
 
   @override
   Widget build(BuildContext context) {
+    UnitsSystem units = Session.instance.account!.unitsSystem;
+
+    // DataTable size properties
+    double horizontalPad  = 18;
+    double tableWidth     = MediaQuery.of(context).size.width - 2*horizontalPad;
+    double columnSpacing  = 32;
+    double maxNameWidth   = 0.3 * (tableWidth - 2*columnSpacing);
+    double numberColWidth = 0.5 * (tableWidth - maxNameWidth);
+
+    // Column labels
+    String col1Label = '';
+    String col2Label = '';
+    bool hasResistanceSets = false;
+    bool hasCardioSets = false;
+
+    if(log.sets.any((set) => set is ResistanceSetLog)) {
+      hasResistanceSets = true;
+      col1Label = 'Reps';
+      col2Label = 'Weight';
+    }
+    if(log.sets.any((set) => set is CardioSetLog)) {
+      hasCardioSets = true;
+      if(hasResistanceSets) {
+        col1Label += '/\nMinutes';
+        col2Label += '/\nAvg Speed';
+      } else {
+        col1Label = 'Minutes';
+        col2Label = 'Avg Speed (${units == UnitsSystem.metric? 'kmph':'mph'})';
+      }
+    }
+    else {
+      col2Label += ' (${units == UnitsSystem.metric? 'kgs':'lbs'})';
+    }
+
+    // Values for determining row appearance
+    String previousExerciseName = '';
+    Color rowColour = Colors.grey.shade200;
+
     return Card(
       clipBehavior: Clip.hardEdge,
       elevation: 4,
       shape: RoundedRectangleBorder(
-        // side: const BorderSide(color: Colors.black, width: 2),
+        side: const BorderSide(color: Colors.black, width: 2),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -29,75 +68,95 @@ class WorkoutDashboardHistoryCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(fontWeight: FontWeight.bold)),
-                Text(
-                  DateFormat.yMMMd().format(date),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: Colors.black54),
-                ),
-              ],
+            padding: EdgeInsets.symmetric(horizontal: horizontalPad),
+            child: Text(
+              DateFormat.yMMMd().format(log.date),
+              style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(fontWeight: FontWeight.bold)
             ),
           ),
           const Divider(),
           Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Lat Pulldowns',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontSize: 17,
-                            ),
-                      ),
-                      Text(
-                        '2 Sets',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w900),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Back',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(color: Colors.grey),
-                      ),
-                      Text(
-                        '50 Kg',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w900),
-                      ),
-                    ],
-                  ),
-                ],
-              )),
-          const Divider(),
-          const ListTile(
-            leading: Icon(Icons.fitness_center),
-            title: Text('Replay Workout'),
-            trailing: Icon(Icons.arrow_forward_ios),
+            padding: EdgeInsets.symmetric(vertical: 8),
+            child: DataTable(
+              dataRowMaxHeight: double.infinity,
+              columnSpacing: columnSpacing,
+              columns: [
+                DataColumn(label: Text('Exercise')),
+                DataColumn(
+                  label: Text(col1Label),
+                  numeric: true,
+                ),
+                DataColumn(
+                  label: Text(col2Label),
+                  numeric: true,
+                ),
+              ],
+              rows: log.sets.map((set) {
+                String name = '';
+                String repsOrDuration;
+                String weightOrAvgSpeed;
+
+                // Determine row color and whether exercise name is displayed
+                if(set.exercise.name != previousExerciseName) {
+                  name = set.exercise.name;
+                  rowColour = (rowColour == Colors.white)?
+                    Colors.grey.shade200 : Colors.white;
+                  previousExerciseName = name;
+                }
+
+                // Remove decimal from rep number string
+                if(set is ResistanceSetLog) {
+                  repsOrDuration = set.repsOrDuration.toStringAsFixed(0);
+                } else {
+                  repsOrDuration = set.repsOrDuration.toStringAsFixed(1);
+                }
+
+                // Attach units to weight/speed if both are used
+                if(set.weightOrAvgSpeed == null) {
+                  weightOrAvgSpeed = 'N/A';
+                } else {
+                  weightOrAvgSpeed = '${set.weightOrAvgSpeed}';
+                  if(hasResistanceSets && hasCardioSets) {
+                    if(set is CardioSetLog) {
+                      weightOrAvgSpeed += (units == UnitsSystem.metric)?
+                        ' (kmph)' : ' (mph)';
+                    } else {
+                      weightOrAvgSpeed += (units == UnitsSystem.metric)?
+                        ' (kgs)' : ' (lbs)';
+                    }
+                  }
+                }
+
+                return DataRow(
+                  color: MaterialStateProperty.all(rowColour),
+                  cells: [
+                    DataCell(
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: maxNameWidth),
+                        child: Text(name),
+                      )
+                    ),
+                    DataCell(
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: numberColWidth),
+                        child: Text(repsOrDuration),
+                      )
+                    ),
+                    DataCell(
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: numberColWidth),
+                        child: Text(weightOrAvgSpeed),
+                      )
+                    ),
+                  ]
+                );
+              }).toList(),
+            ),
           ),
+          const Divider(),
         ],
       ),
     );

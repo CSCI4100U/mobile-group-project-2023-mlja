@@ -42,6 +42,10 @@ class WorkoutControl {
       muscleGroups: [MuscleGroup.lats, MuscleGroup.upperBack, MuscleGroup.biceps],
       requiredEquipment: [Equipment.specializedMachine],
     );
+    Exercise running = Exercise(
+      name: 'Running',
+      description: ''
+    );
 
     WorkoutPlan plan = WorkoutPlan(
       accountEmail: 'mitchell.nolte@ontariotechu.net',
@@ -84,11 +88,29 @@ class WorkoutControl {
           ResistanceSetLog(
             exercise: benchPress,
             reps: 10,
-            weight: 99999999
+            weight: 135
+          ),
+          ResistanceSetLog(
+            exercise: benchPress,
+            reps: 8,
+            weight: 135
+          ),
+          ResistanceSetLog(
+            exercise: benchPress,
+            reps: 10,
+            weight: 125
           ),
           ResistanceSetLog(
             exercise: pushups,
-            reps: 9999999999,
+            reps: 30,
+          ),
+          ResistanceSetLog(
+            exercise: pushups,
+            reps: 24,
+          ),
+          ResistanceSetLog(
+            exercise: pushups,
+            reps: 19,
           ),
         ]
       ),
@@ -98,13 +120,36 @@ class WorkoutControl {
         sets: [
           ResistanceSetLog(
             exercise: pullups,
-            reps: 9999999,
+            reps: 20,
+          ),
+          ResistanceSetLog(
+            exercise: pullups,
+            reps: 17,
+          ),
+          ResistanceSetLog(
+            exercise: pullups,
+            reps: 14,
           ),
           ResistanceSetLog(
             exercise: latPulldowns,
             reps: 10,
-            weight: 999999999
+            weight: 150
           ),
+          ResistanceSetLog(
+            exercise: latPulldowns,
+            reps: 10,
+            weight: 145
+          ),
+          ResistanceSetLog(
+            exercise: latPulldowns,
+            reps: 9,
+            weight: 140
+          ),
+          CardioSetLog(
+            exercise: running,
+            duration: 30,
+            avgSpeed: 5
+          )
         ]
       ),
     ];

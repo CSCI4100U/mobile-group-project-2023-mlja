@@ -10,7 +10,9 @@ class Exercise {
   Exercise({
     required this.name,
     required this.description,
-    required this.muscleGroups,
-    required this.requiredEquipment,
-  });
+    List<MuscleGroup>? muscleGroups,
+    List<Equipment>? requiredEquipment,
+  })
+    : this.muscleGroups = muscleGroups??[],
+      this.requiredEquipment = requiredEquipment??[];
 }
