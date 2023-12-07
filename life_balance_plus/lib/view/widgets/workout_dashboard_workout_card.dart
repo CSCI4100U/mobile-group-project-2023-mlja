@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class WorkoutDashboardWorkoutCard extends StatelessWidget {
-  const WorkoutDashboardWorkoutCard({super.key});
+  const WorkoutDashboardWorkoutCard({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,101 +28,23 @@ class WorkoutDashboardWorkoutCard extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: const Color.fromARGB(60, 158, 158, 158),
-                  ),
-                  child: Text("Chest"),
-                ),
+                _buildExerciseTag(context, "Chest"),
                 const SizedBox(width: 8),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: const Color.fromARGB(60, 158, 158, 158),
-                  ),
-                  child: const Text("Shoulders"),
-                ),
+                _buildExerciseTag(context, "Shoulders"),
                 const SizedBox(width: 8),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: const Color.fromARGB(60, 158, 158, 158),
-                  ),
-                  child: const Text("Triceps"),
-                ),
+                _buildExerciseTag(context, "Triceps"),
               ],
             ),
             const Divider(),
             const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Workout 1",
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w900,
-                        ),
-                  ),
-                  Text(
-                    "3 Sets",
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Colors.grey[600],
-                        ),
-                  ),
-                ],
-              ),
-            ),
+            _buildWorkoutDetails(context, "Workout 1", "3 Sets", "Bench Press",
+                "10 reps", "50 kg"),
             const Divider(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Workout 2",
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w900,
-                        ),
-                  ),
-                  Text(
-                    "3 Sets",
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Colors.grey[600],
-                        ),
-                  ),
-                ],
-              ),
-            ),
+            _buildWorkoutDetails(context, "Workout 2", "3 Sets",
+                "Shoulder Press", "12 reps", "20 kg"),
             const Divider(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Workout 3",
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w900,
-                        ),
-                  ),
-                  Text(
-                    "4 Sets",
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Colors.grey[600],
-                        ),
-                  ),
-                ],
-              ),
-            ),
+            _buildWorkoutDetails(context, "Workout 3", "4 Sets", "Tricep Dips",
+                "15 reps", "Body Weight"),
             const SizedBox(height: 8),
             Align(
               alignment: Alignment.centerRight,
@@ -135,6 +57,67 @@ class WorkoutDashboardWorkoutCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildExerciseTag(BuildContext context, String exerciseName) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6),
+        color: const Color.fromARGB(60, 158, 158, 158),
+      ),
+      child: Text(exerciseName),
+    );
+  }
+
+  Widget _buildWorkoutDetails(
+    BuildContext context,
+    String workoutName,
+    String setsAndReps,
+    String exerciseName,
+    String reps,
+    String weight,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                workoutName,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w900,
+                    ),
+              ),
+              Text(
+                setsAndReps,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Colors.grey[600],
+                    ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                exerciseName,
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+              Text(
+                "$reps • $weight",
+                style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                      color: Colors.grey[600],
+                    ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
