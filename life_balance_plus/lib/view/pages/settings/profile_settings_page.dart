@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:life_balance_plus/data/model/account.dart';
 import 'package:life_balance_plus/data/model/session.dart';
 
+/// A page for managing user profile settings.
 class ProfileSettingsPage extends StatefulWidget {
   const ProfileSettingsPage({super.key});
 
@@ -35,7 +36,6 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile Settings'),
@@ -84,7 +84,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                 ),
                 initialValue: weight?.toStringAsFixed(1) ?? '',
                 keyboardType: TextInputType.number,
-                onChanged: (value) => weight = double.tryParse(value)
+                onChanged: (value) => weight = double.tryParse(value),
               ),
               const SizedBox(height: 20.0),
               const Text('Height (cm)'),
@@ -99,6 +99,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
               const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
+                  // Save updated profile information to the user's account
                   Session.instance.account?.updateAccountInfo(
                     firstName: username?.split(' ')[0],
                     lastName: username?.split(' ')[1],
@@ -117,7 +118,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     );
   }
 
-  // Displays a date picker and updates date of birth.
+  /// Displays a date picker and updates date of birth.
   Future<void> _chooseDateOfBirth(BuildContext context) async {
     DateTime? date = await showDatePicker(
       context: context,
