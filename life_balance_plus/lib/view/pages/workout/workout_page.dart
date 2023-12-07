@@ -5,6 +5,7 @@ import 'package:life_balance_plus/view/pages/workout/dashboard_run.dart';
 import 'package:life_balance_plus/view/pages/workout/dashboard_history.dart';
 import 'package:life_balance_plus/view/pages/workout/exercise_tab_page.dart';
 import 'package:life_balance_plus/control/workouts_control.dart';
+import 'package:life_balance_plus/view/pages/workout/program_tab_page.dart';
 import 'package:life_balance_plus/view/widgets/custom_tabbar.dart';
 
 class WorkoutPage extends StatefulWidget {
@@ -27,7 +28,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
   @override
   void initState() {
     super.initState();
-    // Uncomment this the first time you run to add some exercises to the local db
+    // TODO: Uncomment this the first time you run to add some exercises to the local db
     WorkoutControl().addDummyData();
     _loadExercises();
   }
@@ -41,7 +42,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
             pages: [
               NestedTabBar(),
               ExerciseTabPage(),
-              Center(child: Text('Programs')),
+              ProgramTabPage(),
             ],
             tabNames: ['Dashboard', 'Exercises', 'Programs'],
           ),

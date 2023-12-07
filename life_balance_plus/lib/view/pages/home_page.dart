@@ -40,6 +40,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: Column(
                   children: [
+                    // TODO: Retrieve data from db
                     HomeSummaryCard(
                       name: name,
                       date: DateTime.now(),

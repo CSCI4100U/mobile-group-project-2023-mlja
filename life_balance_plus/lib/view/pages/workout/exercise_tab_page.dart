@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:life_balance_plus/data/enums/muscle_group.dart';
 import 'package:life_balance_plus/data/model/workout_plan.dart';
 import 'package:life_balance_plus/data/model/exercise.dart';
 import 'package:life_balance_plus/control/workouts_control.dart';
@@ -14,19 +15,29 @@ class ExerciseTabPage extends StatefulWidget {
 class _ExerciseTabPageState extends State<ExerciseTabPage> {
   List<ExerciseSet> exerciseList = [];
   List<ExerciseSet> filteredList = [];
+  String search = '';
 
   Future<void> _loadExercises() async {
     var temp = await WorkoutControl().getExerciseSets();
     setState(() {
       exerciseList = temp;
+      filteredList = temp;
+    });
+  }
+
+  void _filterExercises(String value) {
+    setState(() {
+      search = value;
+      filteredList = exerciseList
+          .where((exercise) =>
+              exercise.name.toLowerCase().contains(value.toLowerCase()))
+          .toList();
     });
   }
 
   @override
   void initState() {
     super.initState();
-    // TESTING: Uncomment this the first time you run to add some exercises to the local db
-    WorkoutControl().addDummyData();
     _loadExercises();
   }
 
@@ -48,24 +59,34 @@ class _ExerciseTabPageState extends State<ExerciseTabPage> {
       body: Column(
         children: [
           const SizedBox(height: 10),
-          Container(
-            height: 48,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
+          SizedBox(
+            height: 100,
+            child: Column(
               children: [
-                Text(
-                  'Filter:',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.search),
+                        onPressed: () {},
                       ),
+                      Expanded(
+                        child: TextField(
+                          onChanged: _filterExercises,
+                          decoration: const InputDecoration(
+                            hintText: 'Search exercises...',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(width: 16),
                 Expanded(
                   child: ListView(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     scrollDirection: Axis.horizontal,
                     children: [
-                      // TODO: Implement filter functionality & iteratively build filter chips
                       FilterChip(
                         label: const Text('All'),
                         selected: true,
@@ -77,42 +98,19 @@ class _ExerciseTabPageState extends State<ExerciseTabPage> {
                         selected: false,
                         onSelected: (value) {},
                       ),
-                      const SizedBox(width: 8),
-                      FilterChip(
-                        label: const Text('Chest'),
-                        selected: false,
-                        onSelected: (value) {},
-                      ),
-                      const SizedBox(width: 8),
-                      FilterChip(
-                        label: const Text('Back'),
-                        selected: false,
-                        onSelected: (value) {},
-                      ),
-                      const SizedBox(width: 8),
-                      FilterChip(
-                        label: const Text('Legs'),
-                        selected: false,
-                        onSelected: (value) {},
-                      ),
-                      const SizedBox(width: 8),
-                      FilterChip(
-                        label: const Text('Arms'),
-                        selected: false,
-                        onSelected: (value) {},
-                      ),
-                      const SizedBox(width: 8),
-                      FilterChip(
-                        label: const Text('Shoulders'),
-                        selected: false,
-                        onSelected: (value) {},
-                      ),
-                      const SizedBox(width: 8),
-                      FilterChip(
-                        label: const Text('Core'),
-                        selected: false,
-                        onSelected: (value) {},
-                      ),
+                      const SizedBox(width: 4),
+                      ...MuscleGroup.values.map(
+                        (muscleGroup) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: FilterChip(
+                              label: Text(muscleGroup.string),
+                              selected: false,
+                              onSelected: (value) {},
+                            ),
+                          );
+                        },
+                      ).toList(),
                     ],
                   ),
                 ),
@@ -123,23 +121,25 @@ class _ExerciseTabPageState extends State<ExerciseTabPage> {
           Expanded(
             child: Scrollbar(
               child: ListView.builder(
-                itemCount: exerciseList.length,
+                padding: const EdgeInsets.only(bottom: 40),
+                itemCount: filteredList.length,
                 itemBuilder: (context, index) {
-                  final exercise = exerciseList[index];
+                  final exercise = filteredList[index];
                   return ListTile(
-                    leading: const Center(
-                      heightFactor: 2,
-                      widthFactor: 1,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white38,
-                        radius: 16,
-                        child: Icon(Icons.fitness_center, size: 20),
+                      leading: const Center(
+                        heightFactor: 2,
+                        widthFactor: 1,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white38,
+                          radius: 16,
+                          child: Icon(Icons.fitness_center, size: 20),
+                        ),
                       ),
-                    ),
-                    title: Text(exercise.name),
-                    subtitle: Text(exercise.muscleGroups.join(' | ')),
-                  );
+                      title: Text(exercise.name),
+                      subtitle: Text(exercise.muscleGroups
+                          .map((muscleGroup) => muscleGroup.string)
+                          .join('  |  ')));
                 },
               ),
             ),

@@ -16,6 +16,7 @@ class WorkoutControl {
   // TODO: Remove for production
   Future<void> addDummyData() async {
     final WorkoutPlan wp = WorkoutPlan(
+      planId: 2340, // id isn't generated until put into db
       startDate: DateTime.now(),
       title: "Test Workout Plan",
       type: WorkoutPlanType.custom,

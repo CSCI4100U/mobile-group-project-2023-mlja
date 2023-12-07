@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:life_balance_plus/data/enums/equipment.dart';
 import 'package:life_balance_plus/data/enums/muscle_group.dart';
+import 'package:life_balance_plus/data/model/exercise.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
+import 'package:life_balance_plus/control/workouts_control.dart';
 
 class AddExercisePage extends StatefulWidget {
   const AddExercisePage({super.key});
@@ -18,7 +20,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
   final setsFieldController = TextEditingController();
   final repsFieldController = TextEditingController();
 
-  final muscleGroupsDropDownKey = GlobalKey<FormFieldState>();
+  bool muscleGroupsInvalid = true;
   final MultiSelectController<MuscleGroup> muscleGroupController =
       MultiSelectController<MuscleGroup>();
 
@@ -59,9 +61,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
                     keyboardType: TextInputType.text,
                     textCapitalization: TextCapitalization.words,
                     maxLength: 50,
-                    onSaved: (newValue) {
-                      nameFieldController.clear();
-                    },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Name is required';
@@ -79,12 +78,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
                           '(e.g. notes, instructions, form tips, variations, etc.)',
                     ),
                     controller: descriptionFieldController,
-                    onSaved: (newValue) {
-                      descriptionFieldController.clear();
-                    },
                     maxLines: 2,
                   ),
-                  const Divider(height: 50, thickness: 2),
+                  const Divider(height: 40, thickness: 2),
                   Row(
                     children: [
                       Expanded(
@@ -214,30 +210,71 @@ class _AddExercisePageState extends State<AddExercisePage> {
                       ),
                     ],
                   ),
-                  const Divider(height: 50, thickness: 2),
-                  DropdownButtonFormField(
-                    key: muscleGroupsDropDownKey,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Muscle Groups',
+                  const Divider(height: 40, thickness: 2),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Text(
+                        'Muscle Groups:',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                     ),
-                    hint: const Text('Select Muscle Groups'),
-                    value: null,
-                    onChanged: (dynamic newValue) {
-                      setState(() {
-                        muscleGroupsDropDownKey.currentState
-                            ?.didChange(newValue);
-                      });
-                    },
-                    isExpanded: true,
-                    items: MuscleGroup.values
-                        .map((group) => DropdownMenuItem(
-                              value: group,
-                              child: Text(group.toString()),
-                            ))
-                        .toList(),
                   ),
-                  const SizedBox(height: 30),
+                  FormField(
+                    builder: (field) {
+                      return MultiSelectDropDown(
+                        controller: muscleGroupController,
+                        selectionType: SelectionType.multi,
+                        dropdownHeight:
+                            MediaQuery.of(context).size.height * 0.5,
+                        onOptionSelected: (selectedOptions) {
+                          setState(() {
+                            muscleGroupsInvalid = true;
+                          });
+                          field.didChange(selectedOptions);
+                        },
+                        backgroundColor: Colors.transparent,
+                        inputDecoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade600),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        hint: 'Select Muscle Groups',
+                        hintStyle: Theme.of(context).textTheme.titleMedium,
+                        padding: const EdgeInsets.only(left: 4, right: 10),
+                        options: MuscleGroup.values
+                            .map((muscleGroup) => ValueItem<MuscleGroup>(
+                                  value: muscleGroup,
+                                  label: muscleGroup.string,
+                                ))
+                            .toList(),
+                      );
+                    },
+                    validator: (_) {
+                      if (muscleGroupController.selectedOptions.isEmpty) {
+                        setState(() {
+                          muscleGroupsInvalid = false;
+                        });
+                        return '';
+                      }
+                      return null;
+                    },
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12, top: 8),
+                      child: Text(
+                        'Muscle Groups are required',
+                        style: TextStyle(
+                            color: muscleGroupsInvalid
+                                ? Colors.transparent
+                                : Colors.red,
+                            fontSize: 12),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
                   DropdownButtonFormField(
                     key: equipmentDropDownKey,
                     decoration: const InputDecoration(
@@ -251,29 +288,21 @@ class _AddExercisePageState extends State<AddExercisePage> {
                         equipmentDropDownKey.currentState?.didChange(newValue);
                       });
                     },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Equipment is required';
+                      }
+                      return null;
+                    },
                     isExpanded: true,
                     items: Equipment.values.map((Equipment equipment) {
                       return DropdownMenuItem(
                         value: equipment,
-                        child: Text(equipment.toString()),
+                        child: Text(equipment.string),
                       );
                     }).toList(),
                   ),
-                  // MultiSelectDropDown(
-                  //   controller: muscleGroupController,
-                  //   selectionType: SelectionType.multi,
-                  //   onOptionSelected: (selectedOptions) {
-                  //     print(selectedOptions);
-                  //     print(muscleGroupController.options);
-                  //   },
-                  //   options: MuscleGroup.values
-                  //       .map((muscleGroup) => ValueItem<MuscleGroup>(
-                  //             value: muscleGroup,
-                  //             label: muscleGroup.toString(),
-                  //           ))
-                  //       .toList(),
-                  // ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 30),
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -292,9 +321,31 @@ class _AddExercisePageState extends State<AddExercisePage> {
   }
 
   Future<void> _save() async {
-    // TODO: Backend Integration - insert exercise to db
     if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
+      await WorkoutControl()
+          .addExerciseSet(
+        ExerciseSet(
+          name: nameFieldController.text,
+          sessionId: 000000, // TODO: What does this refer to?
+          muscleGroups: muscleGroupController.selectedOptions.map((element) {
+            return element.value!;
+          }).toList(),
+          requiredEquipment: [equipmentDropDownKey.currentState!.value],
+        ),
+      )
+          .then((value) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Exercise Added!',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 15),
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        Navigator.pop(context, true);
+      });
     }
   }
 }
