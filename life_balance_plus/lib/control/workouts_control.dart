@@ -13,6 +13,7 @@ import 'package:life_balance_plus/data/model/session.dart';
 class WorkoutControl {
   final userId = Session.instance.account!.firestoreId;
 
+  // TODO: Remove for production
   Future<void> addDummyData() async {
     final WorkoutPlan wp = WorkoutPlan(
       startDate: DateTime.now(),
@@ -34,7 +35,11 @@ class WorkoutControl {
     final ExerciseSet es = ExerciseSet(
       name: 'Test ExerciseSet',
       sessionId: ws.sessionId!,
-      muscleGroups: [MuscleGroup.other],
+      muscleGroups: [
+        MuscleGroup.other,
+        MuscleGroup.biceps,
+        MuscleGroup.triceps,
+      ],
       requiredEquipment: [Equipment.other],
     );
 
