@@ -1,7 +1,8 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 
 class Locator {
-  static Future<Map<String, double>> getCurrentLocation() async {
+  static Future<LatLng> getCurrentLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -26,6 +27,6 @@ class Locator {
 
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    return {'lat': position.latitude, 'long': position.longitude};
+    return LatLng(position.latitude, position.longitude);
   }
 }
