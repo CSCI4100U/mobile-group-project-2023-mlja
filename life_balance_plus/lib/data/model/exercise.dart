@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:life_balance_plus/data/enums/equipment.dart';
+import 'package:life_balance_plus/data/enums/muscle_group.dart';
 
 class ExerciseSet {
   int? id;
@@ -32,10 +34,12 @@ class ExerciseSet {
       'description': description,
       'sets': sets,
       'repetitionsPerSet': repetitionsPerSet,
-      'muscleGroups': jsonEncode(muscleGroups.map((group) => group.toString().split('.')[1]).toList()),
-      'requiredEquipment': jsonEncode(requiredEquipment.map((group) => group.toString().split('.')[1]).toList()),
-    }..removeWhere(
-      (dynamic key, dynamic value) => value == null);
+      'muscleGroups': jsonEncode(
+          muscleGroups.map((group) => group.toString().split('.')[1]).toList()),
+      'requiredEquipment': jsonEncode(requiredEquipment
+          .map((group) => group.toString().split('.')[1])
+          .toList()),
+    }..removeWhere((dynamic key, dynamic value) => value == null);
   }
 
   factory ExerciseSet.fromMap(Map<String, dynamic> map) {
@@ -48,51 +52,13 @@ class ExerciseSet {
       description: map['description'] as String?,
       repetitionsPerSet: map['repetitionsPerSet'] as int?,
       muscleGroups: (jsonDecode(map['muscleGroups']) as List)
-          .map((e) => MuscleGroup.values.firstWhere(
-            (muscle) => muscle.toString().split('.')[1] == e))
+          .map((e) => MuscleGroup.values
+              .firstWhere((muscle) => muscle.toString().split('.')[1] == e))
           .toList(),
       requiredEquipment: (jsonDecode(map['requiredEquipment']) as List)
-          .map((e) =>
-          Equipment.values.firstWhere(
-            (equipment) => equipment.toString().split('.')[1] == e))
+          .map((e) => Equipment.values.firstWhere(
+              (equipment) => equipment.toString().split('.')[1] == e))
           .toList(),
     );
   }
-}
-
-
-enum MuscleGroup {
-  anteriorDelts,
-  biceps,
-  calves,
-  chest,
-  core,
-  forearms,
-  glutes,
-  hamstrings,
-  lats,
-  lowerBack,
-  medialDelts,
-  neck,
-  other,
-  posteriorDelts,
-  quadriceps,
-  triceps,
-  upperBack,
-}
-
-enum Equipment {
-  adjustableBench,
-  barbell,
-  cableMachine,
-  curlBar,
-  dumbbells,
-  exerciseBall,
-  flatBench,
-  kettlebell,
-  medicineBall,
-  powerRack,
-  pullUpBar,
-  specializedMachine,
-  other,
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:life_balance_plus/data/model/workout_plan.dart';
 import 'package:life_balance_plus/data/model/exercise.dart';
 import 'package:life_balance_plus/control/workouts_control.dart';
-import 'package:life_balance_plus/view/pages/add_exercise_page.dart';
+import 'package:life_balance_plus/view/pages/workout/add_exercise_page.dart';
 
 class ExerciseTabPage extends StatefulWidget {
   const ExerciseTabPage({super.key});

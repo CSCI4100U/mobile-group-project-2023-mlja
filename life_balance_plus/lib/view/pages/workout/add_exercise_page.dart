@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:life_balance_plus/data/enums/equipment.dart';
+import 'package:life_balance_plus/data/enums/muscle_group.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 
 class AddExercisePage extends StatefulWidget {
   const AddExercisePage({super.key});
@@ -16,13 +19,27 @@ class _AddExercisePageState extends State<AddExercisePage> {
   final repsFieldController = TextEditingController();
 
   final muscleGroupsDropDownKey = GlobalKey<FormFieldState>();
+  final MultiSelectController<MuscleGroup> muscleGroupController =
+      MultiSelectController<MuscleGroup>();
+
   final equipmentDropDownKey = GlobalKey<FormFieldState>();
+
+  @override
+  void dispose() {
+    _formKey.currentState?.dispose();
+    nameFieldController.dispose();
+    descriptionFieldController.dispose();
+    setsFieldController.dispose();
+    repsFieldController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Exercise'),
+        toolbarHeight: 104,
       ),
       body: Scrollbar(
         thumbVisibility: true,
@@ -30,7 +47,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
           child: Form(
             key: _formKey,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(30, 50, 30, 0),
+              padding: const EdgeInsets.fromLTRB(30, 40, 30, 0),
               child: Column(
                 children: [
                   TextFormField(
@@ -40,7 +57,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
                     ),
                     controller: nameFieldController,
                     keyboardType: TextInputType.text,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     textCapitalization: TextCapitalization.words,
                     maxLength: 50,
                     onSaved: (newValue) {
@@ -67,7 +83,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
                       descriptionFieldController.clear();
                     },
                     maxLines: 2,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                   ),
                   const Divider(height: 50, thickness: 2),
                   Row(
@@ -215,45 +230,12 @@ class _AddExercisePageState extends State<AddExercisePage> {
                       });
                     },
                     isExpanded: true,
-                    items: const [
-                      // TODO: Replace with enum iterator
-                      DropdownMenuItem(
-                        value: 'Chest',
-                        child: Text('Chest'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Back',
-                        child: Text('Back'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Shoulders',
-                        child: Text('Shoulders'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Biceps',
-                        child: Text('Biceps'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Triceps',
-                        child: Text('Triceps'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Quadriceps',
-                        child: Text('Quadriceps'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Hamstrings',
-                        child: Text('Hamstrings'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Calves',
-                        child: Text('Calves'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Abs',
-                        child: Text('Abs'),
-                      ),
-                    ],
+                    items: MuscleGroup.values
+                        .map((group) => DropdownMenuItem(
+                              value: group,
+                              child: Text(group.toString()),
+                            ))
+                        .toList(),
                   ),
                   const SizedBox(height: 30),
                   DropdownButtonFormField(
@@ -270,25 +252,35 @@ class _AddExercisePageState extends State<AddExercisePage> {
                       });
                     },
                     isExpanded: true,
-                    items: const [
-                      // TODO: Replace with enum iterator
-                      DropdownMenuItem(
-                        value: 'Bench',
-                        child: Text('Bench'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Machine',
-                        child: Text('Machine'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Dumbells',
-                        child: Text('Dumbells'),
-                      ),
-                      DropdownMenuItem(
-                        value: '...',
-                        child: Text('...'),
-                      ),
-                    ],
+                    items: Equipment.values.map((Equipment equipment) {
+                      return DropdownMenuItem(
+                        value: equipment,
+                        child: Text(equipment.toString()),
+                      );
+                    }).toList(),
+                  ),
+                  // MultiSelectDropDown(
+                  //   controller: muscleGroupController,
+                  //   selectionType: SelectionType.multi,
+                  //   onOptionSelected: (selectedOptions) {
+                  //     print(selectedOptions);
+                  //     print(muscleGroupController.options);
+                  //   },
+                  //   options: MuscleGroup.values
+                  //       .map((muscleGroup) => ValueItem<MuscleGroup>(
+                  //             value: muscleGroup,
+                  //             label: muscleGroup.toString(),
+                  //           ))
+                  //       .toList(),
+                  // ),
+                  const SizedBox(height: 40),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: _save,
+                      child: const Text('Save'),
+                    ),
                   ),
                 ],
               ),
@@ -297,5 +289,12 @@ class _AddExercisePageState extends State<AddExercisePage> {
         ),
       ),
     );
+  }
+
+  Future<void> _save() async {
+    // TODO: Backend Integration - insert exercise to db
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+    }
   }
 }
