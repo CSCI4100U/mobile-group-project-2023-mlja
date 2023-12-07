@@ -68,13 +68,11 @@ class WorkoutPlan {
       accountEmail: map['accountEmail'],
       title: map['title'] as String,
       type: WorkoutPlanType.values.byName(map['type']),
-      sessions: jsonDecode(
-        map['sessions']
-      ).cast<List<Map<String, dynamic>>>()
-       .map((session) => session.map((exercise) {
-         return ExercisePlan.fromMap(exercise);
-       }).toList()
-      ).toList()
+      sessions: jsonDecode(map['sessions']).map((session) =>
+        List<Map<String, dynamic>>.from(session).map((exercise) {
+          return ExercisePlan.fromMap(exercise);
+        }).toList()
+      ).toList().cast<List<ExercisePlan>>()
     );
   }
 

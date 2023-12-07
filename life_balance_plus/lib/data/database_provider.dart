@@ -87,7 +87,7 @@ class DatabaseProvider {
       CREATE TABLE IF NOT EXISTS set_logs(
         id INTEGER PRIMARY KEY,
         firestoreId TEXT,
-        exercise_name TEXT,
+        exerciseName TEXT,
         reps INTEGER,
         weight REAL,
         duration REAL,

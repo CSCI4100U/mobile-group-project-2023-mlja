@@ -9,6 +9,66 @@ import 'package:life_balance_plus/data/model/account.dart';
 
 class WorkoutControl {
 
+
+
+  void addDummyData() {
+    print('LOADING DUMMY DATA...');
+
+    WorkoutPlan plan = WorkoutPlan(
+      accountEmail: 'mitchell.nolte@ontariotechu.net',
+      title: 'Push Pull Legs',
+      type: WorkoutPlanType.hypertrophy,
+      sessions: [
+        [
+          ExercisePlan(name: 'Bench Press', sets: 3, repTarget: 10),
+          ExercisePlan(name: 'Pushups', sets: 3, repTarget: 30)
+        ],
+        [
+          ExercisePlan(name: 'Pullups', sets: 3, repTarget: 20),
+          ExercisePlan(name: 'Lat Pulldowns', sets: 3, repTarget: 10)
+        ]
+      ]
+    );
+
+    List<SessionLog> sessions = [
+      SessionLog(
+        accountEmail: 'mitchell.nolte@ontariotechu.net',
+        date: DateTime.now(),
+        sets: [
+          ResistanceSetLog(
+            exerciseName: 'Bench press',
+            reps: 10,
+            weight: 99999999
+          ),
+          ResistanceSetLog(
+            exerciseName: 'Pushups',
+            reps: 9999999999,
+          ),
+        ]
+      ),
+      SessionLog(
+        accountEmail: 'mitchell.nolte@ontariotechu.net',
+        date: DateTime.now(),
+        sets: [
+          ResistanceSetLog(
+            exerciseName: 'Pullups',
+            reps: 9999999,
+          ),
+          ResistanceSetLog(
+            exerciseName: 'Lat Pulldowns',
+            reps: 10,
+            weight: 999999999
+          ),
+        ]
+      ),
+    ];
+
+    addWorkoutPlan(plan);
+    sessions.forEach((log) => addSessionLog(log));
+  }
+
+
+
   // ---------------------------------------------------------------
   // WorkoutPlan control
 
@@ -21,8 +81,8 @@ class WorkoutControl {
       whereArgs: [account.email]
     );
     if (localData.isNotEmpty) {
-      result = localData.map((wp) {
-        return WorkoutPlan.fromMap(wp);
+      result = localData.map((plan) {
+        return WorkoutPlan.fromMap(plan);
       }).toList();
     }
 
@@ -68,7 +128,12 @@ class WorkoutControl {
 
   Future updateWorkoutPlan(WorkoutPlan plan, [bool updateCloud=true]) async {
     final Database db = await DatabaseProvider.instance.database;
-    db.update('workout_plans', plan.toMap());
+    db.update(
+      'workout_plans',
+      plan.toMap(),
+      where: 'id = ?',
+      whereArgs: [plan.id]
+    );
     if(updateCloud) _updateCloudWorkoutPlan(plan);
   }
 
@@ -184,6 +249,7 @@ class WorkoutControl {
       conflictAlgorithm: ConflictAlgorithm.replace
     );
     _addSessionLogCloud(log);
+    log.sets.forEach((setLog) => addSetLog(setLog, log.id!));
   }
 
   void _addSessionLogCloud(SessionLog log) {
@@ -199,7 +265,12 @@ class WorkoutControl {
 
   Future updateSessionLog(SessionLog log, [bool updateCloud=true]) async {
     final Database db = await DatabaseProvider.instance.database;
-    db.update('session_logs', log.toMap());
+    db.update(
+      'session_logs',
+      log.toMap(),
+      where: 'id = ?',
+      whereArgs: [log.id]
+    );
     if(updateCloud) _updateSessionLogCloud(log);
   }
 
@@ -267,7 +338,12 @@ class WorkoutControl {
 
   Future<void> updateSetLog(SetLog log, [bool updateCloud=true]) async {
     final Database db = await DatabaseProvider.instance.database;
-    db.update('set_logs', log.toMap());
+    db.update(
+      'set_logs',
+      log.toMap(),
+      where: 'id = ?',
+      whereArgs: [log.id]
+    );
     if(updateCloud) _updateSetLogCloud(log);
   }
 

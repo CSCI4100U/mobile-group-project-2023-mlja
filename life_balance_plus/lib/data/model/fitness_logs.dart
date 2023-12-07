@@ -1,3 +1,4 @@
+/// Records of training history.
 class FitnessLogs {
   List<SessionLog> entries;
 
@@ -9,6 +10,7 @@ class FitnessLogs {
 }
 
 
+/// Record of a workout session.
 class SessionLog {
   int? id;
   String? firestoreId;
@@ -23,8 +25,8 @@ class SessionLog {
     required this.accountEmail,
     required this.date,
     required this.sets,
-    required this.notes
-  });
+    List<String>? notes
+  }) : this.notes = notes ?? [];
 
   factory SessionLog.fromMap(Map<String, dynamic> map) {
     return SessionLog(
@@ -49,7 +51,6 @@ class SessionLog {
       'id': id,
       'accountEmail': accountEmail,
       'date': date.toString(),
-      'sets': sets,
       'notes': notes.fold('', (str, note) => '$str$note\n'),
     };
   }
@@ -64,6 +65,7 @@ class SessionLog {
 }
 
 
+/// Record of a set in a workout session.
 abstract class SetLog {
   int? id;
   String? firestoreId;
@@ -99,11 +101,6 @@ class CardioSetLog extends SetLog {
   }
 
   Map<String, dynamic> toMap() {
-
-
-    print('CARDIO SET LOG TO MAP CALLED');
-
-
     return {
       'id': id,
       'firestoreId': firestoreId,
@@ -112,29 +109,26 @@ class CardioSetLog extends SetLog {
   }
 
   Map<String, dynamic> toFirestoreMap() {
-
-
-    print('CARDIO SET LOG TO FIRESTORE MAP CALLED');
-
-
     return {
       'exerciseName': exerciseName,
       'duration': duration,
-      'avgSpeed': avgSpeed
+      'avgSpeed': avgSpeed,
+      'reps': null,
+      'weight': null,
     };
   }
 }
 
 class ResistanceSetLog extends SetLog {
   int reps;
-  double weight;
+  double? weight;   // Nullable for bodyweight exercises
 
   ResistanceSetLog({
     super.id,
     super.firestoreId,
     required super.exerciseName,
     required this.reps,
-    required this.weight
+    this.weight
   });
 
   factory ResistanceSetLog.fromMap(Map<String, dynamic> map) {
@@ -148,11 +142,6 @@ class ResistanceSetLog extends SetLog {
   }
 
   Map<String, dynamic> toMap() {
-
-
-    print('RESISTANCE SET LOG TO MAP CALLED');
-
-
     return {
       'id': id,
       'firestoreId': firestoreId,
@@ -161,15 +150,12 @@ class ResistanceSetLog extends SetLog {
   }
 
   Map<String, dynamic> toFirestoreMap() {
-
-
-    print('RESISTANCE SET LOG TO FIRESTORE MAP CALLED');
-
-
     return {
       'exerciseName': exerciseName,
       'reps': reps,
       'weight': weight,
+      'duration': null,
+      'avgSpeed': null
     };
   }
 }
