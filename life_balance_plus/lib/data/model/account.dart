@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:life_balance_plus/control/account_control.dart';
+import 'package:life_balance_plus/data/model/workout_plan.dart';
 
 enum Gender { male, female, other }
 
 enum UnitsSystem { metric, imperial }
 
 class Account {
+  WorkoutPlan? activePlan;
   String firestoreId;   // Id of account document in users collection
   String email;
   String firstName;
@@ -50,6 +52,7 @@ class Account {
     this.useBluetooth = true,
     this.useNFC = false,
     this.useLocation = true,
+    this.activePlan,
   });
 
   factory Account.fromMap(Map<String, dynamic> map) {
@@ -95,6 +98,7 @@ class Account {
       'useBluetooth': useBluetooth? 1:0,
       'useNFC': useNFC? 1:0,
       'useLocation': useLocation? 1:0,
+      'active_workout_plan_id': activePlan?.id,
       ...toFirestoreMap()
     };
   }
@@ -131,6 +135,7 @@ class Account {
   }
 
   void updateAccountInfo({
+    WorkoutPlan? activePlan,
     String? firestoreId,
     String? firstName,
     String? lastName,
@@ -154,6 +159,10 @@ class Account {
   }) {
     bool updateCloud = false;
 
+    if (activePlan != null) {
+      this.activePlan = activePlan;
+      updateCloud = true;
+    }
     if (firstName != null) {
       this.firstName = firstName;
       updateCloud = true;

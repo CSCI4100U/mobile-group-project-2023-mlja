@@ -36,19 +36,21 @@ class _DashboardHistoryState extends State<DashboardHistory> {
                     .headlineMedium
                     ?.copyWith(fontWeight: FontWeight.bold)),
             const SizedBox(height: 26),
-            ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: logs.entries.length,
-              itemBuilder: (context, index) {
-                return Column(children: [
-                  WorkoutDashboardHistoryCard(
-                    log: logs.entries[logs.entries.length-1 - index]
-                  ),
-                  const Divider(),
-                ]);
-              },
-            ),
+            (logs.entries.isEmpty)? const Text(
+              'You haven\'t logged any workouts yet. Time to get moving!'
+            ) : ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: logs.entries.length,
+                  itemBuilder: (context, index) {
+                    return Column(children: [
+                      WorkoutDashboardHistoryCard(
+                        log: logs.entries[logs.entries.length-1 - index]
+                      ),
+                      const Divider(),
+                    ]);
+                  },
+                ),
           ],
         ),
       ),

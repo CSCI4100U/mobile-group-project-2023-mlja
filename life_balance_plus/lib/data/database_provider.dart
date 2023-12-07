@@ -36,6 +36,7 @@ class DatabaseProvider {
       CREATE TABLE IF NOT EXISTS account(
         email TEXT PRIMARY KEY,
         firestoreId TEXT,
+        active_workout_plan_id INTEGER,
         firstName TEXT,
         lastName TEXT,
         height REAL,
@@ -54,7 +55,8 @@ class DatabaseProvider {
         useMobileData INTEGER,
         useBluetooth INTEGER,
         useNFC INTEGER,
-        useLocation INTEGER
+        useLocation INTEGER,
+        FOREIGN KEY (active_workout_plan_id) REFERENCES workout_plans (id)
       )'''
     );
 

@@ -107,13 +107,17 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
             ),
           ),
           const Divider(),
-          ListTile(
-            trailing: TextButton.icon(
-              icon: Icon(Icons.arrow_forward_ios),
-              label: Text('Start Workout'),
-              onPressed: () {},
+          if(plan.id != Session.instance.account!.activePlan?.id) ...[
+            ListTile(
+              trailing: TextButton.icon(
+                icon: Icon(Icons.power_settings_new),
+                label: Text('Set as Active Program'),
+                onPressed: () => Session.instance.account!.updateAccountInfo(
+                  activePlan: plan,
+                ),
+              ),
             ),
-          ),
+          ]
         ],
       ),
     );

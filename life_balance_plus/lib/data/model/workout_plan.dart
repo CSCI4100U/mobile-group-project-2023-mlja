@@ -47,7 +47,6 @@ class WorkoutPlan {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'firestoreId': firestoreId,
       ...toFirestoreMap(),
     };
@@ -55,6 +54,7 @@ class WorkoutPlan {
 
   Map<String, dynamic> toFirestoreMap() {
     return {
+      'id': id,
       'accountEmail': accountEmail,
       'title': title,
       'type': type.name,
