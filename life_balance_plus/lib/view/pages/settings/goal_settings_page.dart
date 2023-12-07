@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:life_balance_plus/data/model/account.dart';
 import 'package:life_balance_plus/data/model/session.dart';
 
+/// A page for managing daily goals related to health and wellness.
 class GoalSettingsPage extends StatefulWidget {
   const GoalSettingsPage({super.key});
 
@@ -89,6 +90,7 @@ class _GoalSettingsPageState extends State<GoalSettingsPage> {
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
+                // Save updated goal settings to the user's account
                 Session.instance.account?.updateAccountInfo(
                   caloricIntakeGoal: dailyCaloricIntakeGoal,
                   dailyActivityGoal: dailyPhysicalActivityGoal,
