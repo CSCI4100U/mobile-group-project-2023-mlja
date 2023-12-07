@@ -5,6 +5,10 @@ import 'dart:async';
 import 'package:life_balance_plus/data/database_provider.dart';
 import 'package:life_balance_plus/data/model/workout_plan.dart';
 import 'package:life_balance_plus/data/model/account.dart';
+import 'package:life_balance_plus/data/model/exercise.dart';
+
+import 'package:life_balance_plus/data/enums/equipment.dart';
+import 'package:life_balance_plus/data/enums/muscle_group.dart';
 
 
 class WorkoutControl {
@@ -20,12 +24,49 @@ class WorkoutControl {
       type: WorkoutPlanType.hypertrophy,
       sessions: [
         [
-          ExercisePlan(name: 'Bench Press', sets: 3, repTarget: 10),
-          ExercisePlan(name: 'Pushups', sets: 3, repTarget: 30)
+          ExercisePlan(
+            exercise: Exercise(
+              name: 'Bench Press',
+              description: '',
+              muscleGroups: [MuscleGroup.chest, MuscleGroup.triceps, MuscleGroup.shoulders],
+              requiredEquipment: [Equipment.flatBench],
+            ),
+            sets: 3,
+            repTarget: 10
+          ),
+          ExercisePlan(
+            exercise: Exercise(
+              name: 'Pushups',
+              description: '',
+              muscleGroups: [MuscleGroup.chest, MuscleGroup.triceps, MuscleGroup.shoulders],
+              requiredEquipment: [],
+            ),
+            sets: 3,
+            repTarget: 30
+          )
         ],
+        [], // Rest day
         [
-          ExercisePlan(name: 'Pullups', sets: 3, repTarget: 20),
-          ExercisePlan(name: 'Lat Pulldowns', sets: 3, repTarget: 10)
+          ExercisePlan(
+            exercise: Exercise(
+              name: 'Pullups',
+              description: '',
+              muscleGroups: [MuscleGroup.lats, MuscleGroup.upperBack, MuscleGroup.biceps],
+              requiredEquipment: [Equipment.pullUpBar],
+            ),
+            sets: 3,
+            repTarget: 20
+          ),
+          ExercisePlan(
+            exercise: Exercise(
+              name: 'Lat Pulldowns',
+              description: '',
+              muscleGroups: [MuscleGroup.lats, MuscleGroup.upperBack, MuscleGroup.biceps],
+              requiredEquipment: [Equipment.specializedMachine],
+            ),
+            sets: 3,
+            repTarget: 10
+          )
         ]
       ]
     );

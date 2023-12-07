@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:collection/collection.dart';
 import 'package:life_balance_plus/data/model/workout_plan.dart';
 import 'package:life_balance_plus/data/model/session.dart';
 
@@ -11,32 +12,20 @@ class ProgramTabPage extends StatefulWidget {
 }
 
 class _ProgramTabPageState extends State<ProgramTabPage> {
+  late List<WorkoutPlan> programs;
+
+  @override
+  void initState() {
+    super.initState();
+
+    programs = Session.instance.workoutPlans!;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        WorkoutDashboardProgramCard(
-          WorkoutPlan(
-            title: 'TEST',
-            type: WorkoutPlanType.custom,
-            accountEmail: Session.instance.account!.email
-          ),
-        ),
-        WorkoutDashboardProgramCard(
-          WorkoutPlan(
-            title: 'TEST2',
-            type: WorkoutPlanType.endurance,
-            accountEmail: Session.instance.account!.email
-          ),
-        ),
-        WorkoutDashboardProgramCard(
-          WorkoutPlan(
-            title: 'TEST3',
-            type: WorkoutPlanType.sportsSpecific,
-            accountEmail: Session.instance.account!.email
-          ),
-        ),
-      ],
+    return ListView.builder(
+      itemCount: programs.length,
+      itemBuilder: (context, i) => WorkoutDashboardProgramCard(programs[i])
     );
   }
 
@@ -46,7 +35,7 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
       elevation: 4,
       margin: const EdgeInsets.all(16),
       shape: RoundedRectangleBorder(
-        // side: const BorderSide(color: Colors.black, width: 2),
+        side: const BorderSide(color: Colors.black, width: 2),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -75,43 +64,40 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Lat Pulldowns',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: 17,
-                          ),
-                    ),
-                    Text(
-                      '2 Sets',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(fontWeight: FontWeight.w900),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Back',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(color: Colors.grey),
-                    ),
-                    Text(
-                      '50 Kg',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(fontWeight: FontWeight.w900),
-                    ),
-                  ],
-                ),
+                ...plan.sessions.mapIndexed((index, session) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        (session.isEmpty)? 'Rest Day' : 'Day ${index+1}',
+                        style: Theme.of(context).textTheme.titleLarge
+                      ),
+                      const Divider(height: 6),
+                      ...session.map((exercisePlan) {
+                        return Padding(
+                          padding: EdgeInsets.only(left: 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                exercisePlan.exercise.name,
+                                style: Theme.of(context).textTheme.bodyLarge?.
+                                  copyWith(fontSize: 17),
+                              ),
+                              Text(
+                                '${exercisePlan.sets} set${exercisePlan.sets > 1? 's':''}'
+                                ', ${exercisePlan.repTarget == null?
+                                  '${exercisePlan.targetDuration} minutes' :
+                                  '${exercisePlan.repTarget} reps '}'
+                              )
+                            ]
+                          )
+                        );
+                      }).toList(),
+                      const Divider(),
+                    ]
+                  );
+                }).toList(),
               ],
             ),
           ),

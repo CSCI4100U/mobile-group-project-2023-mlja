@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'package:life_balance_plus/data/enums/equipment.dart';
+import 'package:life_balance_plus/data/enums/muscle_group.dart';
+import 'package:life_balance_plus/data/model/exercise.dart';
 
 
 enum WorkoutPlanType {
@@ -84,16 +87,27 @@ class WorkoutPlan {
 
 /// Defines the plan for a single exercise in a WorkoutPlan.
 class ExercisePlan {
-  String name;
+  Exercise exercise;
   int sets;
   int? repTarget;       // Number of reps to aim for in each set for resistance training
   int? targetDuration;  // Target duration for cardio exercise
 
-  ExercisePlan({required this.name, required this.sets, this.repTarget, this.targetDuration});
+  ExercisePlan({
+    required this.exercise,
+    required this.sets,
+    this.repTarget,
+    this.targetDuration});
 
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
+      'name': exercise.name,
+      'description': exercise.description,
+      'muscleGroups': exercise.muscleGroups.fold(
+        '', (str, group) => '$str${group.name},'
+      ),
+      'requiredEquipment': exercise.requiredEquipment.fold(
+        '', (str, equipment) => '$str${equipment.name},'
+      ),
       'sets': sets,
       'repTarget': repTarget,
       'targetDuration': targetDuration,
@@ -102,7 +116,24 @@ class ExercisePlan {
 
   factory ExercisePlan.fromMap(Map<String, dynamic> map) {
     return ExercisePlan(
-      name: map['name'],
+      exercise: Exercise(
+        name: map['name'],
+        description: map['description'],
+        muscleGroups: (map['muscleGroups'] == '')? []
+          : (map['muscleGroups']
+              .split(',')
+              .where((str) => str != '')
+              .map((group) => MuscleGroup.values.byName(group))
+              .toList().cast<MuscleGroup>()
+            ),
+        requiredEquipment: (map['requiredEquipment'] == '')? []
+          : (map['requiredEquipment']
+              .split(',')
+              .where((str) => str != '')
+              .map((equipment) => Equipment.values.byName(equipment))
+              .toList().cast<Equipment>()
+            ),
+      ),
       sets: map['sets'],
       repTarget: map['repTarget'],
       targetDuration: map['targetDuration'],
