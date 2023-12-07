@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import '../../../data/model/meal.dart';
 
+/// A StatefulWidget that displays a DataTable for meals.
 class MealsDataTable extends StatefulWidget {
-  MealsDataTable({Key? key, required this.meals}) : super(key: key);
+  /// List of meals to be displayed in the DataTable.
   final List<Meal> meals;
+
+  /// Constructor to initialize the MealsDataTable.
+  MealsDataTable({Key? key, required this.meals}) : super(key: key);
 
   @override
   State<MealsDataTable> createState() => _MealsDataTableState();
 }
 
+/// The State class for MealsDataTable.
 class _MealsDataTableState extends State<MealsDataTable> {
-  // Variables to control sorting in the DataTable
   bool _sortAscending = true;
   int _sortColumnIndex = 0;
 
-  // Function to build DataRow widgets based on the list of meals
+  /// Builds DataRows based on the provided list of meals.
   List<DataRow> _buildDataRows(List<Meal> meals) {
     return meals.map((meal) {
       return DataRow(
@@ -31,30 +35,29 @@ class _MealsDataTableState extends State<MealsDataTable> {
 
   @override
   Widget build(BuildContext context) {
-    // Build DataRow widgets based on the provided meals
+    // Build DataRows based on the provided meals.
     List<DataRow> dataRows = _buildDataRows(widget.meals);
 
+    // Scrollable DataTable with specified column widths.
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: DataTable(
         sortColumnIndex: _sortColumnIndex,
         sortAscending: _sortAscending,
         columnSpacing: 5.0, // Adjust the spacing between columns
+        dataRowHeight: 40.0, // Set the height for each DataRow
 
         // Define columns for the DataTable
         columns: [
           DataColumn(
             label: SizedBox(
-              width: 100.0, // Set the width for the "Meal" column
+              width: 100.0,
               child: Text("Meal"),
             ),
-            // Enable sorting for the "Meal" column
             onSort: (columnIndex, ascending) {
               setState(() {
                 _sortColumnIndex = columnIndex;
                 _sortAscending = ascending;
-
-                // Sort the meals list based on the selected column
                 widget.meals.sort((a, b) {
                   if (ascending) {
                     return a.name.compareTo(b.name);
@@ -67,7 +70,7 @@ class _MealsDataTableState extends State<MealsDataTable> {
           ),
           DataColumn(
             label: SizedBox(
-              width: 50.0, // Set the width for the "Type" column
+              width: 60.0,
               child: Text("Type"),
             ),
             onSort: (columnIndex, ascending) {
@@ -86,7 +89,7 @@ class _MealsDataTableState extends State<MealsDataTable> {
           ),
           DataColumn(
             label: SizedBox(
-              width: 40.0, // Set the width for the "Carbs" column
+              width: 40.0,
               child: Text("Carbs"),
             ),
             onSort: (columnIndex, ascending) {
@@ -105,7 +108,7 @@ class _MealsDataTableState extends State<MealsDataTable> {
           ),
           DataColumn(
             label: SizedBox(
-              width: 50.0, // Set the width for the "Proteins" column
+              width: 45.0,
               child: Text("Protein"),
             ),
             onSort: (columnIndex, ascending) {
@@ -124,7 +127,7 @@ class _MealsDataTableState extends State<MealsDataTable> {
           ),
           DataColumn(
             label: SizedBox(
-              width: 30.0, // Set the width for the "Fats" column
+              width: 30.0,
               child: Text("Fats"),
             ),
             onSort: (columnIndex, ascending) {
