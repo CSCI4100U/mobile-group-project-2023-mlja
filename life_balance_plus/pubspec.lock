@@ -69,26 +69,26 @@ packages:
     dependency: "direct main"
     description:
       name: cloud_firestore
-      sha256: "49c0e34a0de7150f6b46390263edd7a940776713bf188891f7fd07c7d750389c"
+      sha256: "8fa76be13bf33c7e1521794d8f43e94abb83515201667d00a1e0063351867200"
       url: "https://pub.dev"
     source: hosted
-    version: "4.13.0"
+    version: "4.13.3"
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
-      sha256: beb8a599bd619d5081469b7af43bf4e9bb0e778f3b005c1b45e21b97e836d1a5
+      sha256: "5683de3ed02dded4857882493a7f359dff8cb9941ef36fa707f1b1cbde054838"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.4"
+    version: "6.0.7"
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
-      sha256: "7a21039c98e8b5e2e0c3f5c764b185fe18b353312613074e81262a246fb58ba4"
+      sha256: "29ed06af42c224e2ada69344b6d42e3d4c5e37f3931ea790733e859c0e5bfbf8"
       url: "https://pub.dev"
     source: hosted
-    version: "3.8.4"
+    version: "3.8.7"
   collection:
     dependency: transitive
     description:
@@ -133,10 +133,10 @@ packages:
     dependency: transitive
     description:
       name: dbus
-      sha256: "6f07cba3f7b3448d42d015bfd3d53fe12e5b36da2423f23838efc1d5fb31a263"
+      sha256: "365c771ac3b0e58845f39ec6deebc76e3276aa9922b0cc60840712094d9047ac"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.8"
+    version: "0.7.10"
   desktop_webview_auth:
     dependency: transitive
     description:
@@ -189,26 +189,26 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_auth
-      sha256: af5a03a0c377af9218c9aa3c6a9ef5207d9621f0f6cd3b5099a5f570e1a03206
+      sha256: "869ff488c7b467e273d7be223f52d3d026576b6e1da92dcd136ff627ae0a8c67"
       url: "https://pub.dev"
     source: hosted
-    version: "4.13.0"
+    version: "4.15.0"
   firebase_auth_platform_interface:
     dependency: transitive
     description:
       name: firebase_auth_platform_interface
-      sha256: def138b34bb97310ff748d1864f3ccd5b49d7424f35825f0df5455f16218ba99
+      sha256: ecf9f78ae1a7a1297de01ec975e9e2cfe5b543589b27cc5969849d9a8dc46999
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.4"
+    version: "7.0.6"
   firebase_auth_web:
     dependency: transitive
     description:
       name: firebase_auth_web
-      sha256: e5fbb3453fbfff0dd8dfed5e3560248391f76a4c59ae9b331704e3443cffde77
+      sha256: "96f89e2340cdf373109cb29afec401c170aa2d98fb0833687793c8017e36f435"
       url: "https://pub.dev"
     source: hosted
-    version: "5.8.7"
+    version: "5.8.9"
   firebase_core:
     dependency: "direct main"
     description:
@@ -237,18 +237,18 @@ packages:
     dependency: transitive
     description:
       name: firebase_dynamic_links
-      sha256: d57ec2b08e20282936c02de4dcb219f03ea92fc97722ae479f9b186ca8c01f3c
+      sha256: "300bd7e1c2dafe7e90cfe7f0890e1371bd30f37043bf64cde406b53ecd1dd4af"
       url: "https://pub.dev"
     source: hosted
-    version: "5.4.4"
+    version: "5.4.6"
   firebase_dynamic_links_platform_interface:
     dependency: transitive
     description:
       name: firebase_dynamic_links_platform_interface
-      sha256: "86e89f063a6018ccd9ea84b6093f7a27fe37cd95b86fb6f02d632b14ae8cb06d"
+      sha256: "1d1d2d90a2edb1a67aad66a44ffc92ba43b4550631c62b4fd988dff771d91edd"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.6+12"
+    version: "0.2.6+14"
   firebase_messaging:
     dependency: "direct main"
     description:
@@ -285,10 +285,10 @@ packages:
     dependency: transitive
     description:
       name: firebase_ui_localizations
-      sha256: "3f2548115b5f33fabc5cc47bee2f1d1d11a049381fbd64a8ecdd04fda6564319"
+      sha256: "3224f45191614bb67d95801689b31a3bb07d5581dfad20c815bf8317b088f003"
       url: "https://pub.dev"
     source: hosted
-    version: "1.8.0"
+    version: "1.9.0"
   firebase_ui_oauth:
     dependency: transitive
     description:
@@ -330,10 +330,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_local_notifications
-      sha256: "6d11ea777496061e583623aaf31923f93a9409ef8fcaeeefdd6cd78bf4fe5bb3"
+      sha256: bb5cd63ff7c91d6efe452e41d0d0ae6348925c82eafd10ce170ef585ea04776e
       url: "https://pub.dev"
     source: hosted
-    version: "16.1.0"
+    version: "16.2.0"
   flutter_local_notifications_linux:
     dependency: transitive
     description:
@@ -359,10 +359,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_map
-      sha256: "2b925948b675ef74ca524179fb133dbe0a21741889ccf56ad08fc8dcc38ba94b"
+      sha256: cda8d72135b697f519287258b5294a57ce2f2a5ebf234f0e406aad4dc14c9399
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.1"
+    version: "6.1.0"
   flutter_map_geojson:
     dependency: "direct main"
     description:
@@ -697,10 +697,10 @@ packages:
     dependency: transitive
     description:
       name: plugin_platform_interface
-      sha256: da3fdfeccc4d4ff2da8f8c556704c08f912542c5fb3cf2233ed75372384a034d
+      sha256: f4f88d4a900933e7267e2b353594774fc0d07fb072b47eedcd5b54e1ea3269f8
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.6"
+    version: "2.1.7"
   polylabel:
     dependency: transitive
     description:
@@ -886,10 +886,10 @@ packages:
     dependency: transitive
     description:
       name: sqflite_common
-      sha256: "8ed044102f3135add97be8653662052838859f5400075ef227f8ad72ae320803"
+      sha256: bb4738f15b23352822f4c42a531677e5c6f522e079461fd240ead29d8d8a54a6
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.0+1"
+    version: "2.5.0+2"
   stack_trace:
     dependency: transitive
     description:
@@ -1062,10 +1062,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "350a11abd2d1d97e0cc7a28a81b781c08002aa2864d9e3f192ca0ffa18b06ed3"
+      sha256: b0f37db61ba2f2e9b7a78a1caece0052564d1bc70668156cf3a29d676fe4e574
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.9"
+    version: "5.1.1"
   wkt_parser:
     dependency: transitive
     description:

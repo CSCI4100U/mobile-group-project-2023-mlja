@@ -24,6 +24,7 @@ class CustomTabbar extends StatelessWidget {
                   labelColor: Colors.white,
                   unselectedLabelColor: Colors.white38,
                   indicatorColor: Colors.white54,
+                  indicatorSize: TabBarIndicatorSize.label,
                   indicator: const UnderlineTabIndicator(
                     borderSide: BorderSide(
                       width: 2,

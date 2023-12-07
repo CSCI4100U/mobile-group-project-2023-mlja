@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:life_balance_plus/data/model/exercise.dart';
 
 class WorkoutDashboardHistoryCard extends StatelessWidget {
   final String title;
   final DateTime date;
-  final String muscleGroup;
   const WorkoutDashboardHistoryCard({
     super.key,
     required this.title,
     required this.date,
-    required this.muscleGroup,
   });
 
   @override

@@ -1,3 +1,6 @@
+import 'package:life_balance_plus/data/enums/equipment.dart';
+import 'package:life_balance_plus/data/enums/muscle_group.dart';
+
 class Exercise {
   String name;
   String description;
@@ -10,40 +13,4 @@ class Exercise {
     required this.muscleGroups,
     required this.requiredEquipment,
   });
-}
-
-
-enum MuscleGroup {
-  anteriorDelts,
-  biceps,
-  calves,
-  chest,
-  core,
-  forearms,
-  glutes,
-  hamstrings,
-  lats,
-  lowerBack,
-  medialDelts,
-  neck,
-  other,
-  posteriorDelts,
-  quadriceps,
-  triceps,
-  upperBack,
-}
-
-enum Equipment {
-  adjustableBench,
-  barbell,
-  cableMachine,
-  curlBar,
-  dumbbells,
-  exerciseBall,
-  flatBench,
-  kettlebell,
-  medicineBall,
-  powerRack,
-  pullUpBar,
-  specializedMachine,
 }
