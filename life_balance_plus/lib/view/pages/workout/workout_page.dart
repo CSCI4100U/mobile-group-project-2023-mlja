@@ -20,7 +20,8 @@ class _WorkoutPageState extends State<WorkoutPage> {
   List<WorkoutPlan> exs = [];
 
   Future<void> _loadExercises() async {
-    final exs_ = await WorkoutControl().getWorkoutPlans(Session.instance.account!);
+    final exs_ =
+        await WorkoutControl().getWorkoutPlans(Session.instance.account!);
     setState(() {
       exs = exs_;
     });
@@ -29,6 +30,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
   @override
   void initState() {
     super.initState();
+    WorkoutControl().addDummyData();
     _loadExercises();
   }
 

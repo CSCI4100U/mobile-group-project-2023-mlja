@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// A page that allows users to view and submit details about their run.
 class RunPage extends StatefulWidget {
   const RunPage({Key? key}) : super(key: key);
 
@@ -8,6 +9,7 @@ class RunPage extends StatefulWidget {
 }
 
 class _RunPageState extends State<RunPage> {
+  // Run rating and comments controller for user feedback
   double runRating = 3.0;
   TextEditingController commentsController = TextEditingController();
 
@@ -23,6 +25,7 @@ class _RunPageState extends State<RunPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Header with the title of the run summary
               Center(
                 child: Text(
                   'Your Run Summary',
@@ -32,8 +35,12 @@ class _RunPageState extends State<RunPage> {
                 ),
               ),
               const SizedBox(height: 16),
+
+              // Section displaying run details and user inputs
               _buildRunDetails(context),
               const SizedBox(height: 16),
+
+              // Button to submit run details
               ElevatedButton(
                 onPressed: () {
                   // Handle the submission of run details
@@ -48,6 +55,7 @@ class _RunPageState extends State<RunPage> {
     );
   }
 
+  // Widget to build the section displaying run details
   Widget _buildRunDetails(BuildContext context) {
     return Card(
       elevation: 4,
@@ -56,6 +64,7 @@ class _RunPageState extends State<RunPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Run information such as distance, duration, pace, etc.
             _buildRunInfo(context, 'Distance', '5.0 km'),
             _buildRunInfo(context, 'Duration', '30 minutes'),
             _buildRunInfo(context, 'Pace', '6:00 min/km'),
@@ -64,8 +73,12 @@ class _RunPageState extends State<RunPage> {
             _buildRunInfo(context, 'Start Time', '08:00 AM'),
             _buildRunInfo(context, 'End Time', '08:30 AM'),
             const SizedBox(height: 16),
+
+            // Widget displaying the run map (image)
             _buildRunMap(),
             const SizedBox(height: 16),
+
+            // Widget for user feedback on the run
             _buildRunFeelings(context),
           ],
         ),
@@ -73,6 +86,7 @@ class _RunPageState extends State<RunPage> {
     );
   }
 
+  // Widget to build individual run information row
   Widget _buildRunInfo(BuildContext context, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -94,6 +108,7 @@ class _RunPageState extends State<RunPage> {
     );
   }
 
+  // Widget to display the run map (image)
   Widget _buildRunMap() {
     return Image.network(
       'https://www.google.com/maps/d/u/0/thumbnail?mid=1T0PVvwSyrRZYDhM5FObXXupuEvo&hl=en',
@@ -103,10 +118,12 @@ class _RunPageState extends State<RunPage> {
     );
   }
 
+  // Widget to gather user feedback on the run
   Widget _buildRunFeelings(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Text field for user comments on the run
         Text(
           'How did you feel about your run?',
           style: Theme.of(context).textTheme.subtitle1?.copyWith(
@@ -123,6 +140,8 @@ class _RunPageState extends State<RunPage> {
           ),
         ),
         const SizedBox(height: 16),
+
+        // Slider for user to rate the run
         Text(
           'Rate your run:',
           style: Theme.of(context).textTheme.subtitle1?.copyWith(
@@ -143,11 +162,14 @@ class _RunPageState extends State<RunPage> {
           label: 'Rating: ${runRating.round()}',
         ),
         const SizedBox(height: 16),
+
+        // Additional details section (weather, temperature, shoes worn)
         _buildAdditionalDetails(context),
       ],
     );
   }
 
+  // Widget to display additional details section
   Widget _buildAdditionalDetails(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,6 +181,8 @@ class _RunPageState extends State<RunPage> {
               ),
         ),
         const SizedBox(height: 8),
+
+        // Individual detail fields (weather conditions, temperature, shoes worn)
         _buildDetailField(context, 'Weather Conditions', 'Sunny'),
         _buildDetailField(context, 'Temperature', '25°C'),
         _buildDetailField(context, 'Shoes Worn', 'Nike Zoom Pegasus 38'),
@@ -166,6 +190,7 @@ class _RunPageState extends State<RunPage> {
     );
   }
 
+  // Widget to build individual detail field row
   Widget _buildDetailField(BuildContext context, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -187,6 +212,7 @@ class _RunPageState extends State<RunPage> {
     );
   }
 
+  // Method to handle the submission of run details
   void _submitRunDetails() {
     // Implement your logic to handle the submission of run details
     // For example, you can save the details to a database or perform any other necessary actions.
@@ -194,6 +220,7 @@ class _RunPageState extends State<RunPage> {
   }
 }
 
+// Main function to run the app
 void main() {
   runApp(MaterialApp(
     home: RunPage(),

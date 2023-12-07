@@ -40,14 +40,13 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: Column(
                   children: [
-                    // TODO: Retrieve data from db
                     HomeSummaryCard(
                       name: name,
                       date: DateTime.now(),
-                      caloriesEaten: 2000,
-                      caloriesBurned: 500,
-                      milesRan: 2.5,
-                      litersDrank: 1.5,
+                      caloriesEaten: account?.caloricIntakeGoal ?? 0,
+                      caloriesBurned: account?.dailyActivityGoal ?? 0,
+                      milesRan: 2.5, // TODO: Retrieve data from db
+                      litersDrank: account!.waterIntakeGoal.toDouble(),
                     ),
                     const SizedBox(height: 16),
                     const HomeNutritionCard(),

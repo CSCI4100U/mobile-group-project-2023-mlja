@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../../../data/model/diet.dart';
 import 'package:life_balance_plus/control/diets_control.dart';
 
+/// A form for creating a new diet.
 class CreateDietForm extends StatefulWidget {
   @override
   _CreateDietFormState createState() => _CreateDietFormState();
@@ -21,6 +22,7 @@ class _CreateDietFormState extends State<CreateDietForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Heading for the form
           Text(
             'Create a New Diet',
             style: Theme.of(context).textTheme.headline4?.copyWith(
@@ -28,6 +30,8 @@ class _CreateDietFormState extends State<CreateDietForm> {
                 ),
           ),
           const SizedBox(height: 16),
+
+          // Text form field for entering diet name
           TextFormField(
             controller: _dietNameController,
             decoration: InputDecoration(
@@ -35,7 +39,9 @@ class _CreateDietFormState extends State<CreateDietForm> {
               border: OutlineInputBorder(),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
+
+          // Text form field for entering daily calories
           TextFormField(
             controller: _caloriesController,
             keyboardType: TextInputType.number,
@@ -44,7 +50,9 @@ class _CreateDietFormState extends State<CreateDietForm> {
               border: OutlineInputBorder(),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
+
+          // Dropdown for selecting diet type
           _buildDropdown(
             'Diet Type',
             DietType.values,
@@ -55,11 +63,15 @@ class _CreateDietFormState extends State<CreateDietForm> {
               });
             },
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
+
+          // Row for selecting and displaying start date
           Row(
             children: [
               Text('Start Date: '),
+              const SizedBox(width: 10),
               SizedBox(
+                height: 30,
                 width: 200,
                 child: ElevatedButton(
                   onPressed: () => _selectDate(context),
@@ -70,16 +82,22 @@ class _CreateDietFormState extends State<CreateDietForm> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: _submitForm,
-            child: Text('Create Diet'),
+          const SizedBox(height: 50),
+          // Button for submitting the form
+          SizedBox(
+            height: 30,
+            width: 125,
+            child: ElevatedButton(
+              onPressed: _submitForm,
+              child: Text('Create Diet'),
+            ),
           ),
         ],
       ),
     );
   }
 
+  // Helper method to build dropdown widget
   Widget _buildDropdown<T>(String label, List<T> items, T selectedItem,
       void Function(T?)? onChanged) {
     return DropdownButtonFormField<T>(
@@ -98,6 +116,7 @@ class _CreateDietFormState extends State<CreateDietForm> {
     );
   }
 
+  // Helper method to display date picker and update selected date
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -112,10 +131,12 @@ class _CreateDietFormState extends State<CreateDietForm> {
     }
   }
 
+  // Helper method to format the date for display
   String _formattedDate(DateTime date) {
     return DateFormat('yyyy-MM-dd').format(date);
   }
 
+  // Helper method to handle form submission
   void _submitForm() {
     final String caloriesText = _caloriesController.text.trim();
     if (caloriesText.isEmpty) {

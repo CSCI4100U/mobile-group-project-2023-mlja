@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// A widget that represents a workout card on the workout dashboard.
 class WorkoutDashboardWorkoutCard extends StatelessWidget {
   const WorkoutDashboardWorkoutCard({Key? key});
 
@@ -12,6 +13,7 @@ class WorkoutDashboardWorkoutCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Header section with workout title
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -24,6 +26,8 @@ class WorkoutDashboardWorkoutCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 6),
+
+            // Workout type and tags
             const Text("Push Day"),
             const SizedBox(height: 10),
             Row(
@@ -37,6 +41,8 @@ class WorkoutDashboardWorkoutCard extends StatelessWidget {
             ),
             const Divider(),
             const SizedBox(height: 8),
+
+            // Workout details for each exercise
             _buildWorkoutDetails(context, "Workout 1", "3 Sets", "Bench Press",
                 "10 reps", "50 kg"),
             const Divider(),
@@ -46,6 +52,8 @@ class WorkoutDashboardWorkoutCard extends StatelessWidget {
             _buildWorkoutDetails(context, "Workout 3", "4 Sets", "Tricep Dips",
                 "15 reps", "Body Weight"),
             const SizedBox(height: 8),
+
+            // Button to start the workout
             Align(
               alignment: Alignment.centerRight,
               child: TextButton.icon(
@@ -61,6 +69,7 @@ class WorkoutDashboardWorkoutCard extends StatelessWidget {
     );
   }
 
+  // Helper method to build an exercise tag with a given name.
   Widget _buildExerciseTag(BuildContext context, String exerciseName) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -72,6 +81,7 @@ class WorkoutDashboardWorkoutCard extends StatelessWidget {
     );
   }
 
+  // Helper method to build workout details for an exercise.
   Widget _buildWorkoutDetails(
     BuildContext context,
     String workoutName,
@@ -84,6 +94,7 @@ class WorkoutDashboardWorkoutCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Column(
         children: [
+          // Row with workout name and sets/reps
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -102,6 +113,8 @@ class WorkoutDashboardWorkoutCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
+
+          // Row with exercise name, reps, and weight
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

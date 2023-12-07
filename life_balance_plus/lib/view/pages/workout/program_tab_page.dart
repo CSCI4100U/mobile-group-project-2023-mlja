@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:life_balance_plus/data/model/workout_plan.dart';
 import 'package:life_balance_plus/data/model/session.dart';
+import 'package:life_balance_plus/view/pages/workout/add_program_dialog.dart';
 
 class ProgramTabPage extends StatefulWidget {
   const ProgramTabPage({super.key});
@@ -21,15 +22,25 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(    
+    print(programs);
+    // programs.add(WorkoutPlan(accountEmail: accountEmail, title: title, type: type))
+
+    return Scaffold(
       body: ListView.builder(
-        itemCount: programs.length,
-        itemBuilder: (context, i) => WorkoutDashboardProgramCard(programs[i])
-      ),
+          itemCount: programs.length,
+          itemBuilder: (context, i) =>
+              WorkoutDashboardProgramCard(programs[i])),
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add),
         label: const Text('Add Program'),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const AddProgramDialog(),
+              fullscreenDialog: true,
+            ),
+          );
+        },
       ),
     );
   }
@@ -41,7 +52,7 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
       margin: const EdgeInsets.all(16),
       shape: RoundedRectangleBorder(
         side: const BorderSide(color: Colors.black, width: 2),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,37 +82,33 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
               children: [
                 ...plan.sessions.mapIndexed((index, session) {
                   return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        (session.isEmpty)? 'Rest Day' : 'Day ${index+1}',
-                        style: Theme.of(context).textTheme.titleLarge
-                      ),
-                      const Divider(height: 6),
-                      ...session.map((exercisePlan) {
-                        return Padding(
-                          padding: EdgeInsets.only(left: 12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                exercisePlan.exercise.name,
-                                style: Theme.of(context).textTheme.bodyLarge?.
-                                  copyWith(fontSize: 17),
-                              ),
-                              Text(
-                                '${exercisePlan.sets} set${exercisePlan.sets > 1? 's':''}'
-                                ' • ${exercisePlan.repTarget == null?
-                                  '${exercisePlan.targetDuration} minutes' :
-                                  '${exercisePlan.repTarget} reps '}'
-                              )
-                            ]
-                          )
-                        );
-                      }).toList(),
-                      const Divider(),
-                    ]
-                  );
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                            (session.isEmpty) ? 'Rest Day' : 'Day ${index + 1}',
+                            style: Theme.of(context).textTheme.titleLarge),
+                        const Divider(height: 6),
+                        ...session.map((exercisePlan) {
+                          return Padding(
+                              padding: EdgeInsets.only(left: 12),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      exercisePlan.exercise.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(fontSize: 17),
+                                    ),
+                                    Text(
+                                        '${exercisePlan.sets} set${exercisePlan.sets > 1 ? 's' : ''}'
+                                        ' • ${exercisePlan.repTarget == null ? '${exercisePlan.targetDuration} minutes' : '${exercisePlan.repTarget} reps '}')
+                                  ]));
+                        }).toList(),
+                        const Divider(),
+                      ]);
                 }).toList(),
               ],
             ),
