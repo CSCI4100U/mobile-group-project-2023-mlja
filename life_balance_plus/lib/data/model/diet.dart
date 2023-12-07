@@ -54,7 +54,7 @@ class Diet {
     }
   }
 
-  void addNote(String note){
+  void addNote(String note) {
     final date = DateTime.now();
 
     // Initialize notes if it is still null
@@ -67,7 +67,8 @@ class Diet {
     }
   }
 
-  Widget progressGraph(DateTime startDate, DateTime endDate, List<String> metrics) {
+  Widget progressGraph(
+      DateTime startDate, DateTime endDate, List<String> metrics) {
     return Container(
       child: Text("Placeholder Graph"),
     );

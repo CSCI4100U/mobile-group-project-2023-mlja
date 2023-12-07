@@ -100,9 +100,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
                                   setsFieldController.clear();
                                 },
                                 validator: (value) {
-                                  // if (value == null || value.isEmpty) {
-                                  //   return 'Sets is required';
-                                  // }
+                                  if (value == null || value.isEmpty) {
+                                    return 'Sets is required';
+                                  }
                                   return null;
                                 },
                               ),
@@ -163,9 +163,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
                                   repsFieldController.clear();
                                 },
                                 validator: (value) {
-                                  // if (value == null || value.isEmpty) {
-                                  //   return 'Reps is required';
-                                  // }
+                                  if (value == null || value.isEmpty) {
+                                    return 'Reps is required';
+                                  }
                                   return null;
                                 },
                               ),

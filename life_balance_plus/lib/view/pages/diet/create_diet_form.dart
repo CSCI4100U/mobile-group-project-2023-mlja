@@ -34,23 +34,15 @@ class _CreateDietFormState extends State<CreateDietForm> {
             ),
           ),
           const SizedBox(height: 16),
-          DropdownButtonFormField<DietType>(
-            value: _selectedDietType,
-            onChanged: (value) {
+          _buildDropdown(
+            'Diet Type',
+            DietType.values,
+            _selectedDietType,
+            (DietType? value) {
               setState(() {
-                _selectedDietType = value!;
+                _selectedDietType = value ?? DietType.other;
               });
             },
-            items: DietType.values.map((type) {
-              return DropdownMenuItem<DietType>(
-                value: type,
-                child: Text(type.toString().split('.').last),
-              );
-            }).toList(),
-            decoration: InputDecoration(
-              labelText: 'Diet Type',
-              border: OutlineInputBorder(),
-            ),
           ),
           const SizedBox(height: 16),
           ElevatedButton(
@@ -61,6 +53,24 @@ class _CreateDietFormState extends State<CreateDietForm> {
             child: Text('Create Diet'),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDropdown<T>(String label, List<T> items, T selectedItem,
+      void Function(T?)? onChanged) {
+    return DropdownButtonFormField<T>(
+      value: selectedItem,
+      onChanged: onChanged,
+      items: items.map((item) {
+        return DropdownMenuItem<T>(
+          value: item,
+          child: Text(item.toString().split('.').last),
+        );
+      }).toList(),
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(),
       ),
     );
   }
@@ -80,9 +90,9 @@ class _CreateDietFormState extends State<CreateDietForm> {
     );
 
     DietControl().addDiet(newDiet);
-    String dietString = _selectedDietType != DietType.other ?
-      _selectedDietType.toString().split('.')[1]
-    : '';
+    String dietString = _selectedDietType != DietType.other
+        ? _selectedDietType.toString().split('.')[1]
+        : '';
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

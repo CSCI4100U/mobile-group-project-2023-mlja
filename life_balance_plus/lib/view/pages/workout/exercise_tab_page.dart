@@ -44,13 +44,12 @@ class _ExerciseTabPageState extends State<ExerciseTabPage> {
         icon: const Icon(Icons.add),
         label: const Text('Add Exercise'),
         onPressed: () {
-          WorkoutControl().addDummyData();
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) => const AddExercisePage(),
-          //     fullscreenDialog: true,
-          //   ),
-          // );
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const AddExercisePage(),
+              fullscreenDialog: true,
+            ),
+          );
         },
       ),
       body: Column(

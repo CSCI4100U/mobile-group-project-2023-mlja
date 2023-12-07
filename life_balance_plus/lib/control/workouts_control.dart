@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:life_balance_plus/data/model/fitness_logs.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
+import 'package:life_balance_plus/data/model/fitness_logs.dart';
 import 'package:life_balance_plus/data/database_provider.dart';
 import 'package:life_balance_plus/data/model/workout_plan.dart';
 import 'package:life_balance_plus/data/model/account.dart';
@@ -18,6 +18,31 @@ class WorkoutControl {
   void addDummyData() {
     print('LOADING DUMMY DATA...');
 
+    Exercise benchPress = Exercise(
+      name: 'Bench Press',
+      description: '',
+      muscleGroups: [MuscleGroup.chest, MuscleGroup.triceps, MuscleGroup.shoulders],
+      requiredEquipment: [Equipment.flatBench],
+    );
+    Exercise pushups = Exercise(
+      name: 'Pushups',
+      description: '',
+      muscleGroups: [MuscleGroup.chest, MuscleGroup.triceps, MuscleGroup.shoulders],
+      requiredEquipment: [],
+    );
+    Exercise pullups = Exercise(
+      name: 'Pullups',
+      description: '',
+      muscleGroups: [MuscleGroup.lats, MuscleGroup.upperBack, MuscleGroup.biceps],
+      requiredEquipment: [Equipment.pullUpBar],
+    );
+    Exercise latPulldowns = Exercise(
+      name: 'Lat Pulldowns',
+      description: '',
+      muscleGroups: [MuscleGroup.lats, MuscleGroup.upperBack, MuscleGroup.biceps],
+      requiredEquipment: [Equipment.specializedMachine],
+    );
+
     WorkoutPlan plan = WorkoutPlan(
       accountEmail: 'mitchell.nolte@ontariotechu.net',
       title: 'Push Pull Legs',
@@ -25,22 +50,12 @@ class WorkoutControl {
       sessions: [
         [
           ExercisePlan(
-            exercise: Exercise(
-              name: 'Bench Press',
-              description: '',
-              muscleGroups: [MuscleGroup.chest, MuscleGroup.triceps, MuscleGroup.shoulders],
-              requiredEquipment: [Equipment.flatBench],
-            ),
+            exercise: benchPress,
             sets: 3,
             repTarget: 10
           ),
           ExercisePlan(
-            exercise: Exercise(
-              name: 'Pushups',
-              description: '',
-              muscleGroups: [MuscleGroup.chest, MuscleGroup.triceps, MuscleGroup.shoulders],
-              requiredEquipment: [],
-            ),
+            exercise: pushups,
             sets: 3,
             repTarget: 30
           )
@@ -48,22 +63,12 @@ class WorkoutControl {
         [], // Rest day
         [
           ExercisePlan(
-            exercise: Exercise(
-              name: 'Pullups',
-              description: '',
-              muscleGroups: [MuscleGroup.lats, MuscleGroup.upperBack, MuscleGroup.biceps],
-              requiredEquipment: [Equipment.pullUpBar],
-            ),
+            exercise: pullups,
             sets: 3,
             repTarget: 20
           ),
           ExercisePlan(
-            exercise: Exercise(
-              name: 'Lat Pulldowns',
-              description: '',
-              muscleGroups: [MuscleGroup.lats, MuscleGroup.upperBack, MuscleGroup.biceps],
-              requiredEquipment: [Equipment.specializedMachine],
-            ),
+            exercise: latPulldowns,
             sets: 3,
             repTarget: 10
           )
@@ -77,12 +82,12 @@ class WorkoutControl {
         date: DateTime.now(),
         sets: [
           ResistanceSetLog(
-            exerciseName: 'Bench press',
+            exercise: benchPress,
             reps: 10,
             weight: 99999999
           ),
           ResistanceSetLog(
-            exerciseName: 'Pushups',
+            exercise: pushups,
             reps: 9999999999,
           ),
         ]
@@ -92,11 +97,11 @@ class WorkoutControl {
         date: DateTime.now(),
         sets: [
           ResistanceSetLog(
-            exerciseName: 'Pullups',
+            exercise: pullups,
             reps: 9999999,
           ),
           ResistanceSetLog(
-            exerciseName: 'Lat Pulldowns',
+            exercise: latPulldowns,
             reps: 10,
             weight: 999999999
           ),

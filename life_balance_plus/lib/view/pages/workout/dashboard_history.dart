@@ -79,9 +79,28 @@
 // Copied old page since backend completely changed
 import 'package:flutter/material.dart';
 import 'package:life_balance_plus/view/widgets/workout_dashboard_history_card.dart';
+import 'package:life_balance_plus/data/model/session.dart';
+import 'package:life_balance_plus/data/model/fitness_logs.dart';
 
-class DashboardHistory extends StatelessWidget {
+
+
+class DashboardHistory extends StatefulWidget {
   const DashboardHistory({super.key});
+
+  @override
+  State<DashboardHistory> createState() => _DashboardHistoryState();
+}
+
+
+class _DashboardHistoryState extends State<DashboardHistory> {
+  late FitnessLogs logs;
+
+  @override
+  void initState() {
+    super.initState();
+
+    logs = Session.instance.fitnessLogs!;
+  }
 
   @override
   Widget build(BuildContext context) {
