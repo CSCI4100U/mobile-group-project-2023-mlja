@@ -86,11 +86,10 @@ class _RunPageState extends State<RunPage> {
   }
 
   Widget _buildRunMap() {
-    // Replace the Image.network URL with the actual URL of your run map image
     return Image.network(
-      'https://via.placeholder.com/400', // Placeholder image URL
+      'https://www.google.com/maps/d/u/0/thumbnail?mid=1T0PVvwSyrRZYDhM5FObXXupuEvo&hl=en',
       fit: BoxFit.cover,
-      height: 200,
+      height: 250,
       width: double.infinity,
     );
   }
