@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:life_balance_plus/data/model/workout_plan.dart';
+import 'package:life_balance_plus/data/model/session.dart';
 
 class ProgramTabPage extends StatefulWidget {
   const ProgramTabPage({super.key});
@@ -14,24 +15,27 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        // WorkoutDashboardProgramCard(
-        //   WorkoutPlan(
-        //       title: 'TEST',
-        //       startDate: DateTime.now(),
-        //       type: WorkoutPlanType.custom),
-        // ),
-        // WorkoutDashboardProgramCard(
-        //   WorkoutPlan(
-        //       title: 'TEST2',
-        //       startDate: DateTime.now(),
-        //       type: WorkoutPlanType.endurance),
-        // ),
-        // WorkoutDashboardProgramCard(
-        //   WorkoutPlan(
-        //       title: 'TEST3',
-        //       startDate: DateTime.now(),
-        //       type: WorkoutPlanType.sportsSpecific),
-        // ),
+        WorkoutDashboardProgramCard(
+          WorkoutPlan(
+            title: 'TEST',
+            type: WorkoutPlanType.custom,
+            accountEmail: Session.instance.account!.email
+          ),
+        ),
+        WorkoutDashboardProgramCard(
+          WorkoutPlan(
+            title: 'TEST2',
+            type: WorkoutPlanType.endurance,
+            accountEmail: Session.instance.account!.email
+          ),
+        ),
+        WorkoutDashboardProgramCard(
+          WorkoutPlan(
+            title: 'TEST3',
+            type: WorkoutPlanType.sportsSpecific,
+            accountEmail: Session.instance.account!.email
+          ),
+        ),
       ],
     );
   }
@@ -63,15 +67,6 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
                         .textTheme
                         .titleLarge
                         ?.copyWith(fontWeight: FontWeight.bold)),
-                // Text(
-                //   plan.endDate != null
-                //       ? '${DateFormat.yMMMd().format(plan.startDate)} - ${DateFormat.yMMMd().format(plan.endDate!)}'
-                //       : DateFormat.yMMMd().format(plan.startDate),
-                //   style: Theme.of(context)
-                //       .textTheme
-                //       .bodyLarge
-                //       ?.copyWith(color: Colors.black54),
-                // ),
               ],
             ),
           ),

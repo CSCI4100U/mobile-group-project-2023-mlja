@@ -24,9 +24,9 @@ class SessionLog {
     this.firestoreId,
     required this.accountEmail,
     required this.date,
-    required this.sets,
+    List<SetLog>? sets,
     List<String>? notes
-  }) : this.notes = notes ?? [];
+  }) : this.notes = notes ?? [],  this.sets = sets ?? [];
 
   factory SessionLog.fromMap(Map<String, dynamic> map) {
     return SessionLog(
@@ -34,7 +34,6 @@ class SessionLog {
       firestoreId: map['firestoreId'],
       accountEmail: map['accountEmail'],
       date: DateTime.parse(map['date']),
-      sets: map['sets'],
       notes: map['notes'].split('\n'),
     );
   }
@@ -136,7 +135,7 @@ class ResistanceSetLog extends SetLog {
       id: map['id'],
       firestoreId: map['firestoreId'],
       exerciseName: map['exerciseName'],
-      reps: map['resp'],
+      reps: map['reps'],
       weight: map['weight'],
     );
   }

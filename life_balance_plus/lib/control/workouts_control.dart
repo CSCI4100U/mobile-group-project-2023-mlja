@@ -189,16 +189,17 @@ class WorkoutControl {
         whereArgs: [sessionMap['id']]
       )).toList();
 
+      List<SessionLog> sessions = sessionMaps.map((sessionMap) {
+        return SessionLog.fromMap(sessionMap);
+      }).toList();
       for(int i=0; i<sessionMaps.length; i++) {
-        sessionMaps[i]['sets'] = (await setFutures[i]).map((setMap) {
+        sessions[i].sets = (await setFutures[i]).map((setMap) {
           if(setMap['reps'] == null) return CardioSetLog.fromMap(setMap);
           else                       return ResistanceSetLog.fromMap(setMap);
-        }).toList();
+        }).toList().cast<SetLog>();
       }
 
-      return FitnessLogs(
-        entries: sessionMaps.map((map) => SessionLog.fromMap(map)).toList()
-      );
+      return FitnessLogs(entries: sessions);
     }
 
     // Query firestore if local db is empty
@@ -216,6 +217,10 @@ class WorkoutControl {
       (doc) => doc.data()
     ).toList();
 
+    List<SessionLog> sessions = sessionMaps.map((sessionMap) {
+      return SessionLog.fromMap(sessionMap);
+    }).toList();
+
     // Query all sets for returned sessions
     if(sessionMaps.isNotEmpty) {
       for(int i=0; i<sessionMaps.length; i++) {
@@ -224,17 +229,15 @@ class WorkoutControl {
           .where('session_log_id', isEqualTo: sessionMaps[i]['id'])
           .get();
 
-        sessionMaps[i]['sets'] = querySnapshot.docs.map((doc) {
+        sessions[i].sets = querySnapshot.docs.map((doc) {
           Map<String, dynamic> setMap = doc.data();
           if(setMap['reps'] == null) return CardioSetLog.fromMap(setMap);
           else                       return ResistanceSetLog.fromMap(setMap);
-        }).toList();
+        }).toList().cast<SetLog>();
       }
     }
 
-    return FitnessLogs(
-      entries: sessionMaps.map((map) => SessionLog.fromMap(map)).toList()
-    );
+    return FitnessLogs(entries: sessions);
   }
 
 

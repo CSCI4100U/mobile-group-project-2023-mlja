@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:life_balance_plus/control/workouts_control.dart';
 
 import 'package:life_balance_plus/view/pages/diet/diet_page.dart';
 import 'package:life_balance_plus/view/pages/home_page.dart';
 import 'package:life_balance_plus/view/pages/settings/settings_page.dart';
 import 'package:life_balance_plus/view/pages/workout/workout_page.dart';
 import 'package:life_balance_plus/data/notifications.dart';
+import 'package:life_balance_plus/data/model/session.dart';
+import 'package:life_balance_plus/data/model/account.dart';
 
 /// Base widget for the UI. Provides a global `Scaffold` with a `NavigationBar`
 /// for navigating between the main pages.
@@ -32,6 +35,15 @@ class _AppBaseState extends State<AppBase> {
 
     // initializes notifications singleton
     // NotificationManager(); // Causing async error on my machine - Ajmain
+
+    _loadTrainingData();
+  }
+
+  Future<void> _loadTrainingData() async {
+    WorkoutControl control = WorkoutControl();
+    Account account = Session.instance.account!;
+    Session.instance.workoutPlans = await control.getWorkoutPlans(account);
+    Session.instance.fitnessLogs  = await control.getFitnessLogs(account);
   }
 
   @override
