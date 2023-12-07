@@ -10,9 +10,11 @@ class MealsDataTable extends StatefulWidget {
 }
 
 class _MealsDataTableState extends State<MealsDataTable> {
+  // Variables to control sorting in the DataTable
   bool _sortAscending = true;
   int _sortColumnIndex = 0;
 
+  // Function to build DataRow widgets based on the list of meals
   List<DataRow> _buildDataRows(List<Meal> meals) {
     return meals.map((meal) {
       return DataRow(
@@ -29,19 +31,30 @@ class _MealsDataTableState extends State<MealsDataTable> {
 
   @override
   Widget build(BuildContext context) {
+    // Build DataRow widgets based on the provided meals
     List<DataRow> dataRows = _buildDataRows(widget.meals);
 
-    return Scaffold(
-      body: DataTable(
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: DataTable(
         sortColumnIndex: _sortColumnIndex,
         sortAscending: _sortAscending,
+        columnSpacing: 5.0, // Adjust the spacing between columns
+
+        // Define columns for the DataTable
         columns: [
           DataColumn(
-            label: Text("Meal"),
+            label: SizedBox(
+              width: 100.0, // Set the width for the "Meal" column
+              child: Text("Meal"),
+            ),
+            // Enable sorting for the "Meal" column
             onSort: (columnIndex, ascending) {
               setState(() {
                 _sortColumnIndex = columnIndex;
                 _sortAscending = ascending;
+
+                // Sort the meals list based on the selected column
                 widget.meals.sort((a, b) {
                   if (ascending) {
                     return a.name.compareTo(b.name);
@@ -53,7 +66,10 @@ class _MealsDataTableState extends State<MealsDataTable> {
             },
           ),
           DataColumn(
-            label: Text("Type"),
+            label: SizedBox(
+              width: 50.0, // Set the width for the "Type" column
+              child: Text("Type"),
+            ),
             onSort: (columnIndex, ascending) {
               setState(() {
                 _sortColumnIndex = columnIndex;
@@ -69,23 +85,29 @@ class _MealsDataTableState extends State<MealsDataTable> {
             },
           ),
           DataColumn(
-            label: Text("Fats"),
+            label: SizedBox(
+              width: 40.0, // Set the width for the "Carbs" column
+              child: Text("Carbs"),
+            ),
             onSort: (columnIndex, ascending) {
               setState(() {
                 _sortColumnIndex = columnIndex;
                 _sortAscending = ascending;
                 widget.meals.sort((a, b) {
                   if (ascending) {
-                    return a.fats!.compareTo(b.fats!);
+                    return a.carbs!.compareTo(b.carbs!);
                   } else {
-                    return b.fats!.compareTo(a.fats!);
+                    return b.carbs!.compareTo(a.carbs!);
                   }
                 });
               });
             },
           ),
           DataColumn(
-            label: Text("Proteins"),
+            label: SizedBox(
+              width: 50.0, // Set the width for the "Proteins" column
+              child: Text("Protein"),
+            ),
             onSort: (columnIndex, ascending) {
               setState(() {
                 _sortColumnIndex = columnIndex;
@@ -101,22 +123,27 @@ class _MealsDataTableState extends State<MealsDataTable> {
             },
           ),
           DataColumn(
-            label: Text("Carbs"),
+            label: SizedBox(
+              width: 30.0, // Set the width for the "Fats" column
+              child: Text("Fats"),
+            ),
             onSort: (columnIndex, ascending) {
               setState(() {
                 _sortColumnIndex = columnIndex;
                 _sortAscending = ascending;
                 widget.meals.sort((a, b) {
                   if (ascending) {
-                    return a.carbs!.compareTo(b.carbs!);
+                    return a.fats!.compareTo(b.fats!);
                   } else {
-                    return b.carbs!.compareTo(a.carbs!);
+                    return b.fats!.compareTo(a.fats!);
                   }
                 });
               });
             },
           ),
         ],
+
+        // Display rows containing meal data
         rows: dataRows,
       ),
     );
