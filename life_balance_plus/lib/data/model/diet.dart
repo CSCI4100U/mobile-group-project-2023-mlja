@@ -19,8 +19,8 @@ enum DietStatus {
 }
 
 class Diet {
-  String? firestoreId;
   int? id;
+  String? firestoreId;
   int dailyCals;
   DietType dietType;
   DateTime startDate;
@@ -85,29 +85,57 @@ class Diet {
     }
 
     return Diet(
-      firestoreId: map['firestoreId'],
       id: map['id'],
+      firestoreId: map['firestoreId'],
       dailyCals: map['dailyCals'],
-      dietType: DietType.values.firstWhere((d) => d.toString().split('.')[1] == map['dietType']),
+      dietType: DietType.values[map['dietType']],
       startDate: DateTime.parse(map['startDate']),
       endDate: endDate_,
-      mealsHistory: map['mealsHistory'],
-      notes: map['notes'],
-      status: DietStatus.values.firstWhere((d) => d.toString().split('.')[1] == map['status']),
+
+      mealsHistory: jsonDecode(map['mealsHistory']).map((key, value) {
+        return MapEntry(key, List<Map<String, dynamic>>.from(value).map((item) {
+          return Meal.fromMap(item);
+        }).toList());
+      }),
+
+      notes: jsonDecode(map['notes']).map((key, value) {
+        return MapEntry(DateTime.parse(key), List<String>.from(value));
+      }),
+
+      status: DietStatus.values[map['status']],
     );
   }
 
   Map<String, dynamic> toMap() {
+    Map<String, dynamic> historyMap = {};
+    Map<String, dynamic> notesMap = {};
+
+    if (mealsHistory != null) {
+      historyMap = mealsHistory!.map((key, value) {
+        return MapEntry(key, value.map((item) => item.toMap()).toList());
+      });
+    }
+
+    if (notes != null) {
+      notesMap = notes!.map((key, value) {
+        return MapEntry(key.toIso8601String(), value);
+      });
+    }
+
+    String historyString = jsonEncode(historyMap);
+    String notesString = jsonEncode(notesMap);
+
     return {
-      'firestoreId': firestoreId,
       'id': id,
+      'firestoreId': firestoreId,
       'dailyCals': dailyCals,
       'dietType': dietType.index,
       'startDate': startDate.toIso8601String(),
       'endDate': endDate?.toIso8601String(),
-      'mealsHistory': mealsHistory,
-      'notes': notes,
+      'mealsHistory': historyString,
+      'notes': notesString,
       'status': status,
-    };
+    }..removeWhere(
+          (dynamic key, dynamic value) => value == null);
   }
 }

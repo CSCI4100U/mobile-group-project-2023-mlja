@@ -101,6 +101,8 @@ class DatabaseProvider {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS meals(
         id INTEGER PRIMARY KEY,
+        dietId INTEGER,
+        firestoreId TEXT,
         name TEXT,
         mealType TEXT,
         fats REAL,
@@ -112,21 +114,14 @@ class DatabaseProvider {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS diets(
         id INTEGER PRIMARY KEY,
-        firestoreId TEXT
+        firestoreId TEXT,
         dailyCals INTEGER,
         startDate TEXT,
         endDate TEXT,
-        status TEXT
-      )'''
-    );
-
-    await db.execute('''
-      CREATE TABLE IF NOT EXISTS diets_meals(
-        diet_id INTEGER NOT NULL,
-        meal_id INTEGER NOT NULL,
-        meal_date TEXT,
-        FOREIGN KEY (diet_id) REFERENCES diets (id),
-        FOREIGN KEY (meal_id) REFERENCES meals (id)
+        dietType INTEGER,
+        mealsHistory TEXT,
+        notes TEXT,
+        status INTEGER
       )'''
     );
   }

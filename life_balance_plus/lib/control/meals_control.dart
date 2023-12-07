@@ -1,9 +1,13 @@
-import 'package:sqflite/sqflite.dart';
 import 'dart:async';
-import '../data/database_provider.dart';
-import '../data/model/meal.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:life_balance_plus/data/database_provider.dart';
+import 'package:life_balance_plus/data/model/meal.dart';
+import 'package:life_balance_plus/data/model/session.dart';
 
 class MealControl {
+  final userId = Session.instance.account!.firestoreId;
+
   Future addDummyData() async {
     // Test list of Meals
     List<Meal> mealList = [
@@ -45,41 +49,95 @@ class MealControl {
           carbs: 30.0),
     ];
 
-    addMealsMult(mealList);
+    await addMealsMult(mealList);
   }
 
   Future<List<Meal>> getAllMeals() async {
     final Database db = await DatabaseProvider.instance.database;
-    final List maps = await db.query('meals');
-    List<Meal> result = [];
-    for (int i = 0; i < maps.length; i++) {
-      result.add(Meal.fromMap(maps[i]));
+    List<Meal> result;
+    final List localData = List.from(await db.query('meals'));
+    if (localData.isNotEmpty) {
+      result = localData.map((e) => Meal.fromMap(e)).toList();
+    } else {
+      final QuerySnapshot<
+          Map<String, dynamic>> querySnapshot = await FirebaseFirestore
+          .instance
+          .collection('meals')
+          .where('userId', isEqualTo: userId)
+          .get();
+      final documents = querySnapshot.docs;
+
+      List<Map<String, dynamic>> remoteData = documents.map((diet) {
+        return {
+          ...diet.data(),
+          'firestoreId': diet.id,
+        };
+      }).toList();
+      result = remoteData.map((e) => Meal.fromMap(e)).toList();
     }
     return result;
   }
 
-  Future<int> addMeal(Meal meal) async {
+  Future<void> addMeal(Meal meal) async {
     final Database db = await DatabaseProvider.instance.database;
-    return db.insert('meals', meal.toMap(),
+    meal.id = await db.insert('meals', meal.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+    _addCloudMeal(meal);
+  }
+
+  Future _addCloudMeal(Meal meal) async {
+    final ref = FirebaseFirestore.instance.collection('meals').doc();
+    try {
+      ref.set(
+          {
+            ...meal.toMap(),
+            'userId': userId,
+          }
+      );
+      meal.firestoreId = ref.id;
+      updateMeal(meal);
+    } catch (e) {
+      print("Error adding Meal to Firestore: $e");
+    }
   }
 
   Future addMealsMult(List<Meal> meals) async {
-    final Database db = await DatabaseProvider.instance.database;
-    for (Meal meal in meals) {
-      db.insert('meals', meal.toMap(),
-          conflictAlgorithm: ConflictAlgorithm.replace);
-    }
+    await Future.forEach(meals, (Meal meal) async {
+      await addMeal(meal);
+    });
   }
 
   Future updateMeal(Meal meal) async {
     final Database db = await DatabaseProvider.instance.database;
-    return db
-        .update('meals', meal.toMap(), where: 'id = ?', whereArgs: [meal.id]);
+    db.update(
+        'meals',
+        meal.toMap(),
+        where: 'id = ?',
+        whereArgs: [meal.id]
+    );
+    _updateCloudMeal(meal);
   }
 
-  Future deleteMeal(int id) async {
+  Future _updateCloudMeal(Meal meal) async {
+    FirebaseFirestore.instance.collection('meals')
+        .doc(meal.firestoreId)
+        .update(meal.toMap()
+    );
+  }
+
+  Future deleteMeal(Meal meal) async {
     final Database db = await DatabaseProvider.instance.database;
-    await db.delete('meals', where: 'id = ?', whereArgs: [id]);
+    await db.delete('meals', where: 'id = ?', whereArgs: [meal.id]);
+    await _deleteCloudMeal(meal);
+  }
+
+  Future<void> _deleteCloudMeal(Meal meal) async {
+    FirebaseFirestore.instance.collection('meals')
+        .doc(meal.firestoreId) .delete()
+        .then((_) {
+          print("Meal deleted successfully");
+      }).catchError((e) {
+        print("Error deleting Meal: $e");
+      });
   }
 }

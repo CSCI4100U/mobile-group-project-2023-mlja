@@ -8,6 +8,29 @@ import 'package:life_balance_plus/data/model/session.dart';
 class DietControl {
   final userId = Session.instance.account!.firestoreId;
 
+  Future<void> addDummyData() async {
+    // Test list of Diets
+    List<Diet> dietList = [
+      Diet(
+        dailyCals: 2000,
+        dietType: DietType.keto,
+        startDate: DateTime.now(),
+      ),
+      Diet(
+        dailyCals: 2500,
+        dietType: DietType.paleo,
+        startDate: DateTime.now(),
+      ),
+      Diet(
+        dailyCals: 3000,
+        dietType: DietType.other,
+        startDate: DateTime.now(),
+      ),
+    ];
+
+    await addDietsMult(dietList);
+  }
+
   Future<List<Diet>> getAllDiets() async {
     final Database db = await DatabaseProvider.instance.database;
     List<Diet> result;
@@ -22,8 +45,12 @@ class DietControl {
           .get();
       final documents = querySnapshot.docs;
 
-      List<Map<String, dynamic>> remoteData = documents.map((e) =>
-          e.data()).toList();
+      List<Map<String, dynamic>> remoteData = documents.map((diet) {
+        return {
+          ...diet.data(),
+          'firestoreId': diet.id,
+        };
+      }).toList();
       result = remoteData.map((e) => Diet.fromMap(e)).toList();
     }
 
@@ -49,6 +76,8 @@ class DietControl {
           'userId': userId,
         }
       );
+      diet.firestoreId = ref.id;
+      updateDiet(diet);
     } catch (e) {
       print("Error adding Diet to Firestore: $e");
     }
@@ -66,13 +95,16 @@ class DietControl {
         'diets',
         diet.toMap(),
         where: 'id = ?',
-        whereArgs: [diet.id]);
+        whereArgs: [diet.id]
+    );
     _updateCloudDiet(diet);
   }
 
   Future _updateCloudDiet(Diet diet) async {
     FirebaseFirestore.instance.collection('diets')
-        .doc(diet.firestoreId).update(diet.toMap());
+        .doc(diet.firestoreId)
+        .update(diet.toMap()
+    );
   }
 
   Future deleteDiet(Diet diet) async {
