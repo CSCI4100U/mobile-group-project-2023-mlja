@@ -29,6 +29,7 @@ class _DashboardHistoryState extends State<DashboardHistory> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Divider(),
             Text('Workout History',
                 style: Theme.of(context)
                     .textTheme

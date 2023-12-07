@@ -41,7 +41,7 @@ class SessionLog {
       firestoreId: map['firestoreId'],
       accountEmail: map['accountEmail'],
       date: DateTime.parse(map['date']),
-      notes: map['notes'].split('\n'),
+      notes: map['notes'].split('\n').where((str) => str != '').toList(),
     );
   }
 

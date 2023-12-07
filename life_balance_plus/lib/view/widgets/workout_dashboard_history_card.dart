@@ -69,12 +69,37 @@ class WorkoutDashboardHistoryCard extends StatelessWidget {
           const SizedBox(height: 16),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: horizontalPad),
-            child: Text(
-              DateFormat.yMMMd().format(log.date),
-              style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(fontWeight: FontWeight.bold)
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  DateFormat.yMMMd().format(log.date),
+                  style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(fontWeight: FontWeight.bold)
+                ),
+                TextButton.icon(
+                  label: const Text('Notes'),
+                  icon: const Icon(Icons.notes_outlined),
+                  style: TextButton.styleFrom(foregroundColor: Colors.black),
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Notes'),
+                      content: (log.notes.isEmpty)?
+                        Text('This workout has no notes.') : SizedBox(
+                          height: 600,
+                          width: 600,
+                          child: ListView.builder(
+                            itemCount: log.notes.length,
+                            itemBuilder: (context, i) =>  Text(log.notes[i]),
+                          )
+                        ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           const Divider(),

@@ -107,11 +107,11 @@ class WorkoutDashboardWorkoutCard extends StatelessWidget {
             children: [
               Text(
                 exerciseName,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               Text(
                 "$reps • $weight",
-                style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Colors.grey[600],
                     ),
               ),

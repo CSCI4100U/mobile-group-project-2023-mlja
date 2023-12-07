@@ -40,10 +40,10 @@ class _WorkoutPageState extends State<WorkoutPage> {
           child: CustomTabbar(
             pages: [
               NestedTabBar(),
-              ExerciseTabPage(),
+              DashboardHistory(),
               ProgramTabPage(),
             ],
-            tabNames: ['Dashboard', 'Exercises', 'Programs'],
+            tabNames: ['Dashboard', 'History', 'Programs'],
           ),
         ),
       ],
@@ -90,7 +90,7 @@ class _NestedTabBarState extends State<NestedTabBar> {
               tabs: const [
                 Tab(text: 'Gym'),
                 Tab(text: 'Run'),
-                Tab(text: 'History'),
+                Tab(text: 'Exercises'),
               ],
             ),
           ),
@@ -99,7 +99,7 @@ class _NestedTabBarState extends State<NestedTabBar> {
               children: [
                 DashboardGym(),
                 RunPage(),
-                DashboardHistory(),
+                ExerciseTabPage(),
               ],
             ),
           ),
