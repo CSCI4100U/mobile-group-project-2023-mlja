@@ -9,6 +9,7 @@ class RunPage extends StatefulWidget {
 
 class _RunPageState extends State<RunPage> {
   double runRating = 3.0;
+  TextEditingController commentsController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,14 @@ class _RunPageState extends State<RunPage> {
               ),
               const SizedBox(height: 16),
               _buildRunDetails(context),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  // Handle the submission of run details
+                  _submitRunDetails();
+                },
+                child: const Text('Submit Run Details'),
+              ),
             ],
           ),
         ),
@@ -106,6 +115,7 @@ class _RunPageState extends State<RunPage> {
         ),
         const SizedBox(height: 8),
         TextField(
+          controller: commentsController,
           maxLines: 3,
           decoration: InputDecoration(
             hintText: 'Enter your comments...',
@@ -175,6 +185,12 @@ class _RunPageState extends State<RunPage> {
         ],
       ),
     );
+  }
+
+  void _submitRunDetails() {
+    // Implement your logic to handle the submission of run details
+    // For example, you can save the details to a database or perform any other necessary actions.
+    print('Run details submitted!');
   }
 }
 
