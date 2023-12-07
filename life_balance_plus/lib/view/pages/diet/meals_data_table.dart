@@ -10,9 +10,11 @@ class MealsDataTable extends StatefulWidget {
 }
 
 class _MealsDataTableState extends State<MealsDataTable> {
+  // Variables to control sorting in the DataTable
   bool _sortAscending = true;
   int _sortColumnIndex = 0;
 
+  // Function to build DataRow widgets based on the list of meals
   List<DataRow> _buildDataRows(List<Meal> meals) {
     return meals.map((meal) {
       return DataRow(
@@ -29,6 +31,7 @@ class _MealsDataTableState extends State<MealsDataTable> {
 
   @override
   Widget build(BuildContext context) {
+    // Build DataRow widgets based on the provided meals
     List<DataRow> dataRows = _buildDataRows(widget.meals);
 
     return SingleChildScrollView(
@@ -37,16 +40,21 @@ class _MealsDataTableState extends State<MealsDataTable> {
         sortColumnIndex: _sortColumnIndex,
         sortAscending: _sortAscending,
         columnSpacing: 5.0, // Adjust the spacing between columns
+
+        // Define columns for the DataTable
         columns: [
           DataColumn(
             label: SizedBox(
               width: 100.0, // Set the width for the "Meal" column
               child: Text("Meal"),
             ),
+            // Enable sorting for the "Meal" column
             onSort: (columnIndex, ascending) {
               setState(() {
                 _sortColumnIndex = columnIndex;
                 _sortAscending = ascending;
+
+                // Sort the meals list based on the selected column
                 widget.meals.sort((a, b) {
                   if (ascending) {
                     return a.name.compareTo(b.name);
@@ -134,6 +142,8 @@ class _MealsDataTableState extends State<MealsDataTable> {
             },
           ),
         ],
+
+        // Display rows containing meal data
         rows: dataRows,
       ),
     );
