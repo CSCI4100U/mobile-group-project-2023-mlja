@@ -26,8 +26,8 @@ class WorkoutDashboardChart extends StatelessWidget {
                 PieChartData(
                   sections: _generateSections(),
                   borderData: FlBorderData(show: false),
-                  centerSpaceRadius: 40,
-                  sectionsSpace: 0,
+                  centerSpaceRadius: 0,
+                  sectionsSpace: 3,
                 ),
               ),
             ),
@@ -38,36 +38,40 @@ class WorkoutDashboardChart extends StatelessWidget {
   }
 
   List<PieChartSectionData> _generateSections() {
-    return List.generate(
-      3, // Replace with the number of workout categories
-      (index) {
-        final isTouched = index == 0; // Highlight the first section if needed
-
-        return PieChartSectionData(
-          color: _getRandomColor(), // You can customize colors as needed
-          value: 30.0, // Replace with actual distribution values
-          title: 'Category $index', // Replace with actual category names
-          radius: isTouched ? 80 : 60,
-          titleStyle: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: const Color(0xffffffff),
-          ),
-        );
-      },
-    );
-  }
-
-  Color _getRandomColor() {
-    // Replace with your logic to generate different colors
-    return Color.fromARGB(
-      255,
-      100 +
-          (50 * (DateTime.now().microsecondsSinceEpoch % 1000) / 1000).toInt(),
-      150 +
-          (50 * (DateTime.now().microsecondsSinceEpoch % 1000) / 1000).toInt(),
-      200 +
-          (55 * (DateTime.now().microsecondsSinceEpoch % 1000) / 1000).toInt(),
-    );
+    return [
+      PieChartSectionData(
+        color: Colors.blue,
+        value: 33.3, // Replace with actual distribution value for Push Day
+        title: 'Push Day',
+        radius: 100,
+        titleStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: const Color(0xffffffff),
+        ),
+      ),
+      PieChartSectionData(
+        color: Colors.orange,
+        value: 33.3, // Replace with actual distribution value for Pull Day
+        title: 'Pull Day',
+        radius: 100,
+        titleStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: const Color(0xffffffff),
+        ),
+      ),
+      PieChartSectionData(
+        color: Colors.green,
+        value: 33.4, // Replace with actual distribution value for Leg Day
+        title: 'Leg Day',
+        radius: 100,
+        titleStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: const Color(0xffffffff),
+        ),
+      ),
+    ];
   }
 }
