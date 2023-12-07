@@ -16,7 +16,8 @@ void main() async {
   );
 
   // Handle background messages
-  FirebaseMessaging.onBackgroundMessage(NotificationManager.fcmBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(
+      NotificationManager.fcmBackgroundHandler);
 
   runApp(ChangeNotifierProvider(
     create: (context) => ApplicationState(),
@@ -32,8 +33,19 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Life Balance Plus',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
-        useMaterial3: true,
+        primarySwatch: const MaterialColor(0xFF000000, {
+          50: Color(0xFF000000),
+          100: Color(0xFF000000),
+          200: Color(0xFF000000),
+          300: Color(0xFF000000),
+          400: Color(0xFF000000),
+          500: Color(0xFF000000),
+          600: Color(0xFF000000),
+          700: Color(0xFF000000),
+          800: Color(0xFF000000),
+          900: Color(0xFF000000),
+        }),
+        useMaterial3: false,
       ),
       home: const AuthGate(),
     );

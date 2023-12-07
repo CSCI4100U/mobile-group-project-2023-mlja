@@ -31,7 +31,7 @@ class _AppBaseState extends State<AppBase> {
     super.initState();
 
     // initializes notifications singleton
-    NotificationManager();
+    // NotificationManager(); // Causing async error on my machine - Ajmain
   }
 
   @override

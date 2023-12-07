@@ -33,41 +33,50 @@ class HomeSummaryCard extends StatelessWidget {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                const CircleAvatar(
-                    backgroundColor: Colors.grey,
-                    foregroundColor: Colors.black,
-                    radius: 26,
-                    child: Icon(Icons.person)),
-                const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    Text(
-                      name,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 20,
-                          ),
-                    ),
-                    const Text(
-                      'Hello!',
+                    const CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        foregroundColor: Colors.black,
+                        radius: 26,
+                        child: Icon(Icons.person)),
+                    const SizedBox(width: 14),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 20,
+                                  ),
+                        ),
+                        const Text(
+                          'Hello!',
+                        ),
+                      ],
                     ),
                   ],
                 ),
                 const SizedBox(width: 40),
-                const Text('Today'),
-                const SizedBox(width: 10),
-                CircleAvatar(
-                  radius: 16,
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  child: Text(date.day.toString(),
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium
-                          ?.copyWith(color: Colors.white)),
+                Row(
+                  children: [
+                    const Text('Today'),
+                    const SizedBox(width: 10),
+                    CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                      child: Text(date.day.toString(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelMedium
+                              ?.copyWith(color: Colors.white)),
+                    ),
+                  ],
                 ),
               ],
             ),

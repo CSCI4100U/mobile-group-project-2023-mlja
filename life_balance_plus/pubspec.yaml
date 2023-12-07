@@ -29,6 +29,7 @@ dependencies:
   fl_chart: ^0.40.0
   firebase_messaging: ^14.7.6
   rxdart: ^0.27.7
+  multi_dropdown: ^2.1.2
 
 dev_dependencies:
   flutter_test:

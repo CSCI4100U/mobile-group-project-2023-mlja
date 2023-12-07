@@ -46,5 +46,4 @@ enum Equipment {
   powerRack,
   pullUpBar,
   specializedMachine,
-  other,
 }

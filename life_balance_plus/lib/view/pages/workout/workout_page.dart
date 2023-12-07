@@ -8,6 +8,8 @@ import 'package:life_balance_plus/view/widgets/custom_tabbar.dart';
 import 'package:life_balance_plus/data/model/session.dart';
 
 class WorkoutPage extends StatefulWidget {
+  const WorkoutPage({super.key});
+
   @override
   State<WorkoutPage> createState() => _WorkoutPageState();
 }
