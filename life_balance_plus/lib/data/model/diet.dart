@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,7 +23,7 @@ class Diet {
   int? id;
   int dailyCals;
   DietType dietType;
-  DateTime? startDate;
+  DateTime startDate;
   DateTime? endDate;
   Map<String, List<Meal>>? mealsHistory;
   Map<DateTime, List<String>>? notes;
@@ -33,7 +34,7 @@ class Diet {
     this.id,
     required this.dailyCals,
     required this.dietType,
-    this.startDate,
+    required this.startDate,
     this.endDate,
     this.mealsHistory,
     this.notes,
@@ -77,16 +78,22 @@ class Diet {
   void finish() => status = DietStatus.inactive;
 
   factory Diet.fromMap(Map<String, dynamic> map) {
+    String? dateStr = map['endDate'] as String?;
+    DateTime? endDate_;
+    if (dateStr != null) {
+      endDate_ = DateTime.tryParse(dateStr);
+    }
+
     return Diet(
       firestoreId: map['firestoreId'],
       id: map['id'],
       dailyCals: map['dailyCals'],
-      dietType: DietType.values[map['dietType']],
-      startDate: DateTime.tryParse(map['startDate']),
-      endDate: DateTime.tryParse(map['endDate']),
+      dietType: DietType.values.firstWhere((d) => d.toString().split('.')[1] == map['dietType']),
+      startDate: DateTime.parse(map['startDate']),
+      endDate: endDate_,
       mealsHistory: map['mealsHistory'],
       notes: map['notes'],
-      status: map['status'],
+      status: DietStatus.values.firstWhere((d) => d.toString().split('.')[1] == map['status']),
     );
   }
 
@@ -96,7 +103,7 @@ class Diet {
       'id': id,
       'dailyCals': dailyCals,
       'dietType': dietType.index,
-      'startDate': startDate?.toIso8601String(),
+      'startDate': startDate.toIso8601String(),
       'endDate': endDate?.toIso8601String(),
       'mealsHistory': mealsHistory,
       'notes': notes,

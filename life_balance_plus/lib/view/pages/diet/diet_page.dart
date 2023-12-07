@@ -33,6 +33,7 @@ class _DietPageState extends State<DietPage> {
     sampleDiet = Diet(
       dailyCals: 10,
       dietType: DietType.other,
+      startDate: DateTime.now(),
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../data/model/diet.dart';
+import 'package:life_balance_plus/control/diets_control.dart';
 
 class CreateDietForm extends StatefulWidget {
   @override
@@ -65,25 +66,30 @@ class _CreateDietFormState extends State<CreateDietForm> {
   }
 
   void _submitForm() {
-    // Validate and handle the form submission
     final String caloriesText = _caloriesController.text.trim();
     if (caloriesText.isEmpty) {
-      // Show an error message or handle validation as needed
       return;
     }
 
     final int dailyCals = int.tryParse(caloriesText) ?? 0;
 
-    // Create a new Diet object with the entered data
     final Diet newDiet = Diet(
       dailyCals: dailyCals,
       dietType: _selectedDietType,
+      startDate: DateTime.now(),
     );
 
-    // You can now use the newDiet object as needed, e.g., add it to a database
-    // DietControl().addCloudDiet(newDiet);
+    DietControl().addDiet(newDiet);
+    String dietString = _selectedDietType != DietType.other ?
+      _selectedDietType.toString().split('.')[1]
+    : '';
 
-    // Optionally, you can reset the form after submission
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$dietString diet created!'),
+        duration: const Duration(seconds: 3),
+      ),
+    );
     _caloriesController.clear();
     setState(() {
       _selectedDietType = DietType.other;
