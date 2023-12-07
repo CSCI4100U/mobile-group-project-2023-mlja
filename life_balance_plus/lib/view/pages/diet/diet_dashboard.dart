@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
+/// A widget representing the diet dashboard.
 class DietDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -9,20 +10,30 @@ class DietDashboard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // Header section of the diet dashboard
           _buildHeader(),
           SizedBox(height: 16),
+
+          // Summary cards displaying key nutrition metrics
           _buildSummaryCards(),
           SizedBox(height: 16),
+
+          // Macro chart displaying the distribution of proteins, carbs, and fats
           _buildMacroChart(),
           SizedBox(height: 16),
+
+          // Nutrient details section providing specific values for proteins, carbs, and fats
           _buildNutrientDetails(),
           SizedBox(height: 16),
+
+          // Today's meal plan section
           _buildMealPlan(),
         ],
       ),
     );
   }
 
+  /// Builds the header section of the diet dashboard.
   Widget _buildHeader() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -40,6 +51,7 @@ class DietDashboard extends StatelessWidget {
     );
   }
 
+  /// Builds the summary cards displaying key nutrition metrics.
   Widget _buildSummaryCards() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -53,6 +65,7 @@ class DietDashboard extends StatelessWidget {
     );
   }
 
+  /// Builds a summary card with an icon, label, and value.
   Widget _buildSummaryCard(String label, String value, IconData icon) {
     return Container(
       padding: EdgeInsets.all(16),
@@ -76,6 +89,7 @@ class DietDashboard extends StatelessWidget {
     );
   }
 
+  /// Builds the macro chart displaying the distribution of proteins, carbs, and fats.
   Widget _buildMacroChart() {
     return Container(
       height: 250,
@@ -110,6 +124,7 @@ class DietDashboard extends StatelessWidget {
     );
   }
 
+  /// Builds the titles data for the macro chart.
   FlTitlesData _buildTitlesData() {
     return FlTitlesData(
       leftTitles: SideTitles(
@@ -137,6 +152,7 @@ class DietDashboard extends StatelessWidget {
     );
   }
 
+  /// Builds a list of bar groups for the macro chart.
   List<BarChartGroupData> _buildMacroBarGroups() {
     return [
       _buildBarChartGroupData(0, 200, 'Proteins', Colors.green),
@@ -145,6 +161,7 @@ class DietDashboard extends StatelessWidget {
     ];
   }
 
+  /// Builds a bar chart group with specified parameters.
   BarChartGroupData _buildBarChartGroupData(
       int x, double y, String label, Color color) {
     return BarChartGroupData(
@@ -158,6 +175,7 @@ class DietDashboard extends StatelessWidget {
     );
   }
 
+  /// Builds the nutrient details section providing specific values for proteins, carbs, and fats.
   Widget _buildNutrientDetails() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,6 +192,7 @@ class DietDashboard extends StatelessWidget {
     );
   }
 
+  /// Builds a row with nutrient label, value, and color.
   Widget _buildNutrientRow(String nutrient, String value, Color color) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -186,6 +205,7 @@ class DietDashboard extends StatelessWidget {
     );
   }
 
+  /// Builds the today's meal plan section.
   Widget _buildMealPlan() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,6 +222,7 @@ class DietDashboard extends StatelessWidget {
     );
   }
 
+  /// Builds a ListTile for a meal item with specified meal time and name.
   Widget _buildMealItem(String mealTime, String mealName) {
     return ListTile(
       title: Text(mealTime,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:life_balance_plus/data/model/account.dart';
 import 'package:life_balance_plus/data/model/session.dart';
 
+/// A page for managing connectivity settings.
 class ConnectivitySettingsPage extends StatefulWidget {
   const ConnectivitySettingsPage({super.key});
 
@@ -100,6 +101,7 @@ class _ConnectivitySettingsPageState extends State<ConnectivitySettingsPage> {
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
+                // Save updated connectivity settings to the user's account
                 Session.instance.account?.updateAccountInfo(
                   useWifi: enableWifi,
                   useMobileData: enableMobileData,

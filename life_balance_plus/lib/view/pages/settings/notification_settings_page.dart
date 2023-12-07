@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
+/// A page for managing notification settings.
 class NotificationsSettingsPage extends StatefulWidget {
   const NotificationsSettingsPage({super.key});
 
@@ -21,16 +22,20 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
   TimeOfDay notificationTime = const TimeOfDay(hour: 8, minute: 0);
   int reminderFrequency = 3;
 
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   List<PendingNotificationRequest> _queuedNotifications = [];
 
   int _id = 0;
+
   @override
   void initState() {
     super.initState();
     tzdata.initializeTimeZones();
-    var initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
-    var initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('app_icon');
+    var initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
     _refreshQueuedNotifications();
 
@@ -44,14 +49,17 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
     }
   }
 
+  /// Refreshes the list of queued notifications.
   Future<void> _refreshQueuedNotifications() async {
     final List<PendingNotificationRequest> pendingNotifications =
-    await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+        await flutterLocalNotificationsPlugin.pendingNotificationRequests();
 
     setState(() {
       _queuedNotifications = pendingNotifications;
     });
   }
+
+  /// Schedules a notification for the given [scheduledDate].
   Future<void> _scheduleNotification(DateTime scheduledDate) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'channel_id',
@@ -59,7 +67,8 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
       channelDescription: 'channel_description',
       icon: 'app_icon',
     );
-    var platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+    var platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       _id++,
@@ -67,16 +76,18 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
       'This is coming at ${scheduledDate.hour}:${scheduledDate.minute}:${scheduledDate.second}',
       tz.TZDateTime.from(scheduledDate, tz.local),
       platformChannelSpecifics,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,  // Allow the notification to be shown even when the device is in low-power idle modes.
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime, // Interpret the scheduled date and time as an absolute timestamp
+      androidScheduleMode: AndroidScheduleMode
+          .exactAllowWhileIdle, // Allow the notification to be shown even when the device is in low-power idle modes.
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation
+          .absoluteTime, // Interpret the scheduled date and time as an absolute timestamp
     );
   }
 
+  /// Deletes the notification with the given [id].
   Future<void> _deleteNotification(int id) async {
     await flutterLocalNotificationsPlugin.cancel(id);
     _refreshQueuedNotifications();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -164,6 +175,7 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
+                // Save updated notification settings to the user's account
                 Session.instance.account?.updateAccountInfo(
                   useNotifications: enableNotifications,
                   notificationSound: enableSound,

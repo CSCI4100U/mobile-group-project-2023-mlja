@@ -321,31 +321,28 @@ class _AddExercisePageState extends State<AddExercisePage> {
   }
 
   Future<void> _save() async {
-  //   if (_formKey.currentState!.validate()) {
-  //     await WorkoutControl()
-  //         .addExerciseSet(
-  //       ExerciseSet(
-  //         name: nameFieldController.text,
-  //         sessionId: 000000, // TODO: What does this refer to?
-  //         muscleGroups: muscleGroupController.selectedOptions.map((element) {
-  //           return element.value!;
-  //         }).toList(),
-  //         requiredEquipment: [equipmentDropDownKey.currentState!.value],
-  //       ),
-  //     )
-  //         .then((value) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //           content: Text(
-  //             'Exercise Added!',
-  //             textAlign: TextAlign.center,
-  //             style: TextStyle(fontSize: 15),
-  //           ),
-  //           behavior: SnackBarBehavior.floating,
-  //         ),
-  //       );
-  //       Navigator.pop(context, true);
-  //     });
-  //   }
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Exercise Added!',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 15),
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      Navigator.pop(
+        context,
+        Exercise(
+          name: nameFieldController.text,
+          description: descriptionFieldController.text,
+          muscleGroups: muscleGroupController.selectedOptions.map((element) {
+            return element.value!;
+          }).toList(),
+          requiredEquipment: [equipmentDropDownKey.currentState?.value],
+        ),
+      );
+    }
   }
 }
