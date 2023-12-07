@@ -23,9 +23,23 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: programs.length,
-      itemBuilder: (context, i) => WorkoutDashboardProgramCard(programs[i])
+    return Scaffold(    
+      body: ListView.builder(
+        itemCount: programs.length,
+        itemBuilder: (context, i) => WorkoutDashboardProgramCard(programs[i])
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(Icons.add),
+        label: const Text('Add Program'),
+        onPressed: () {
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (context) => const AddExercisePage(),
+          //     fullscreenDialog: true,
+          //   ),
+          // );
+        },
+      ),
     );
   }
 
@@ -86,7 +100,7 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
                               ),
                               Text(
                                 '${exercisePlan.sets} set${exercisePlan.sets > 1? 's':''}'
-                                ', ${exercisePlan.repTarget == null?
+                                ' • ${exercisePlan.repTarget == null?
                                   '${exercisePlan.targetDuration} minutes' :
                                   '${exercisePlan.repTarget} reps '}'
                               )

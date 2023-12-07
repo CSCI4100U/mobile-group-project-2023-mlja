@@ -1,3 +1,8 @@
+import 'package:life_balance_plus/data/model/exercise.dart';
+import 'package:life_balance_plus/data/enums/equipment.dart';
+import 'package:life_balance_plus/data/enums/muscle_group.dart';
+
+
 /// Records of training history.
 class FitnessLogs {
   List<SessionLog> entries;
@@ -68,9 +73,9 @@ class SessionLog {
 abstract class SetLog {
   int? id;
   String? firestoreId;
-  String exerciseName;
+  Exercise exercise;
 
-  SetLog({this.id, this.firestoreId, required this.exerciseName});
+  SetLog({this.id, this.firestoreId, required this.exercise});
 
   
   Map<String, dynamic> toMap();
@@ -84,7 +89,7 @@ class CardioSetLog extends SetLog {
   CardioSetLog({
     super.id,
     super.firestoreId,
-    required super.exerciseName,
+    required super.exercise,
     required this.duration,
     required this.avgSpeed
   });
@@ -93,9 +98,26 @@ class CardioSetLog extends SetLog {
     return CardioSetLog(
       id: map['id'],
       firestoreId: map['firestoreId'],
-      exerciseName: map['exerciseName'],
       duration: map['duration'],
       avgSpeed: map['avgSpeed'],
+      exercise: Exercise(
+        name: map['exerciseName'],
+        description: map['exerciseDescription'],
+        muscleGroups: (map['muscleGroups'] == '')? []
+          : (map['muscleGroups']
+              .split(',')
+              .where((str) => str != '')
+              .map((group) => MuscleGroup.values.byName(group))
+              .toList().cast<MuscleGroup>()
+            ),
+        requiredEquipment: (map['requiredEquipment'] == '')? []
+          : (map['requiredEquipment']
+              .split(',')
+              .where((str) => str != '')
+              .map((equipment) => Equipment.values.byName(equipment))
+              .toList().cast<Equipment>()
+            ),
+      )
     );
   }
 
@@ -109,7 +131,14 @@ class CardioSetLog extends SetLog {
 
   Map<String, dynamic> toFirestoreMap() {
     return {
-      'exerciseName': exerciseName,
+      'exerciseName': exercise.name,
+      'exerciseDescription': exercise.description,
+      'muscleGroups': exercise.muscleGroups.fold(
+        '', (str, group) => '$str${group.name},'
+      ),
+      'requiredEquipment': exercise.requiredEquipment.fold(
+        '', (str, equipment) => '$str${equipment.name},'
+      ),
       'duration': duration,
       'avgSpeed': avgSpeed,
       'reps': null,
@@ -125,7 +154,7 @@ class ResistanceSetLog extends SetLog {
   ResistanceSetLog({
     super.id,
     super.firestoreId,
-    required super.exerciseName,
+    required super.exercise,
     required this.reps,
     this.weight
   });
@@ -134,9 +163,26 @@ class ResistanceSetLog extends SetLog {
     return ResistanceSetLog(
       id: map['id'],
       firestoreId: map['firestoreId'],
-      exerciseName: map['exerciseName'],
       reps: map['reps'],
       weight: map['weight'],
+      exercise: Exercise(
+        name: map['exerciseName'],
+        description: map['exerciseDescription'],
+        muscleGroups: (map['muscleGroups'] == '')? []
+          : (map['muscleGroups']
+              .split(',')
+              .where((str) => str != '')
+              .map((group) => MuscleGroup.values.byName(group))
+              .toList().cast<MuscleGroup>()
+            ),
+        requiredEquipment: (map['requiredEquipment'] == '')? []
+          : (map['requiredEquipment']
+              .split(',')
+              .where((str) => str != '')
+              .map((equipment) => Equipment.values.byName(equipment))
+              .toList().cast<Equipment>()
+            ),
+      )
     );
   }
 
@@ -150,7 +196,14 @@ class ResistanceSetLog extends SetLog {
 
   Map<String, dynamic> toFirestoreMap() {
     return {
-      'exerciseName': exerciseName,
+      'exerciseName': exercise.name,
+      'exerciseDescription': exercise.description,
+      'muscleGroups': exercise.muscleGroups.fold(
+        '', (str, group) => '$str${group.name},'
+      ),
+      'requiredEquipment': exercise.requiredEquipment.fold(
+        '', (str, equipment) => '$str${equipment.name},'
+      ),
       'reps': reps,
       'weight': weight,
       'duration': null,
