@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:life_balance_plus/control/account_control.dart';
+import 'package:life_balance_plus/data/model/account.dart';
+import 'package:life_balance_plus/data/model/session.dart';
 
-class HomeSummaryCard extends StatelessWidget {
+class HomeSummaryCard extends StatefulWidget {
   final String name;
   final DateTime date;
   final int caloriesEaten;
   final int caloriesBurned;
   final double milesRan;
-  final double litersDrank;
+  double litersDrank;
 
-  const HomeSummaryCard({
+  HomeSummaryCard({
     super.key,
     required this.name,
     required this.date,
@@ -17,6 +20,15 @@ class HomeSummaryCard extends StatelessWidget {
     required this.milesRan,
     required this.litersDrank,
   });
+
+  @override
+  State<HomeSummaryCard> createState() => _HomeSummaryCardState();
+}
+
+class _HomeSummaryCardState extends State<HomeSummaryCard> {
+  Account? account = Session.instance.account;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final waterFieldController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +59,7 @@ class HomeSummaryCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          name,
+                          widget.name,
                           style:
                               Theme.of(context).textTheme.titleLarge?.copyWith(
                                     fontWeight: FontWeight.w900,
@@ -70,7 +82,7 @@ class HomeSummaryCard extends StatelessWidget {
                       radius: 16,
                       backgroundColor: Colors.black,
                       foregroundColor: Colors.white,
-                      child: Text(date.day.toString(),
+                      child: Text(widget.date.day.toString(),
                           style: Theme.of(context)
                               .textTheme
                               .labelMedium
@@ -86,14 +98,15 @@ class HomeSummaryCard extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    Text(caloriesEaten.toString(), style: metricTextStyle),
+                    Text(widget.caloriesEaten.toString(),
+                        style: metricTextStyle),
                     Text('Calories Eaten', style: metricLabelStyle),
                   ],
                 ),
                 Column(
                   children: [
                     Text(
-                      caloriesBurned.toString(),
+                      widget.caloriesBurned.toString(),
                       style: metricTextStyle,
                     ),
                     Text('Calories Burned', style: metricLabelStyle),
@@ -102,20 +115,78 @@ class HomeSummaryCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      milesRan.toString(),
+                      widget.milesRan.toString(),
                       style: metricTextStyle,
                     ),
                     Text('Miles Ran', style: metricLabelStyle),
                   ],
                 ),
-                Column(
-                  children: [
-                    Text(
-                      litersDrank.toString(),
-                      style: metricTextStyle,
-                    ),
-                    Text('Liters Drank', style: metricLabelStyle),
-                  ],
+                InkWell(
+                  onTap: () {
+                    // Show a dialog to increment liters drank add and subtract buttons. Update account in db using AccountControl.updateAccount'
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('Update Water Intake'),
+                          content: Form(
+                            key: _formKey,
+                            child: TextFormField(
+                              controller: waterFieldController,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                  labelText: 'Set Water Intake'),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a value';
+                                }
+                                if (int.tryParse(value) == null) {
+                                  return 'Please enter a valid number';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              child: Text('Cancel'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text('Set'),
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
+                                  AccountControl.updateAccount(
+                                      account!.copyWith(
+                                    waterIntakeGoal:
+                                        int.parse(waterFieldController.text),
+                                  ));
+                                  setState(() {
+                                    widget.litersDrank =
+                                        int.parse(waterFieldController.text)
+                                            .toDouble();
+                                  });
+                                  Navigator.of(context).pop();
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        widget.litersDrank.toString(),
+                        style: metricTextStyle,
+                      ),
+                      Text('Liters Drank', style: metricLabelStyle),
+                    ],
+                  ),
                 ),
               ],
             ),
