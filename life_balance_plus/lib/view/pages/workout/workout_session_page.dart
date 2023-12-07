@@ -1,5 +1,17 @@
-
 import 'package:flutter/material.dart';
+
+
+class Set {
+  int set;
+  double weight;
+  int reps;
+
+  Set({
+    required this.set,
+    required this.weight,
+    required this.reps,
+  });
+}
 
 class WorkoutSessionPage extends StatefulWidget {
   @override
@@ -7,8 +19,6 @@ class WorkoutSessionPage extends StatefulWidget {
 }
 
 class _WorkoutSessionPageState extends State<WorkoutSessionPage> {
-  List<TextEditingController> weightControllers = [TextEditingController()];
-  List<TextEditingController> repsControllers = [TextEditingController()];
   List<Set> data = [Set(set: 1, weight: 0, reps: 0)];
   int sets = 1;
 
@@ -38,10 +48,18 @@ class _WorkoutSessionPageState extends State<WorkoutSessionPage> {
                 children: [
                   Text('Set ${index + 1}'),
                   TextField(
-                    controller: weightControllers[index],
+                    onChanged: (value) {
+                      setState(() {
+                        data[index].weight = double.parse(value);
+                      });
+                    },
                   ),
                   TextField(
-                    controller: repsControllers[index],
+                    onChanged: (value) {
+                      setState(() {
+                        data[index].reps = int.parse(value);
+                      });
+                    }
                   ),
                   IconButton(
                     icon: Icon(Icons.delete),
@@ -65,8 +83,6 @@ class _WorkoutSessionPageState extends State<WorkoutSessionPage> {
 
   void _deleteRow(int index) {
     setState(() {
-      weightControllers.removeAt(index);
-      repsControllers.removeAt(index);
       data.removeAt(index);
       sets--;
     });
@@ -75,17 +91,7 @@ class _WorkoutSessionPageState extends State<WorkoutSessionPage> {
   void _addRow() {
     setState(() {
       sets++;
-      weightControllers.add(TextEditingController());
-      repsControllers.add(TextEditingController());
-      data.add(Set(set: sets, weight: 0, reps: 0));
+      data.add( Set( set: sets, weight: 0, reps: 0));
     });
   }
-}
-
-class Set {
-  int set;
-  double weight;
-  int reps;
-
-  Set({required this.set, required this.weight, required this.reps});
 }
