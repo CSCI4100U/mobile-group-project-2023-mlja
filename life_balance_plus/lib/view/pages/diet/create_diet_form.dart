@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../../data/model/diet.dart';
 import 'package:life_balance_plus/control/diets_control.dart';
 
@@ -9,7 +10,9 @@ class CreateDietForm extends StatefulWidget {
 
 class _CreateDietFormState extends State<CreateDietForm> {
   final TextEditingController _caloriesController = TextEditingController();
+  final TextEditingController _dietNameController = TextEditingController();
   DietType _selectedDietType = DietType.other;
+  DateTime _selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +23,17 @@ class _CreateDietFormState extends State<CreateDietForm> {
         children: [
           Text(
             'Create a New Diet',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            style: Theme.of(context).textTheme.headline4?.copyWith(
                   fontWeight: FontWeight.w900,
                 ),
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _dietNameController,
+            decoration: InputDecoration(
+              labelText: 'Diet Name',
+              border: OutlineInputBorder(),
+            ),
           ),
           const SizedBox(height: 16),
           TextFormField(
@@ -45,11 +56,23 @@ class _CreateDietFormState extends State<CreateDietForm> {
             },
           ),
           const SizedBox(height: 16),
+          Row(
+            children: [
+              Text('Start Date: '),
+              SizedBox(
+                width: 200,
+                child: ElevatedButton(
+                  onPressed: () => _selectDate(context),
+                  child: Text(
+                    'Select Date - ${_formattedDate(_selectedDate)}',
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () {
-              // Handle form submission here
-              _submitForm();
-            },
+            onPressed: _submitForm,
             child: Text('Create Diet'),
           ),
         ],
@@ -75,6 +98,24 @@ class _CreateDietFormState extends State<CreateDietForm> {
     );
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  String _formattedDate(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
+  }
+
   void _submitForm() {
     final String caloriesText = _caloriesController.text.trim();
     if (caloriesText.isEmpty) {
@@ -86,7 +127,7 @@ class _CreateDietFormState extends State<CreateDietForm> {
     final Diet newDiet = Diet(
       dailyCals: dailyCals,
       dietType: _selectedDietType,
-      startDate: DateTime.now(),
+      startDate: _selectedDate,
     );
 
     DietControl().addDiet(newDiet);
@@ -101,8 +142,10 @@ class _CreateDietFormState extends State<CreateDietForm> {
       ),
     );
     _caloriesController.clear();
+    _dietNameController.clear();
     setState(() {
       _selectedDietType = DietType.other;
+      _selectedDate = DateTime.now();
     });
   }
 }
