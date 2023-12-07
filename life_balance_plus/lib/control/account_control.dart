@@ -49,8 +49,12 @@ class AccountControl {
   }
 
   static void _updateAccountCloud(Account account) {
-    FirebaseFirestore.instance.collection('users')
-                              .doc(account.firestoreId)
-                              .update(account.toFirestoreMap());
+    try {
+      FirebaseFirestore.instance.collection('users')
+                                .doc(account.firestoreId)
+                                .update(account.toFirestoreMap());
+    } catch (e) {
+      print('Error updating account data in Firestore: $e');
+    }
   }
 }

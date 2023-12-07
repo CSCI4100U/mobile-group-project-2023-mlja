@@ -1,308 +1,305 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:life_balance_plus/data/model/fitness_logs.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:life_balance_plus/data/database_provider.dart';
-import 'package:life_balance_plus/data/model/exercise.dart';
 import 'package:life_balance_plus/data/model/workout_plan.dart';
-import 'package:life_balance_plus/data/model/session.dart';
+import 'package:life_balance_plus/data/model/account.dart';
 
-
-// A lot of repeated code here. There might be a away to "generic-fy" everything.
 
 class WorkoutControl {
-  final userId = Session.instance.account!.firestoreId;
 
-  Future<void> addDummyData() async {
-    final WorkoutPlan wp = WorkoutPlan(
-      startDate: DateTime.now(),
-      title: "Test Workout Plan",
-      type: WorkoutPlanType.custom,
-      sessions: [],
-    );
-    await addWorkoutPlan(wp);
-
-    final WorkoutSession ws = WorkoutSession(
-      date: DateTime.now(),
-      planId: wp.planId!,
-      exercises: [],
-    );
-
-    await addWorkoutSession(ws);
-    wp.addSession(ws);
-
-    final ExerciseSet es = ExerciseSet(
-      name: 'Test ExerciseSet',
-      sessionId: ws.sessionId!,
-      muscleGroups: [MuscleGroup.other],
-      requiredEquipment: [Equipment.other],
-    );
-
-    await addExerciseSet(es);
-    ws.addExercise(es);
-  }
-
+  // ---------------------------------------------------------------
   // WorkoutPlan control
 
-  Future<List<WorkoutPlan>> getWorkoutPlans() async {
+  Future<List<WorkoutPlan>> getWorkoutPlans(Account account) async {
     final Database db = await DatabaseProvider.instance.database;
     List<WorkoutPlan> result;
-    final List localData = await db.query('workout_plans');
+    final List localData = await db.query(
+      'workout_plans',
+      where: 'accountEmail = ?',
+      whereArgs: [account.email]
+    );
     if (localData.isNotEmpty) {
-
       result = localData.map((wp) {
-        return WorkoutPlan.fromMap(wp);
-      }).toList();
-
-    } else { // Query firestore if local db is empty
-
-      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-      await FirebaseFirestore.instance.collection('workout_plans')
-          .where('userId', isEqualTo: Session.instance.account!.firestoreId)
-          .get();
-      final documents = querySnapshot.docs;
-
-      List<Map<String, dynamic>> remoteData =
-      documents.map((doc) => doc.data()).toList();
-
-      result = remoteData.map((wp) {
         return WorkoutPlan.fromMap(wp);
       }).toList();
     }
 
+    // Query firestore if local db is empty
+    else {
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await FirebaseFirestore.instance
+          .collection('workout_plans')
+          .where('accountEmail', isEqualTo: account.email)
+          .get();
+
+      final documents = querySnapshot.docs;
+      result = documents.map((doc) {
+        Map<String, dynamic> map = doc.data();
+        map['firestoreId'] = doc.id;
+        return map;
+      }).toList().map((plan) => WorkoutPlan.fromMap(plan)).toList();
+    }
+  
     return result;
   }
 
-  Future<void> addWorkoutPlan(WorkoutPlan wp) async {
+  Future<void> addWorkoutPlan(WorkoutPlan plan) async {
     final Database db = await DatabaseProvider.instance.database;
-    wp.planId = await db.insert(
-        'workout_plans',
-        wp.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace
+    plan.id = await db.insert(
+      'workout_plans',
+      plan.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace
     );
-    _addCloudWorkoutPlan(wp);
+    _addCloudWorkoutPlan(plan);
   }
 
-  Future<void> _addCloudWorkoutPlan(WorkoutPlan wp) async {
+  void _addCloudWorkoutPlan(WorkoutPlan plan) {
     final ref = FirebaseFirestore.instance.collection('workout_plans').doc();
     try {
-      ref.set(
-        {
-          ...wp.toMap(),
-          'userId': userId,
-        }
-      );
+      ref.set(plan.toFirestoreMap());
+      plan.firestoreId = ref.id;
+      updateWorkoutPlan(plan, false);
     } catch (e) {
       print('Error adding WorkoutPlan to Firestore: $e');
     }
   }
 
-  Future<void> updateWorkoutPlan(WorkoutPlan wp) async {
+  Future updateWorkoutPlan(WorkoutPlan plan, [bool updateCloud=true]) async {
     final Database db = await DatabaseProvider.instance.database;
-    db.update('workout_plans', wp.toMap());
-    _updateCloudWorkoutPlan(wp);
+    db.update('workout_plans', plan.toMap());
+    if(updateCloud) _updateCloudWorkoutPlan(plan);
   }
 
-  Future<void> _updateCloudWorkoutPlan(WorkoutPlan wp) async {
-    FirebaseFirestore.instance.collection('workout_plans')
-        .doc(wp.firestoreId).update(wp.toMap());
+  void _updateCloudWorkoutPlan(WorkoutPlan plan) {
+    try {
+      FirebaseFirestore.instance.collection('workout_plans')
+                                .doc(plan.firestoreId)
+                                .update(plan.toFirestoreMap());
+    } catch (e) {
+      print('Error updating WorkoutPlan in Firestore: $e');
+    }
   }
 
-  Future<void> deleteWorkoutPlan(WorkoutPlan wp) async {
+  Future<void> deleteWorkoutPlan(WorkoutPlan plan) async {
     final Database db = await DatabaseProvider.instance.database;
     await db.delete(
-        'workout_plans',
-        where: 'planId = ?',
-        whereArgs: [wp.planId]
+      'workout_plans',
+      where: 'planId = ?',
+      whereArgs: [plan.id]
     );
-    _deleteCloudWorkoutPlan(wp);
+    _deleteCloudWorkoutPlan(plan);
   }
 
-  Future<void> _deleteCloudWorkoutPlan(WorkoutPlan wp) async {
-    FirebaseFirestore.instance.collection('workout_plans')
-        .doc(wp.firestoreId).delete()
-        .then((_) {
-          print('WorkoutPlan deleted from Firestore: $wp');
+  void _deleteCloudWorkoutPlan(WorkoutPlan plan) {
+    FirebaseFirestore.instance
+      .collection('workout_plans')
+      .doc(plan.firestoreId)
+      .delete()
+      .then((_) {
+        print('WorkoutPlan deleted from Firestore: $plan');
       }).catchError((e) {
         print('Error deleting WorkoutPlan from Firestore: $e');
-    });
+      });
   }
 
+
   // ---------------------------------------------------------------
+  // FitnessLogs control
 
-  // WorkoutSession control
-
-  Future<List<WorkoutSession>> getWorkoutSessions() async {
+  Future<FitnessLogs> getFitnessLogs(Account account) async {
     final Database db = await DatabaseProvider.instance.database;
-    List<WorkoutSession> result;
-    final List localData = await db.query('workout_sessions');
+    List<Map<String, dynamic>> sessionMaps = await db.query(
+      'session_logs',
+      where: 'accountEmail = ?',
+      whereArgs: [account.email],
+    );
 
-    if (localData.isNotEmpty) {
+    // Query all sets for returned sessions
+    if(sessionMaps.isNotEmpty) {
+      List setFutures = sessionMaps.map((sessionMap) => db.query(
+        'set_logs',
+        where: 'session_log_id = ?',
+        whereArgs: [sessionMap['id']]
+      )).toList();
 
-      result = localData.map((ws) {
-        return WorkoutSession.fromMap(ws);
-      }).toList();
+      for(int i=0; i<sessionMaps.length; i++) {
+        sessionMaps[i]['sets'] = (await setFutures[i]).map((setMap) {
+          if(setMap['reps'] == null) return CardioSetLog.fromMap(setMap);
+          else                       return ResistanceSetLog.fromMap(setMap);
+        }).toList();
+      }
 
-    } else { // Query firestore if local db is empty
+      return FitnessLogs(
+        entries: sessionMaps.map((map) => SessionLog.fromMap(map)).toList()
+      );
+    }
 
-      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-      await FirebaseFirestore.instance.collection('workout_sessions')
-          .where('userId', isEqualTo: Session.instance.account!.firestoreId)
+    // Query firestore if local db is empty
+    else return _getFitnessLogsCloud(account);
+  }
+
+  Future<FitnessLogs> _getFitnessLogsCloud(Account account) async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+      await FirebaseFirestore.instance
+        .collection('session_logs')
+        .where('accountEmail', isEqualTo: account.email)
+        .get();
+
+    List<Map<String, dynamic>> sessionMaps = querySnapshot.docs.map(
+      (doc) => doc.data()
+    ).toList();
+
+    // Query all sets for returned sessions
+    if(sessionMaps.isNotEmpty) {
+      for(int i=0; i<sessionMaps.length; i++) {
+        querySnapshot = await FirebaseFirestore.instance
+          .collection('set_logs')
+          .where('session_log_id', isEqualTo: sessionMaps[i]['id'])
           .get();
-      final documents = querySnapshot.docs;
 
-      List<Map<String, dynamic>> remoteData =
-      documents.map((doc) => doc.data()).toList();
-
-      result = remoteData.map((ws) {
-        return WorkoutSession.fromMap(ws);
-      }).toList();
+        sessionMaps[i]['sets'] = querySnapshot.docs.map((doc) {
+          Map<String, dynamic> setMap = doc.data();
+          if(setMap['reps'] == null) return CardioSetLog.fromMap(setMap);
+          else                       return ResistanceSetLog.fromMap(setMap);
+        }).toList();
+      }
     }
 
-    return result;
-  }
-
-  Future<void> addWorkoutSession(WorkoutSession ws) async {
-    final Database db = await DatabaseProvider.instance.database;
-    ws.sessionId = await db.insert(
-        'workout_sessions',
-        ws.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace
+    return FitnessLogs(
+      entries: sessionMaps.map((map) => SessionLog.fromMap(map)).toList()
     );
-    _addCloudWorkoutSession(ws);
   }
 
-  Future<void> _addCloudWorkoutSession(WorkoutSession ws) async {
-    final ref = FirebaseFirestore.instance.collection('workout_sessions').doc();
-    try {
-      ref.set(
-        {
-          ...ws.toMap(),
-          'userId': userId,
-        }
-      );
-    } catch (e) {
-      print('Error adding WorkoutSession to Firestore: $e');
-    }
-  }
-
-  Future<void> updateWorkoutSession(WorkoutSession ws) async {
-    final Database db = await DatabaseProvider.instance.database;
-    db.update('workout_sessions', ws.toMap());
-    _updateCloudWorkoutSession(ws);
-  }
-
-  Future<void> _updateCloudWorkoutSession(WorkoutSession ws) async {
-    FirebaseFirestore.instance.collection('workout_sessions')
-        .doc(ws.firestoreId).update(ws.toMap());
-  }
-
-  Future<void> deleteWorkoutSession(WorkoutSession ws) async {
-    final Database db = await DatabaseProvider.instance.database;
-    await db.delete(
-        'workout_sessions',
-        where: 'sessionId = ?',
-        whereArgs: [ws.sessionId]
-    );
-    _deleteCloudWorkoutSession(ws);
-  }
-
-  Future _deleteCloudWorkoutSession(WorkoutSession ws) async {
-    FirebaseFirestore.instance.collection('workout_sessions')
-        .doc(ws.firestoreId).delete()
-        .then((_) {
-      print('WorkoutSession deleted from Firestore: $ws');
-    }).catchError((e) {
-      print('Error deleting WorkoutSession from Firestore: $e');
-    });
-  }
 
   // ---------------------------------------------------------------
+  // SessionLog control
 
-  // ExerciseSet control
-
-  Future<List<ExerciseSet>> getExerciseSets() async {
+  Future<void> addSessionLog(SessionLog log) async {
     final Database db = await DatabaseProvider.instance.database;
-    List<ExerciseSet> result = [];
-    final List localData = await db.query('exercise_sets');
-
-    if (localData.isNotEmpty) {
-
-      result = localData.map((es) {
-        return ExerciseSet.fromMap(es);
-      }).toList();
-
-    } else { // Query firestore if local db is empty
-
-       final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance.collection('exercise_sets')
-           .where('userId', isEqualTo: Session.instance.account!.firestoreId)
-           .get();
-       final documents = querySnapshot.docs;
-
-       List<Map<String, dynamic>> remoteData =
-          documents.map((doc) => doc.data()).toList();
-
-       result = remoteData.map((es) {
-         return ExerciseSet.fromMap(es);
-       }).toList();
-    }
-
-    return result;
-  }
-
-  Future<void> addExerciseSet(ExerciseSet es) async {
-    final Database db = await DatabaseProvider.instance.database;
-    await db.insert(
-        'exercise_sets',
-        es.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace
+    log.id = await db.insert(
+      'session_logs',
+      log.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace
     );
-    _addCloudExerciseSets(es);
+    _addSessionLogCloud(log);
   }
 
-  Future _addCloudExerciseSets(ExerciseSet es) async {
-    final ref = FirebaseFirestore.instance.collection('exercise_sets').doc();
+  void _addSessionLogCloud(SessionLog log) {
+    final ref = FirebaseFirestore.instance.collection('session_logs').doc();
     try {
-      ref.set(
-        {
-          ...es.toMap(),
-          'userId': userId,
-        }
-      );
+      ref.set(log.toFirestoreMap());
+      log.firestoreId = ref.id;
+      updateSessionLog(log, false);
     } catch (e) {
-      print('Error adding ExerciseSet to Firestore: $e');
+      print('Error adding SessionLog to Firestore: $e');
     }
   }
 
-  Future<void> updateExerciseSets(ExerciseSet es) async {
+  Future updateSessionLog(SessionLog log, [bool updateCloud=true]) async {
     final Database db = await DatabaseProvider.instance.database;
-    db.update('exercise_sets', es.toMap());
-    _updateCloudExerciseSet(es);
+    db.update('session_logs', log.toMap());
+    if(updateCloud) _updateSessionLogCloud(log);
   }
 
-  Future<void> _updateCloudExerciseSet(ExerciseSet es) async {
-    FirebaseFirestore.instance.collection('exercise_sets')
-        .doc(es.firestoreId).update(es.toMap());
+  void _updateSessionLogCloud(SessionLog log) {
+    try {
+      FirebaseFirestore.instance.collection('session_logs')
+                                .doc(log.firestoreId)
+                                .update(log.toFirestoreMap());
+    } catch (e) {
+      print('Error updating SessionLog in Firestore: $e');
+    }
   }
 
-  Future<void> deleteExerciseSet(ExerciseSet es) async {
+  Future<void> deleteSessionLog(SessionLog log) async {
+    final Database db = await DatabaseProvider.instance.database;
+    log.sets.forEach((setLog) => deleteSetLog(setLog));
+    await db.delete(
+      'session_logs',
+      where: 'id = ?',
+      whereArgs: [log.id]
+    );
+    _deleteSessionLogCloud(log);
+  }
+
+  void _deleteSessionLogCloud(SessionLog log) {
+    FirebaseFirestore.instance
+      .collection('session_logs')
+      .doc(log.firestoreId)
+      .delete()
+      .then((_) {
+        print('SessionLog deleted from Firestore: $log');
+      }).catchError((e) {
+        print('Error deleting SessionLog from Firestore: $e');
+      });
+  }
+
+
+  // ---------------------------------------------------------------
+  // SetLog control
+
+  Future<void> addSetLog(SetLog log, int session_log_id) async {
+    final Database db = await DatabaseProvider.instance.database;
+    Map<String, dynamic> map = log.toMap();
+    map['session_log_id'] = session_log_id;
+    log.id = await db.insert(
+      'set_logs',
+      map,
+      conflictAlgorithm: ConflictAlgorithm.replace
+    );
+    _addSetLogCloud(log, session_log_id);
+  }
+
+  void _addSetLogCloud(SetLog log, int session_log_id) {
+    final ref = FirebaseFirestore.instance.collection('set_logs').doc();
+    Map<String, dynamic> map = log.toFirestoreMap();
+    map['session_log_id'] = session_log_id;
+    try {
+      ref.set(map);
+      log.firestoreId = ref.id;
+      updateSetLog(log, false);
+    } catch (e) {
+      print('Error adding SetLog to Firestore: $e');
+    }
+  }
+
+  Future<void> updateSetLog(SetLog log, [bool updateCloud=true]) async {
+    final Database db = await DatabaseProvider.instance.database;
+    db.update('set_logs', log.toMap());
+    if(updateCloud) _updateSetLogCloud(log);
+  }
+
+  void _updateSetLogCloud(SetLog log) {
+    try {
+      FirebaseFirestore.instance.collection('set_logs')
+                                .doc(log.firestoreId)
+                                .update(log.toFirestoreMap());
+    } catch (e) {
+      print('Error updating SetLog in Firestore: $e');
+    }
+  }
+
+  Future<void> deleteSetLog(SetLog log) async {
     final Database db = await DatabaseProvider.instance.database;
     await db.delete(
-        'exercise_sets',
-        where: 'id = ?',
-        whereArgs: [es.id]
+      'set_logs',
+      where: 'id = ?',
+      whereArgs: [log.id]
     );
-
-    _deleteCloudExerciseSet(es);
+    _deleteSetLogCloud(log);
   }
 
-  Future _deleteCloudExerciseSet(ExerciseSet es) async {
-    FirebaseFirestore.instance.collection('exercise_sets')
-        .doc(es.firestoreId).delete()
-        .then((_) {
-      print('ExerciseSet deleted from Firestore: $es');
-    }).catchError((e) {
-      print('Error deleting ExerciseSet from Firestore: $e');
-    });
+  void _deleteSetLogCloud(SetLog log) {
+    FirebaseFirestore.instance
+      .collection('set_logs')
+      .doc(log.firestoreId)
+      .delete()
+      .then((_) {
+        print('SetLog deleted from Firestore: $log');
+      }).catchError((e) {
+        print('Error deleting SetLog from Firestore: $e');
+      });
   }
 }

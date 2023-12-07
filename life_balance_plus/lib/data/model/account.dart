@@ -82,12 +82,6 @@ class Account {
     return {
       'firestoreId': firestoreId,
       'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
-      'height': height,
-      'weight': weight,
-      'gender': gender.name,
-      'dateOfBirth': dateOfBirth.toString(),
       'caloricIntakeGoal': caloricIntakeGoal,
       'dailyActivityGoal': dailyActivityGoal,
       'waterIntakeGoal': waterIntakeGoal,
@@ -101,6 +95,7 @@ class Account {
       'useBluetooth': useBluetooth? 1:0,
       'useNFC': useNFC? 1:0,
       'useLocation': useLocation? 1:0,
+      ...toFirestoreMap()
     };
   }
 

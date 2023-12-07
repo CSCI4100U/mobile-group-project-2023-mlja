@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:life_balance_plus/data/model/workout_plan.dart';
 import 'package:life_balance_plus/data/model/exercise.dart';
 import 'package:life_balance_plus/control/workouts_control.dart';
 
@@ -11,20 +10,15 @@ class ExerciseTabPage extends StatefulWidget {
 }
 
 class _ExerciseTabPageState extends State<ExerciseTabPage> {
-  List<ExerciseSet> exs = [];
+  List<Exercise> exs = [];
 
   Future<void> _loadExercises() async {
-    final exs_ = await WorkoutControl().getExerciseSets();
-    setState(() {
-      exs = exs_;
-    });
+    // load list of exercises from file
   }
 
   @override
   void initState() {
     super.initState();
-    // TESTING: Uncomment this the first time you run to add some exercises to the local db
-    WorkoutControl().addDummyData();
     _loadExercises();
   }
 
@@ -43,7 +37,6 @@ class _ExerciseTabPageState extends State<ExerciseTabPage> {
             final ex = exs[index];
             return ListTile(
               title: Text(ex.name),
-              subtitle: Text('Sets: ${ex.sets}'),
             );
           },
         ),

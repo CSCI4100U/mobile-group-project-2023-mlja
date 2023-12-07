@@ -5,6 +5,7 @@ import 'package:life_balance_plus/view/pages/workout/dashboard_history.dart';
 import 'package:life_balance_plus/view/pages/workout/exercise_tab_page.dart';
 import 'package:life_balance_plus/control/workouts_control.dart';
 import 'package:life_balance_plus/view/widgets/custom_tabbar.dart';
+import 'package:life_balance_plus/data/model/session.dart';
 
 class WorkoutPage extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
   List<WorkoutPlan> exs = [];
 
   Future<void> _loadExercises() async {
-    final exs_ = await WorkoutControl().getWorkoutPlans();
+    final exs_ = await WorkoutControl().getWorkoutPlans(Session.instance.account!);
     setState(() {
       exs = exs_;
     });
@@ -24,8 +25,6 @@ class _WorkoutPageState extends State<WorkoutPage> {
   @override
   void initState() {
     super.initState();
-    // Uncomment this the first time you run to add some exercises to the local db
-    WorkoutControl().addDummyData();
     _loadExercises();
   }
 
