@@ -3,7 +3,7 @@ import 'package:life_balance_plus/data/enums/muscle_group.dart';
 import 'package:life_balance_plus/data/model/workout_plan.dart';
 import 'package:life_balance_plus/data/model/exercise.dart';
 import 'package:life_balance_plus/control/workouts_control.dart';
-import 'package:life_balance_plus/view/pages/workout/add_exercise_page.dart';
+import 'package:life_balance_plus/view/widgets/add_exercise_dialog.dart';
 
 class ExerciseTabPage extends StatefulWidget {
   const ExerciseTabPage({super.key});
@@ -135,8 +135,7 @@ class _ExerciseTabPageState extends State<ExerciseTabPage> {
                       title: Text(exercise.name),
                       subtitle: Text(exercise.muscleGroups
                           .map((muscleGroup) => muscleGroup.string)
-                          .join('  |  '))
-                  );
+                          .join('  |  ')));
                 },
               ),
             ),
