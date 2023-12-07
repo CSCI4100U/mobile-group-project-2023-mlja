@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:life_balance_plus/authentication/authentication_gate.dart';
 import 'package:life_balance_plus/view/pages/settings/export_settings.dart';
 
+/// A page that displays various settings options for the user.
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -88,26 +89,25 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           const SizedBox(height: 196),
-          // Center(
-          //     child: TextButton(
-          //       onPressed: () async {
-          //         Navigator.of(context).push(MaterialPageRoute(
-          //           builder: (context) => const LoginForward(),
-          //         ));
-          //       },
-          //       child: Text("Test mid-router", style: TextStyle(fontSize: 35)),
-          //     ),
-          // ),
           Center(
             child: TextButton(
-              // TODO: better implement sign-out functionality
+              onPressed: () async {
+                // TODO: Implement any additional functionality for the test button
+              },
+              child:
+                  const Text("Test mid-router", style: TextStyle(fontSize: 35)),
+            ),
+          ),
+          Center(
+            child: TextButton(
+              // Sign out the user and navigate to the authentication gate
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const AuthGate(),
                 ));
               },
-              child: const Text("sign out", style: TextStyle(fontSize: 16)),
+              child: const Text("Sign Out", style: TextStyle(fontSize: 16)),
             ),
           ),
         ],
