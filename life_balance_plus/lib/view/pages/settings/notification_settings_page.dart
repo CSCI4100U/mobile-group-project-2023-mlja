@@ -159,7 +159,6 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
                           },
                           child: const Text('3 times a day'),
                         ),
-                        // Add more options as needed.
                       ],
                     );
                   },
