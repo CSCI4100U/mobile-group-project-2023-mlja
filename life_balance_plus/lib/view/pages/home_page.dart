@@ -19,9 +19,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Account? account = Session.instance.account;
-    String name = (account != null)
-        ? '${account.firstName} ${account.lastName}'
-        : 'John Doe';
+    String name = account != null ? '${account.firstName}' : 'John Doe';
 
     return Scaffold(
       body: Stack(
