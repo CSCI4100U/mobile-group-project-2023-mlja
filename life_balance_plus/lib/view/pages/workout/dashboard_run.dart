@@ -214,15 +214,6 @@ class _RunPageState extends State<RunPage> {
 
   // Method to handle the submission of run details
   void _submitRunDetails() {
-    // Implement your logic to handle the submission of run details
-    // For example, you can save the details to a database or perform any other necessary actions.
     print('Run details submitted!');
   }
-}
-
-// Main function to run the app
-void main() {
-  runApp(MaterialApp(
-    home: RunPage(),
-  ));
 }
