@@ -24,8 +24,6 @@ class HomeRunCard extends StatelessWidget {
               height: 200,
               child: BarChart(
                 BarChartData(
-                  // Your bar chart data and configurations go here
-                  // Example: BarData(...),
                   titlesData: FlTitlesData(
                     leftTitles: SideTitles(showTitles: true),
                     bottomTitles: SideTitles(showTitles: true),
@@ -56,7 +54,6 @@ class HomeRunCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    // Add more BarChartGroupData for additional bars
                   ],
                 ),
               ),

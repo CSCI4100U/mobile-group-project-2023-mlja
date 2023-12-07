@@ -145,7 +145,6 @@ class _MealsDataTableState extends State<MealsDataTable> {
             },
           ),
         ],
-
         // Display rows containing meal data
         rows: dataRows,
       ),

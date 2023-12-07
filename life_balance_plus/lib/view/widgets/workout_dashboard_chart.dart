@@ -57,7 +57,7 @@ class WorkoutDashboardChart extends StatelessWidget {
     return [
       PieChartSectionData(
         color: Colors.blue,
-        value: 40, // Replace with actual distribution value for Push Day
+        value: 40,
         radius: 70,
         titleStyle: TextStyle(
           fontSize: 16,
@@ -67,7 +67,7 @@ class WorkoutDashboardChart extends StatelessWidget {
       ),
       PieChartSectionData(
         color: Colors.orange,
-        value: 35, // Replace with actual distribution value for Pull Day
+        value: 35,
         radius: 70,
         titleStyle: TextStyle(
           fontSize: 16,
@@ -77,7 +77,7 @@ class WorkoutDashboardChart extends StatelessWidget {
       ),
       PieChartSectionData(
         color: Colors.green,
-        value: 25, // Replace with actual distribution value for Leg Day
+        value: 25,
         radius: 70,
         titleStyle: TextStyle(
           fontSize: 16,
