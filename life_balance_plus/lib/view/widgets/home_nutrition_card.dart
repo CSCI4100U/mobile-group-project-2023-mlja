@@ -21,16 +21,16 @@ class HomeNutritionCard extends StatelessWidget {
                         fontWeight: FontWeight.w900,
                       ),
                 ),
-                Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: TextButton.icon(
-                    label: Text('Log Meal',
-                        style: Theme.of(context).textTheme.labelMedium),
-                    icon: const Icon(Icons.keyboard_double_arrow_right),
-                    style: TextButton.styleFrom(foregroundColor: Colors.black),
-                    onPressed: () {},
-                  ),
-                ),
+                // Directionality(
+                //   textDirection: TextDirection.rtl,
+                //   child: TextButton.icon(
+                //     label: Text('Log Meal',
+                //         style: Theme.of(context).textTheme.labelMedium),
+                //     icon: const Icon(Icons.keyboard_double_arrow_right),
+                //     style: TextButton.styleFrom(foregroundColor: Colors.black),
+                //     onPressed: () {},
+                //   ),
+                // ),
               ],
             ),
             const SizedBox(height: 16),
