@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:life_balance_plus/data/model/workout_plan.dart';
 import 'package:life_balance_plus/view/pages/workout/dashboard_gym.dart';
+import 'package:life_balance_plus/view/pages/workout/dashboard_run.dart';
 import 'package:life_balance_plus/view/pages/workout/dashboard_history.dart';
 import 'package:life_balance_plus/view/pages/workout/exercise_tab_page.dart';
 import 'package:life_balance_plus/control/workouts_control.dart';
@@ -97,7 +98,7 @@ class _NestedTabBarState extends State<NestedTabBar> {
             child: TabBarView(
               children: [
                 DashboardGym(),
-                Center(child: Text('Run')),
+                RunPage(),
                 DashboardHistory(),
               ],
             ),
