@@ -22,9 +22,6 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(programs);
-    // programs.add(WorkoutPlan(accountEmail: accountEmail, title: title, type: type))
-
     return Scaffold(
       body: ListView.builder(
           itemCount: programs.length,
@@ -39,7 +36,7 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
               builder: (context) => const AddProgramDialog(),
               fullscreenDialog: true,
             ),
-          );
+          ).whenComplete(() => setState(() {}));
         },
       ),
     );
@@ -104,7 +101,7 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
                                     ),
                                     Text(
                                         '${exercisePlan.sets} set${exercisePlan.sets > 1 ? 's' : ''}'
-                                        ' • ${exercisePlan.repTarget == null ? '${exercisePlan.targetDuration} minutes' : '${exercisePlan.repTarget} reps '}')
+                                        ' • ${exercisePlan.repTarget == null ? '${exercisePlan.targetDuration} minutes' : '${exercisePlan.repTarget} reps'}')
                                   ]));
                         }).toList(),
                         const Divider(),
@@ -119,9 +116,9 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
               trailing: TextButton.icon(
                 icon: Icon(Icons.power_settings_new),
                 label: Text('Set as Active Program'),
-                onPressed: () => Session.instance.account!.updateAccountInfo(
-                  activePlan: plan,
-                ),
+                onPressed: () => setState(() {
+                  Session.instance.account!.updateAccountInfo(activePlan: plan);
+                }),
               ),
             ),
           ]

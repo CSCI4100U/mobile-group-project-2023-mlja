@@ -5,7 +5,7 @@ import 'package:life_balance_plus/data/model/exercise.dart';
 import 'package:life_balance_plus/data/model/workout_plan.dart';
 import 'package:life_balance_plus/view/widgets/add_exercise_dialog.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
-import 'package:life_balance_plus/control/workouts_control.dart';
+import 'package:life_balance_plus/data/model/session.dart';
 
 class AddProgramDialog extends StatefulWidget {
   const AddProgramDialog({super.key});
@@ -30,7 +30,6 @@ class _AddProgramDialogState extends State<AddProgramDialog> {
 
   @override
   Widget build(BuildContext context) {
-    List<Exercise> exercises = [];
     List<List<ExercisePlan>> sessions = [];
     return Scaffold(
       appBar: AppBar(
@@ -70,11 +69,7 @@ class _AddProgramDialogState extends State<AddProgramDialog> {
                     ),
                     hint: const Text('Select Training Type'),
                     value: null,
-                    onChanged: (dynamic newValue) {
-                      setState(() {
-                        typeDropDownKey.currentState?.didChange(newValue);
-                      });
-                    },
+                    onChanged: (dynamic newValue) {},
                     validator: (value) {
                       if (value == null) {
                         return 'Training type is required';
@@ -104,9 +99,11 @@ class _AddProgramDialogState extends State<AddProgramDialog> {
                         TextButton.icon(
                           label: const Text('Add Session'),
                           icon: const Icon(Icons.add),
-                          onPressed: () {
-                            openSessionCreatorModal(
-                                context, exercises, sessions);
+                          onPressed: () async {
+                            List<ExercisePlan> session = await
+                              openSessionCreatorModal(context);
+                            setState(() => sessions.add(session));
+                            print('session added');
                           },
                         ),
                       ],
@@ -154,75 +151,69 @@ class _AddProgramDialogState extends State<AddProgramDialog> {
     );
   }
 
-  Future<dynamic> openSessionCreatorModal(BuildContext context,
-      List<Exercise> exercises, List<List<ExercisePlan>> sessions) {
+  Future<dynamic> openSessionCreatorModal(context) {
+    List<ExercisePlan> exercisePlans = [];
+
     return showModalBottomSheet(
       context: context,
       builder: (context) {
         return Container(
           padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _modalFormKey,
-            child: Column(
-              children: [
-                Text(
-                  'New Session Creator',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  child: const Text('Add Exercise'),
-                  onPressed: () async {
-                    final Exercise newExercise = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AddExercisePage()),
-                    );
-                    setState(() {
-                      exercises.add(newExercise);
-
-                      sessions.add([
-                        ExercisePlan(
-                          exercise: newExercise,
-                          sets: 3,
-                          repTarget: 10,
-                        )
-                      ]);
-                    });
+          child: Column(
+            children: [
+              Text(
+                'New Session Creator',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                child: const Text('Add Exercise'),
+                onPressed: () async {
+                  final ExercisePlan newExercise = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddExercisePage()),
+                  );
+                  setState(() => exercisePlans.add(newExercise));
+                },
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: exercisePlans.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                        title: Text(exercisePlans[index].exercise.name),
+                        subtitle: Text(exercisePlans[index].exercise
+                            .muscleGroups
+                            .map((e) => e.name)
+                            .join(' | '))
+                        // TODO: Trailing with set and rep info
+                        );
                   },
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: exercises.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                          title: Text(exercises[index].name),
-                          subtitle: Text(exercises[index]
-                              .muscleGroups
-                              .map((e) => e.name)
-                              .join(' | '))
-                          // TODO: Trailing with set and rep info
-                          );
-                    },
-                  ),
-                ),
-                const Divider(thickness: 2),
-                ElevatedButton(
-                  child: const Text('Save'),
-                  onPressed: () {
-                    // TODO: THE ISSUE IS HERE, BREAKS ON SAVE
-                    if (_modalFormKey.currentState!.validate()) {
-                      Navigator.pop(context);
-                    }
-                  },
-                ),
-              ],
-            ),
+              ),
+              const Divider(thickness: 2),
+              ElevatedButton(
+                child: const Text('Save'),
+                onPressed: () => Navigator.pop(context, exercisePlans),
+              ),
+            ],
           ),
         );
       },
     );
   }
 
-  Future<void> _save() async {}
+  Future<void> _save() async {
+    if(_formKey.currentState!.validate()) {
+      WorkoutPlan plan = WorkoutPlan(
+        accountEmail: Session.instance.account!.email,
+        title: programNameFieldController.text,
+        type: typeDropDownKey.currentState!.value
+      );
+
+      Session.instance.addWorkoutPlan(plan);
+      Navigator.pop(context, plan);
+    }
+  }
 }

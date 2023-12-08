@@ -173,11 +173,12 @@ class WorkoutControl {
     return result;
   }
 
-  Future<void> addWorkoutPlan(WorkoutPlan plan) async {
+  Future<int> addWorkoutPlan(WorkoutPlan plan) async {
     final Database db = await DatabaseProvider.instance.database;
     plan.id = await db.insert('workout_plans', plan.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+      conflictAlgorithm: ConflictAlgorithm.replace);
     _addCloudWorkoutPlan(plan);
+    return plan.id!;
   }
 
   void _addCloudWorkoutPlan(WorkoutPlan plan) {
@@ -309,12 +310,13 @@ class WorkoutControl {
   // ---------------------------------------------------------------
   // SessionLog control
 
-  Future<void> addSessionLog(SessionLog log) async {
+  Future<int> addSessionLog(SessionLog log) async {
     final Database db = await DatabaseProvider.instance.database;
     log.id = await db.insert('session_logs', log.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
     _addSessionLogCloud(log);
     log.sets.forEach((setLog) => addSetLog(setLog, log.id!));
+    return log.id!;
   }
 
   void _addSessionLogCloud(SessionLog log) {
@@ -368,13 +370,14 @@ class WorkoutControl {
   // ---------------------------------------------------------------
   // SetLog control
 
-  Future<void> addSetLog(SetLog log, int session_log_id) async {
+  Future<int> addSetLog(SetLog log, int session_log_id) async {
     final Database db = await DatabaseProvider.instance.database;
     Map<String, dynamic> map = log.toMap();
     map['session_log_id'] = session_log_id;
     log.id = await db.insert('set_logs', map,
         conflictAlgorithm: ConflictAlgorithm.replace);
     _addSetLogCloud(log, session_log_id);
+    return log.id!;
   }
 
   void _addSetLogCloud(SetLog log, int session_log_id) {

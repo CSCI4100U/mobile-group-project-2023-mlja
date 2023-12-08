@@ -4,6 +4,7 @@ import 'package:life_balance_plus/data/enums/muscle_group.dart';
 import 'package:life_balance_plus/data/model/exercise.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:life_balance_plus/control/workouts_control.dart';
+import 'package:life_balance_plus/data/model/workout_plan.dart';
 
 class AddExercisePage extends StatefulWidget {
   const AddExercisePage({super.key});
@@ -229,10 +230,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                         dropdownHeight:
                             MediaQuery.of(context).size.height * 0.5,
                         onOptionSelected: (selectedOptions) {
-                          setState(() {
-                            muscleGroupsInvalid = true;
-                          });
-                          field.didChange(selectedOptions);
+                          setState(() => muscleGroupsInvalid = true);
                         },
                         backgroundColor: Colors.transparent,
                         inputDecoration: BoxDecoration(
@@ -284,9 +282,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
                     hint: const Text('Select Equipment'),
                     value: null,
                     onChanged: (dynamic newValue) {
-                      setState(() {
-                        equipmentDropDownKey.currentState?.didChange(newValue);
-                      });
                     },
                     validator: (value) {
                       if (value == null) {
@@ -334,13 +329,17 @@ class _AddExercisePageState extends State<AddExercisePage> {
       );
       Navigator.pop(
         context,
-        Exercise(
-          name: nameFieldController.text,
-          description: descriptionFieldController.text,
-          muscleGroups: muscleGroupController.selectedOptions.map((element) {
-            return element.value!;
-          }).toList(),
-          requiredEquipment: [equipmentDropDownKey.currentState?.value],
+        ExercisePlan(
+          sets: int.parse(setsFieldController.value.text),
+          repTarget: int.parse(repsFieldController.value.text),
+          exercise: Exercise(
+            name: nameFieldController.text,
+            description: descriptionFieldController.text,
+            muscleGroups: muscleGroupController.selectedOptions.map((element) {
+              return element.value!;
+            }).toList(),
+            requiredEquipment: [equipmentDropDownKey.currentState?.value],
+          ),
         ),
       );
     }
