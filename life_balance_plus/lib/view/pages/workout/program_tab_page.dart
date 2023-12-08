@@ -17,7 +17,7 @@ class _ProgramTabPageState extends State<ProgramTabPage> {
   @override
   void initState() {
     super.initState();
-    programs = Session.instance.workoutPlans!;
+    programs = Session.instance.workoutPlans?? [];
   }
 
   @override

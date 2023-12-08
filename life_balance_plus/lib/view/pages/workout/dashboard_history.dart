@@ -18,7 +18,7 @@ class _DashboardHistoryState extends State<DashboardHistory> {
   @override
   void initState() {
     super.initState();
-    logs = Session.instance.fitnessLogs!;
+    logs = Session.instance.fitnessLogs?? FitnessLogs(entries: []);
   }
 
   @override
