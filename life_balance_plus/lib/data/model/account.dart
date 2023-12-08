@@ -12,8 +12,8 @@ class Account {
   String email;
   String firstName;
   String lastName;
-  double height;        // Height in cm
-  double weight;        // Weight in kg
+  double height; // Height in cm
+  double weight; // Weight in kg
   Gender gender;
   DateTime dateOfBirth;
   int caloricIntakeGoal;
@@ -89,9 +89,9 @@ class Account {
       'dailyActivityGoal': dailyActivityGoal,
       'waterIntakeGoal': waterIntakeGoal,
       'unitsSystem': unitsSystem.name,
-      'useNotifications': useNotifications? 1:0,
-      'notificationSound': notificationSound? 1:0,
-      'notificationVibration': notificationVibration? 1:0,
+      'useNotifications': useNotifications ? 1 : 0,
+      'notificationSound': notificationSound ? 1 : 0,
+      'notificationVibration': notificationVibration ? 1 : 0,
       'notificationFrequency': notificationFrequency,
       'useWifi': useWifi? 1:0,
       'useMobileData': useMobileData? 1:0,
@@ -206,5 +206,57 @@ class Account {
     if (useLocation != null) this.useLocation = useLocation;
 
     AccountControl.updateAccount(this, updateCloud);
+  }
+
+  // Copywith method
+  Account copyWith({
+    String? firestoreId,
+    String? firstName,
+    String? lastName,
+    double? height,
+    double? weight,
+    String? gender,
+    DateTime? dateOfBirth,
+    int? caloricIntakeGoal,
+    int? dailyActivityGoal,
+    int? waterIntakeGoal,
+    UnitsSystem? unitsSystem,
+    bool? useNotifications,
+    bool? notificationSound,
+    bool? notificationVibration,
+    int? notificationFrequency,
+    bool? useWifi,
+    bool? useMobileData,
+    bool? useBluetooth,
+    bool? useNFC,
+    bool? useLocation,
+  }) {
+    return Account(
+      firestoreId: firestoreId ?? this.firestoreId,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      height: height ?? this.height,
+      weight: weight ?? this.weight,
+      gender: gender != null
+          ? Gender.values.byName(gender.toLowerCase())
+          : this.gender,
+      dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+      caloricIntakeGoal: caloricIntakeGoal ?? this.caloricIntakeGoal,
+      dailyActivityGoal: dailyActivityGoal ?? this.dailyActivityGoal,
+      waterIntakeGoal: waterIntakeGoal ?? this.waterIntakeGoal,
+      unitsSystem: unitsSystem ?? this.unitsSystem,
+      useNotifications: useNotifications ?? this.useNotifications,
+      notificationSound: notificationSound ?? this.notificationSound,
+      notificationVibration:
+          notificationVibration ?? this.notificationVibration,
+      notificationFrequency:
+          notificationFrequency ?? this.notificationFrequency,
+      useWifi: useWifi ?? this.useWifi,
+      useMobileData: useMobileData ?? this.useMobileData,
+      useBluetooth: useBluetooth ?? this.useBluetooth,
+      useNFC: useNFC ?? this.useNFC,
+      useLocation: useLocation ?? this.useLocation,
+    );
   }
 }

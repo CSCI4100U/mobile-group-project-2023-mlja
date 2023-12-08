@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:life_balance_plus/view/widgets/map_widget.dart';
 
 /// A page that allows users to view and submit details about their run.
 class RunPage extends StatefulWidget {
@@ -110,11 +111,16 @@ class _RunPageState extends State<RunPage> {
 
   // Widget to display the run map (image)
   Widget _buildRunMap() {
-    return Image.network(
-      'https://www.google.com/maps/d/u/0/thumbnail?mid=1T0PVvwSyrRZYDhM5FObXXupuEvo&hl=en',
-      fit: BoxFit.cover,
+    // return Image.network(
+    //   'https://www.google.com/maps/d/u/0/thumbnail?mid=1T0PVvwSyrRZYDhM5FObXXupuEvo&hl=en',
+    //   fit: BoxFit.cover,
+    //   height: 250,
+    //   width: double.infinity,
+    // );
+    return Container(
       height: 250,
       width: double.infinity,
+      child: MapWidget(),
     );
   }
 
@@ -214,15 +220,6 @@ class _RunPageState extends State<RunPage> {
 
   // Method to handle the submission of run details
   void _submitRunDetails() {
-    // Implement your logic to handle the submission of run details
-    // For example, you can save the details to a database or perform any other necessary actions.
     print('Run details submitted!');
   }
-}
-
-// Main function to run the app
-void main() {
-  runApp(MaterialApp(
-    home: RunPage(),
-  ));
 }

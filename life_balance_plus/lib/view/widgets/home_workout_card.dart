@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:life_balance_plus/view/pages/workout/workout_session_page.dart';
 
 class HomeWorkoutCard extends StatelessWidget {
   final String workoutName;
@@ -74,7 +75,13 @@ class HomeWorkoutCard extends StatelessWidget {
               label: const Text("Start Workout"),
               icon: const Icon(Icons.play_circle),
               style: TextButton.styleFrom(foregroundColor: Colors.black),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const WorkoutSessionPage(),
+                  ),
+                );
+              },
             ),
           ],
         ),
