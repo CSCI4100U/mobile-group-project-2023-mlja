@@ -30,7 +30,6 @@ class _WorkoutPageState extends State<WorkoutPage> {
   @override
   void initState() {
     super.initState();
-    WorkoutControl().addDummyData();
     _loadExercises();
   }
 

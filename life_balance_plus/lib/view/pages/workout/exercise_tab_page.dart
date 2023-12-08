@@ -135,7 +135,8 @@ class _ExerciseTabPageState extends State<ExerciseTabPage> {
                       title: Text(exercise.name),
                       subtitle: Text(exercise.muscleGroups
                           .map((muscleGroup) => muscleGroup.string)
-                          .join('  |  ')));
+                          .join('  |  '))
+                  );
                 },
               ),
             ),
